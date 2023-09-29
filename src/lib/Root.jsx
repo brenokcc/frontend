@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import Form from './Form'
 import QuerySet from './QuerySet'
 
-function open(url){
+function open(url, reloader){
+    window.reloader = reloader;
     createRoot(document.body.appendChild(document.createElement( 'div' ))).render(<Dialog url={url} />);
 }
 
@@ -24,15 +25,16 @@ function Root(props){
                 dialog.classList.remove('opened');
                 dialog.remove();
                 $('.layer').hide();
+                if(window.reloader) window.reloader();
             }
           }
         }, false);
     }, [])
 
-    function reload(){
+    function load(){
         request('GET', document.location.pathname, function(data){
             setdata(data);
-            setkey(key+1);
+            //setkey(key+1);
         });
     }
 
@@ -40,7 +42,7 @@ function Root(props){
         if(data){
             return (
                 <div key={key}>
-                    <Header reload={reload} data={data} open={open}/>
+                    <Header reloader={load} data={data} open={open}/>
                     <ClearFix/>
                     <button onClick={function(){ open('/api/v1/health/check/') }}>Open Dialog!</button>
                     <Breadcrumbs/>
@@ -49,22 +51,22 @@ function Root(props){
                     <Footer/>
                     <Message/>
                     <Layer/>
+                    <Counter/>
                 </div>
             )
         } else {
             return <Loading/>
         }
     }
-    if(data==null) reload();
+    if(data==null) load();
     return content();
 }
 
 function Action(props){
-
     function render(){
         if(props.modal){
             return (
-                <a className="action" href={props.href} onClick={function(e){e.preventDefault();open(props.href);}}>
+                <a className="action" href={props.href} onClick={function(e){e.preventDefault();open(props.href, props.reloader);}}>
                     {props.children}
                 </a>
             )
@@ -155,10 +157,16 @@ function Dialog(props){
 function Content(props){
 
     function child(){
-        if(props.data.type == "form") return (<Form data={props.data}/>);
-        if(props.data.type == "queryset") return (<QuerySet data={props.data}/>);
-        if(props.data.type == "icons") return (<Icons data={props.data}/>);
-        return <Unknown data={props.data}/>
+        switch(props.data.type) {
+            case 'form':
+              return (<Form data={props.data}/>);
+            case 'queryset':
+              return (<QuerySet data={props.data}/>);
+            case 'icons':
+              return (<Icons data={props.data}/>);
+            default:
+              return (<Unknown data={props.data}/>);
+        }
     }
     return (
         <div className="content">{child()}</div>
@@ -181,10 +189,10 @@ function Header(props){
             <div className="left">
                 <div className="brand">Header</div>
                 <div className="shortcuts">
-                    <Action href="/api/v1/user/" reload={props.reload}>Início</Action>
-                    <Action href="/api/v1/icons/" modal={true}>Ícones</Action>
-                    <Action href="/api/v1/instituicoes/" modal={true}>Instituições</Action>
-                    <Action href="/api/v1/instituicoes/add/" modal={true}>Adicionar Instituição</Action>
+                    <Action href="/api/v1/user/" reloader={props.reloader}>Início</Action>
+                    <Action href="/api/v1/icons/" modal={true} reloader={props.reloader}>Ícones</Action>
+                    <Action href="/api/v1/instituicoes/" modal={true} reloader={props.reloader}>Instituições</Action>
+                    <Action href="/api/v1/instituicoes/add/" modal={true} reloader={props.reloader}>Adicionar Instituição</Action>
                 </div>
             </div>
             <div className="right">
@@ -210,6 +218,19 @@ function Footer(props){
     return (
         <div className="footer">Footer</div>
     )
+}
+
+function Counter(props) {
+  const [data, setdata] = useState(0);
+
+  function x(){
+    setdata(function(data){return data+=1});
+  }
+  return (
+    <>
+      <button onClick={x}>data is {data} - {new Date().toString()}</button>
+    </>
+  )
 }
 
 export default Root

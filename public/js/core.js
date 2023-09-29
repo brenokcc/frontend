@@ -149,28 +149,15 @@ function showMessage(text, style){
 }
 function showErrors(data){
     var message = null;
-    for(var k in data.errors){
+    for(var k in data){
         if(k=='non_field_errors' || k==0){
-            message = data.errors[k];
+            message = data[k];
         } else {
-            document.querySelector('.field-error.'+k).innerHTML = data.errors[k][0];
+            document.querySelector('.field-error.'+k).innerHTML = data[k][0];
         }
     }
     if(message) showMessage(message, 'error');
     else showMessage('Corrija os erros indicados no formulário.', 'error');
-}
-function processHtmlResponse(html){
-    var parser = new DOMParser();
-    var doc = parser.parseFromString(html, 'text/html');
-    var main = document.querySelector('.main');
-    var dialog = document.querySelector('dialog');
-    if(dialog){
-        dialog.innerHTML = doc.querySelector('.main').innerHTML;
-        initialize(dialog);
-    } else {
-        main.innerHTML = doc.querySelector('.main').innerHTML;
-        initialize(main);
-    }
 }
 
 function showTask(key, callback){

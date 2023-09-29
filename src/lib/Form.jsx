@@ -103,16 +103,18 @@ function Form(props){
         <div>
             <h2>Form Title</h2>
             <div>{JSON.stringify(props.data)}</div>
-            <form method="post" id="form">
-                <div>
-                    {form.fields.map((field) => (
-                      <div key={Math.random()}>
-                        <label>{field.name}</label>
-                        <br/>
-                        <Field data={field}/>
-                      </div>
-                    ))}
-                </div>
+            <form method="post" id="form" className="form">
+
+                {form.fields.map((field) => (
+                  <div className="form-group" key={Math.random()}>
+                    <label>{field.name}</label>
+                    <br/>
+                    <Field data={field}/>
+                    <div className={"field-error "+field.name}></div>
+                    <div className="help_text">{field.help_text}</div>
+                  </div>
+                ))}
+
                 <div className="right">
                     <input className="btn submit" type="button" onClick={submitForm} value="Enviar"/>
                 </div>

@@ -1,3 +1,9 @@
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
 body{
     font-family: sans-serif;
     font-size: 14px;
@@ -10,7 +16,7 @@ body{
 .right{float: right}
 .clear {clear: both}
 .content{
-    margin: 20px;
+    padding: 20px;
 }
 .form-group{ width: 100%; }
 .form-body.empty { display: none}
@@ -121,6 +127,9 @@ select {color: #757575;}
 ::placeholder, :-ms-input-placeholder, ::-ms-input-placeholder {
   color: #BBBBBB;
   opacity: 1;
+}
+.form .field-error{
+    color: red;
 }
 .form .form-group{display: inline-block;}
 .form .form-group.w50{ width: 49.8%; }

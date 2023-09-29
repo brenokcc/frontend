@@ -102,7 +102,7 @@ function Form(props){
     return (
         <div>
             <div>{JSON.stringify(props.data)}</div>
-            <form method="post">
+            <form method="post" id="form">
                 <div>
                     {form.fields.map((field) => (
                       <div>
@@ -111,7 +111,7 @@ function Form(props){
                       </div>
                     ))}
                 </div>
-                <input type="submit"/>
+                <input className="btn submit" type="button" onClick={submitForm} value="Enviar"/>
             </form>
         </div>
     )

@@ -18,9 +18,12 @@ document.addEventListener("DOMContentLoaded", function(e) {
       }
     }, false);
 });
-function request(method, url, callback){
+function request(method, url, callback, data){
     var headers = new Headers({'Authorization': 'Basic '+localStorage.getItem('token')});
-    fetch(API_URL+url, {method: method, headers: headers}).then(
+    url = API_URL + url.replace(document.location.origin, '');
+    var params = {method: method, headers: headers};
+    if(data) params['body'] = data;
+    fetch(url, params).then(
         response => response.json()
     ).then(
         data => {
@@ -167,7 +170,7 @@ function getCookie(cname) {
 }
 function hideMessage(){
     var feedback = document.querySelector(".feedback");
-    feedback.style.display='none';
+    if(feedback) feedback.style.display='none';
 }
 function showMessage(text, style){
     hideMessage();
@@ -259,11 +262,12 @@ function processJsonResponse(data){
         }
         if(data.task) showTask(data.task, callback);
         else callback()
-    } else {
+    } else if (Object.keys(data).length) {
         showErrors(data);
     }
 }
 function submitForm(id){
+    var id = 'form';
     hideMessage();
     var form = document.getElementById(id);
     var data = new FormData(form);
@@ -276,18 +280,12 @@ function submitForm(id){
             data.append(widget.name, widget.blob, new Date().getTime()+'.'+'png');
         }
     });
-    if(form.method=='post') var request = fetch(form.action, {method:'post', body: data});
-    else var request = fetch(form.action+'?'+new URLSearchParams(new FormData(form)).toString(), {method:'get'});
-    request.then(
-        function(response){
-            button.innerHTML = label;
-            if(response.headers.get("Content-Type").indexOf('text/html;')>=0){
-                response.text().then(processHtmlResponse);
-            } else {
-                response.json().then(processJsonResponse);
-            }    
-        }
-    );
+    function callback(data){
+        button.innerHTML = label;
+        processJsonResponse(data);
+    }
+    if(form.method=='post') request('POST', form.action, callback, data);
+    else request('GET', form.action+'?'+new URLSearchParams(new FormData(form)).toString(), callback);
 }
 function addParam(url, name, value, reload){
     var tokens = url.split('?');

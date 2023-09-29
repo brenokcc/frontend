@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import Form from './lib/form'
+import Form from './lib/Form'
 import './App.css'
 
 function Welcome(props) {
@@ -22,6 +22,8 @@ function Root(props){
     return (
         <>
           <Welcome name="Breno Silva"/>
+          <HealthCheck/>
+          <div className="feedback"></div>
           <Dispatcher data={props.data}/>
 
           {props.data.status == "UP" &&
@@ -54,16 +56,57 @@ function Root(props){
     )
 }
 
+function HealthCheck(props){
+    const [data, setdata] = useState();
+    const [key, setkey] = useState(0);
+
+    function reload(){
+        request('GET', '/api/v1/health/check/', function(data){
+            setdata(JSON.stringify(data));
+            setkey(key+1);
+        });
+    }
+
+    return (
+        <div key={key}>
+            {!data && "Carregando..."}
+            {data && <div>{data}</div>}
+
+            <button onClick={reload}>Carregar</button>
+            <Stateless reload={reload}/>
+            <Statefull reload={reload} data={{time: 'NONE'}}/>
+        </div>
+    )
+
+}
+
+function Stateless(props){
+    return (
+        <h2 onClick={props.reload}>:)</h2>
+    )
+}
+
+function Statefull(props){
+    const [data, setdata] = useState(props.data);
+    function reload(){
+        request('GET', '/api/v1/health/check/', function(data){
+            setdata(data);
+        });
+    }
+    return (
+        <h2 onClick={reload}>:D {data.time}</h2>
+    )
+}
+
+
 function App(props) {
   const [data, setdata] = useState(0);
 
   function x(){
-    setdata((data) => data + 1);
+    setdata(function(data){return data+=1});
   }
-
   return (
     <>
-      <Welcome name="Breno Silva"/>
       <img src={viteLogo} className="logo" alt="Vite logo" />
       <img src={reactLogo} className="logo react" alt="React logo" />
       <button onClick={x}>data is {data}</button>

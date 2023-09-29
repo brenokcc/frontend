@@ -1,23 +1,10 @@
 var API_URL = "http://localhost:8000";
 var reloadable = null;
 
-
 document.addEventListener("DOMContentLoaded", function(e) {
-    initialize(document);
-    document.addEventListener('keydown', (event) => {
-      if(event.code=='Escape'){
-        var dialogs = document.getElementsByTagName('dialog');
-        for(var i=0; i<dialogs.length; i++){
-            var dialog = dialogs[i];
-            dialog.close();
-            dialog.classList.remove('opened');
-            dialog.remove();
-            displayLayer('none');
-            hideMessage();
-        }
-      }
-    }, false);
+
 });
+
 function request(method, url, callback, data){
     var headers = new Headers({'Authorization': 'Basic '+localStorage.getItem('token')});
     url = API_URL + url.replace(document.location.origin, '');
@@ -32,19 +19,19 @@ function request(method, url, callback, data){
     );
 }
 function initialize(element){
+    if(!element) element = document;
     var message = getCookie('message');
     if(message){
         showMessage(message);
         setCookie('message', null);
     }
-    element.querySelectorAll(".modal").forEach( function(link) {
+    $(element).find("a.modal").each( function(i, link) {
         link.addEventListener("click", function(){
             event.preventDefault();
             openDialog(link.href);
-            reloadable = link.dataset.reload;
         });
     });
-    element.querySelectorAll("input[type=file]").forEach(function( input ) {
+    $(element).find("input[type=file]").each(function(i, input) {
         input.addEventListener('change', function (e) {
             if (e.target.files) {
                 let file = e.target.files[0];
@@ -80,7 +67,7 @@ function initialize(element){
             }
         });
     });
-    element.querySelectorAll(".async").forEach(function( div ) {
+    $(element).find(".async").each(function(i, div) {
         fetch(div.dataset.url).then(
             function(response){
                 response.text().then(
@@ -119,33 +106,7 @@ function setInnerHTML(elm, html) {
   });
 }
 function displayLayer(display){
-    document.querySelector('.dialog-layer').style.display = display;
-}
-function openDialog(url){
-    hideMessage();
-    var dialog = document.createElement('dialog');
-    dialog.style.top = (document.documentElement.scrollTop || document.body.scrollTop) + 50;
-    fetch(url).then(
-        function(response){
-            if(response.headers.get("Content-Type")=='application/json'){
-                response.json().then(processJsonResponse);
-            } else {
-                response.text().then(
-                    function(html){
-                        var parser = new DOMParser();
-                        var doc = parser.parseFromString(html, 'text/html');
-                        document.body.append(dialog);
-                        dialog.classList.add('dialog');
-                        dialog.classList.add('opened');
-                        setInnerHTML(dialog, doc.getElementsByClassName('main')[0].innerHTML);
-                        dialog.show();
-                        displayLayer('block');
-                        initialize(dialog);
-                    }
-                );
-            }
-        }
-    );
+    document.querySelector('.layer').style.display = display;
 }
 function setCookie(cname, cvalue, exdays) {
   const d = new Date();
@@ -174,7 +135,7 @@ function hideMessage(){
 }
 function showMessage(text, style){
     hideMessage();
-    var feedback = document.querySelector(".feedback");
+    var feedback = document.querySelector(".message");
     feedback.innerHTML = text;
     feedback.style.display='block';
     if(style=='error'){

@@ -71,7 +71,6 @@ function HealthCheck(props){
         <div key={key}>
             {!data && "Carregando..."}
             {data && <div>{data}</div>}
-
             <button onClick={reload}>Carregar</button>
             <Stateless reload={reload}/>
             <Statefull reload={reload} data={{time: 'NONE'}}/>

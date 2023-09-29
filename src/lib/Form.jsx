@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import {useEffect} from 'react';
 
 function Input(props){
     var field = props.data;
@@ -101,17 +101,21 @@ function Form(props){
     ]
     return (
         <div>
+            <h2>Form Title</h2>
             <div>{JSON.stringify(props.data)}</div>
             <form method="post" id="form">
                 <div>
                     {form.fields.map((field) => (
-                      <div>
+                      <div key={Math.random()}>
                         <label>{field.name}</label>
+                        <br/>
                         <Field data={field}/>
                       </div>
                     ))}
                 </div>
-                <input className="btn submit" type="button" onClick={submitForm} value="Enviar"/>
+                <div className="right">
+                    <input className="btn submit" type="button" onClick={submitForm} value="Enviar"/>
+                </div>
             </form>
         </div>
     )

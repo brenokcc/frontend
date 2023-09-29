@@ -1,21 +1,73 @@
-.header .left{float: left}
-.header .right{float: right}
+body{
+    font-family: sans-serif;
+    font-size: 14px;
+    margin: 0;
+}
+#root{
+    width: 100%;
+}
+.left{float: left}
+.right{float: right}
+.clear {clear: both}
+.content{
+    margin: 20px;
+}
 .form-group{ width: 100%; }
-
 .form-body.empty { display: none}
-.main {clear:both}
 .footer {text-align: center;}
+.loading{
+    text-align:center;
+    padding: 50px;
+}
 .dialog{
+    display: block;
     position: absolute;
-    top: 100;
+    top: 100px;
     min-width: 75%;
     border: 1px solid #ebebeb;
     border-radius: 4px;
     box-shadow: 0 10px 30px 0 rgba(0,0,0,.2);
     max-width: 90%;
     overflow-x: auto;
+    z-index: 9998;
 }
-.clear {clear: both}
+.layer{
+    background-color: black;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    opacity: 0.7;
+    display: none;
+}
+.header .left > div, .header .right > div {
+    display: inline-block;
+}
+.icons{
+    margin: 20;
+}
+.icons .icon-box{
+    cursor: pointer;
+    width: 125px;
+    height: 125px;
+    background-color: white;
+    display: inline-block;
+    text-align: center;
+    border-radius: 10%;
+    margin: 5;
+}
+.icons .icon-box{
+    color: #183153;
+}
+.icons .icon-box i{
+    margin-top:20px;
+    font-size: 30px;
+}
+.icons .icon-box:hover{
+    background-color: #ffd43b;
+}
+
 .autocomplete {
   /*the container must be positioned relative:*/
   position: relative;
@@ -50,12 +102,6 @@
   background-color: DodgerBlue !important;
   color: #ffffff;
 }
-body{
-    font-family: sans-serif;
-    font-size: 14px;
-    margin: 0;
-    background-color: #fafafa;
-}
 .form-control {
     background: #fff;
     border: 1px solid #d9d9d9;
@@ -71,59 +117,7 @@ input:read-only{
 input[type=file]{
     width: 0;
 }
-.header{
-    background-color: #1b1b1b;
-    color: white;
-    height: 43;
-}
-.header .brand{
-    font-size: 1.5rem;
-    margin: 20;
-}
-.header .right{
-    padding: 10;
-}
-.header .user{
-    color: #6baae8;
-}
-.header .user-actions{
-    position:absolute;
-    background-color:#1b1b1b;
-    right:0;
-    width:200;
-    border-color: #6baae8;
-    text-align:center;
-    display:none;
-}
-.header .user-actions li{
-    list-style: none;
-    padding: 5;
-}
-.header a{
-    color: white;
-    text-decoration: none;
-}
-.header input{
-    background-color: #1b1b1b;
-    border-color: #6baae8;
-    color: #6baae8;
-}
-.header .autocomplete-items div {
-    background-color: #6baae8 !important;
-    border-bottom: 1px solid #5394d1 !important;
-}
-
-.main{
-    margin-top: 20;
-    min-height: 80vh;
-}
-dt{
-    font-style: italic;
-    font-weight: bold;
-    color: #7d8493;
-}
 select {color: #757575;}
-
 ::placeholder, :-ms-input-placeholder, ::-ms-input-placeholder {
   color: #BBBBBB;
   opacity: 1;
@@ -147,153 +141,13 @@ select {color: #757575;}
     font-size: 125%;
     color: #61affe;
 }
-.btn {
-    background: transparent;
-    border: 2px solid gray;
-    border-radius: 4px;
-    box-shadow: 0 1px 2px rgba(0,0,0,.1);
-    color: #3b4151;
-    font-family: sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    padding: 5px 23px;
-    transition: all .3s;
-    text-decoration: none;
-    margin: 5;
-    cursor: pointer;
-}
-.btn.add{
-    color: #49cc90;
-    border: 2px solid #49cc90;
-}
-.btn.view{
-    color: #61affe;
-    border: 2px solid #61affe;
-}
-.btn.edit{
-    color: #fca130;
-    border: 2px solid #fca130;
-}
-.btn.delete{
-    color: #f93e3e;
-    border: 2px solid #f93e3e;
-}
+
 .qs{
     background-color: white;
     margin: 20;
     padding: 20;
 }
-.qs .filters{
-    margin-top: 20;
-}
-.qs .subsets a.active{
-    border-bottom: solid 3px #61affe;
-}
-.qs .subsets a{
-    margin: 10;
-    padding-bottom: 3;
-    text-decoration: none;
-    color: #3b4151;
-}
-.qs .filters select{
-    width: 250;
-}
-.qs .data{
-    margin-top: 20;
-    overflow-x: auto;
-    width: 100%;
-}
-.qs table{
-    border-spacing: 0px;
-    /* background-color: #f9fafa; */
-}
 
-.qs table thead th{
-    text-align: left;
-}
-.qs td, .qs th{
-    height: 40px;
-    vertical-align: top;
-    padding: 10;
-}
-.qs tr:nth-child(even) td{
-    background-color: inherite;
-}
-.qs .paginator{
-    margin: 20;
-}
-.qs .action{
-    display:inline-block;
-}
-.qs td.actions{
-    vertical-align: center;
-
-}
-.qs .queryset-actions{
-    margin-top: 10;
-}
-.fieldset .qs {
-    margin: 10;
-    padding: 0;
-}
-.view .fieldset h1{
-    display: none;
-}
-.view .field{
-    padding: 10;
-    background: white;
-    line-height: 15px;
-    display: inline-block;
-    width: 45%;
-}
-.view .renderer{
-    margin: 20;
-}
-.back{
-    position: fixed;
-    right: 30;
-    bottom: 30;
-    background-color: #49cc90;
-    width: 50;
-    height: 50;
-    border-radius: 50%;
-}
-.back a{
-    color: white;
-    margin-left: 10;
-    font-size: 40;
-    text-decoration: none;
-}
-th{
-    height: 40px;
-}
-h1{
-    color: #3b4151;
-    font-size: 36px;
-    margin: 0 20 20 20;
-}
-h2{
-    margin: 20 20 0 20;
-    color: #3b4151;
-}
-.fieldset{
-    margin: 0 20 0 20;
-    background: white;
-    padding: 10;
-    margin-bottom: 10;
-}
-small {
-    background: #7d8492;
-    border-radius: 57px;
-    display: inline-block;
-    font-size: 10px;
-    margin: 0 0 0 5px;
-    padding: 2px 4px;
-    position: relative;
-    top: -5px;
-    vertical-align: super;
-    color: white;
-}
 .form-header, .form-body, .form-footer{
     margin: 20px;
     min-height: 40px;
@@ -321,15 +175,15 @@ small {
 .form-container.login .form-group.token{
     display: none;
 }
-.feedback{
+.message{
     display: none;
-    padding: 15;
+    padding: 15px;
     background-color: #49cc90;
     color: white;
-    width: 300;
+    width: 300px;
     position: fixed;
-    top: 60;
-    right: 20;
+    top: 60px;
+    right: 20px;
     text-align: center;
     z-index: 9999;
 }
@@ -338,14 +192,4 @@ small {
     background-color: rgba(97,175,254,.1);
     border: solid 1px #61affe;
 
-}
-.dialog-layer{
-    background-color: black;
-    bottom: 0;
-    left: 0;
-    position: fixed;
-    right: 0;
-    top: 0;
-    opacity: 0.7;
-    display: none;
 }

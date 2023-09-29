@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import { useState, useEffect } from 'react'
 import Action from './Action'
 import {ClearFix, Empty, Loading} from './Utils'
 
@@ -46,8 +46,9 @@ function FilterField(props){
 
 function Pagination(props){
     return (
-        <div className="pagination">
-            {props.data.next && <button onClick={function(){alert(props.data.next)}}>Próximo</button>}
+        <div className="pagination right">
+            {props.data.previous && <button onClick={function(){props.reloader(props.data.previous)}}>Anterior</button>}
+            {props.data.next && <button onClick={function(){props.reloader(props.data.next)}}>Próximo</button>}
         </div>
     )
 }
@@ -62,16 +63,16 @@ function DataTable(props){
                     <thead>
                         <tr>
                             {Object.keys(props.data.results[0]).map((k) => (
-                              <th>{k}</th>
+                              <th key={Math.random()}>{k}</th>
                             ))}
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         {props.data.results.map((item) => (
-                          <tr>
+                          <tr key={Math.random()}>
                             {Object.keys(props.data.results[0]).map((k) => (
-                              <td>{JSON.stringify(item[k])}</td>
+                              <td key={Math.random()}>{JSON.stringify(item[k])}</td>
                             ))}
                             <td><InstanceActions data={props.data} id={item.id}/></td>
                           </tr>
@@ -106,17 +107,28 @@ function BatchActions(props){
 }
 
 function QuerySet(props){
+    const [data, setdata] = useState(props.data);
+
+    useEffect(()=>{
+
+    }, [])
+
+    function reload(url){
+        request('GET', url, function(data){
+            setdata(data);
+        });
+    }
+    //<div>{JSON.stringify(data)}</div>
     return (
         <div>
-            <div>{JSON.stringify(props.data)}</div>
-            <h1>{props.data.model} ({props.data.count})</h1>
-            <GlobalActions data={props.data} reloader={props.reloader}/>
+            <h1>{props.data.model} ({data.count})</h1>
+            <GlobalActions data={data} reloader={props.reloader}/>
             <ClearFix/>
             <FilterForm/>
-            <Pagination data={props.data}/>
-            <DataTable data={props.data}/>
-            <BatchActions data={props.data}/>
-            <Pagination data={props.data}/>
+            <Pagination data={data} reloader={reload}/>
+            <DataTable data={data}/>
+            <BatchActions data={data}/>
+            <Pagination data={data} reloader={reload}/>
         </div>
     )
 }

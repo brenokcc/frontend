@@ -11,12 +11,14 @@ function request(method, url, callback, data){
     if(url.indexOf(API_URL) == -1) url = API_URL + url;
     var params = {method: method, headers: headers};
     if(data) params['body'] = data;
+    var httpResponse = null;
     fetch(url, params).then(
-        response => response.json()
-    ).then(
-        data => {
-            callback(data);
+        function (response){
+            httpResponse = response;
+            return response.json()
         }
+    ).then(
+        data => {callback(data, httpResponse);}
     );
 }
 function initialize(element){
@@ -177,64 +179,6 @@ function showTask(key, callback){
             )
         }
     );
-}
-
-function processJsonResponse(data){
-    if(data.redirect){
-        function callback(){
-            if(document.querySelectorAll("dialog.opened").length>0){
-                var dialog = document.querySelector("dialog.opened");
-                dialog.close();
-                dialog.classList.remove('opened');
-                dialog.remove();
-                displayLayer('none');
-                if(window['formcallback']){
-                    window['formcallback']();
-                } else {
-                    if(data.redirect==document.location.pathname){
-                        if(reloadable) {
-                            if(data.message) showMessage(data.message);
-                            filter(document.getElementById(reloadable));
-                        } else {
-                            if(data.message) setCookie('message', data.message);
-                            document.location.reload();
-                        }
-                    } else {
-                        if(data.message) setCookie('message', data.message);
-                        document.location.href = data.redirect;
-                    }
-                }
-            } else {
-                if(data.message) setCookie('message', data.message);
-                document.location.href = data.redirect;
-            }
-        }
-        if(data.task) showTask(data.task, callback);
-        else callback()
-    } else if (Object.keys(data).length) {
-        showErrors(data);
-    }
-}
-function submitForm(id){
-    var id = 'form';
-    hideMessage();
-    var form = document.getElementById(id);
-    var data = new FormData(form);
-    var button = form.parentNode.parentNode.querySelector(".btn.submit");
-    var label = button.innerHTML;
-    button.innerHTML = 'Aguarde...';
-    form.querySelectorAll("input[type=file]").forEach(function( widget ) {
-        if(widget.blob){
-            data.delete(widget.name);
-            data.append(widget.name, widget.blob, new Date().getTime()+'.'+'png');
-        }
-    });
-    function callback(data){
-        button.innerHTML = label;
-        processJsonResponse(data);
-    }
-    if(form.method=='post') request('POST', form.action, callback, data);
-    else request('GET', form.action+'?'+new URLSearchParams(new FormData(form)).toString(), callback);
 }
 function addParam(url, name, value, reload){
     var tokens = url.split('?');

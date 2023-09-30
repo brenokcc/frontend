@@ -91,6 +91,15 @@ function Header(props){
 }
 
 function Message(props){
+
+    useEffect(()=>{
+        var message = getCookie('message');
+        if(message){
+            showMessage(message);
+            setCookie('message', null);
+        }
+    }, [])
+
     return (
         <div className="message">Message</div>
     )

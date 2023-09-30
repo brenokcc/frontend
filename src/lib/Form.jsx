@@ -99,6 +99,73 @@ function Form(props){
         {type: 'select', name:'tipo', value:{id: 1, text: ''}},
         {type: 'select', name:'pesquisadores_institucionais', multiple:true, value:[{id: 1, text: 'João'}]},
     ]
+
+    function process(data, response){
+        console.log(response.headers);
+        window['x'] = response.headers;
+        if (response.status>=400){
+             showErrors(data);
+        } else if (data.token){
+            localStorage.setItem('token', data.token);
+        }
+        if(data.redirect){
+            function callback(){
+                if(document.querySelectorAll("dialog.opened").length>0){
+                    var dialog = document.querySelector("dialog.opened");
+                    dialog.close();
+                    dialog.classList.remove('opened');
+                    dialog.remove();
+                    displayLayer('none');
+                    if(window['formcallback']){
+                        window['formcallback']();
+                    } else {
+                        if(data.redirect==document.location.pathname){
+                            if(reloadable) {
+                                if(data.message) showMessage(data.message);
+                                filter(document.getElementById(reloadable));
+                            } else {
+                                if(data.message) setCookie('message', data.message);
+                                document.location.reload();
+                            }
+                        } else {
+                            if(data.message) setCookie('message', data.message);
+                            document.location.href = data.redirect;
+                        }
+                    }
+                } else {
+                    if(data.message) setCookie('message', data.message);
+                    document.location.href = data.redirect;
+                }
+            }
+            if(data.task) showTask(data.task, callback);
+            else callback()
+        } else if (Object.keys(data).length) {
+            alert(data);
+        }
+    }
+
+    function submit(){
+        hideMessage();
+        var id = 'form';
+        var form = document.getElementById(id);
+        var data = new FormData(form);
+        var button = form.querySelector(".btn.submit");
+        var label = button.value;
+        button.value = 'Aguarde...';
+        form.querySelectorAll("input[type=file]").forEach(function( widget ) {
+            if(widget.blob){
+                data.delete(widget.name);
+                data.append(widget.name, widget.blob, new Date().getTime()+'.'+'png');
+            }
+        });
+        function callback(data, response){
+            button.value = label;
+            process(data, response);
+        }
+        if(form.method=='post') request('POST', form.action, callback, data);
+        else request('GET', form.action+'?'+new URLSearchParams(new FormData(form)).toString(), callback);
+    }
+
     return (
         <div>
             <h2>Form Title</h2>
@@ -116,7 +183,7 @@ function Form(props){
                 ))}
 
                 <div className="right">
-                    <input className="btn submit" type="button" onClick={submitForm} value="Enviar"/>
+                    <input className="btn submit" type="button" onClick={submit} value="Enviar"/>
                 </div>
             </form>
         </div>

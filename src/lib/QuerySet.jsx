@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Action from './Action'
+import {Field} from './Form'
 import {ClearFix, Empty, Loading} from './Utils'
 
 
@@ -27,14 +28,36 @@ function InstanceActions(props){
     )
 }
 
-function FilterForm(props){
-    var fields = [1, 2, 3];
+function SearchField(props){
     return (
-        <div className="filterForm">
-            {fields.map((choice) => (
-              <FilterField key={Math.random()}/>
-            ))}
+        <div>
+            <label>Palavra-chave</label>
+            <br/>
+            <input type="text" name="q" className="form-control"/>
         </div>
+    )
+}
+function FilterButton(props){
+    return (
+        <div>
+            <input className="btn" type="button" value="filter" onClick={props.onfilter}/>
+        </div>
+    )
+}
+
+function FilterForm(props){
+    return (
+        <form className="filterForm">
+            <SearchField/>
+            {props.data.filters.map((filter) => (
+              <div className="filterField" key={Math.random()}>
+                <label>{filter.name}</label>
+                <br/>
+                <Field data={filter}/>
+            </div>
+            ))}
+            <FilterButton onfilter={props.onfilter}/>
+        </form>
     )
 }
 
@@ -108,6 +131,7 @@ function BatchActions(props){
 
 function QuerySet(props){
     const [data, setdata] = useState(props.data);
+    const [search, setsearch] = useState(props.data);
 
     useEffect(()=>{
 
@@ -118,13 +142,19 @@ function QuerySet(props){
             setdata(data);
         });
     }
+
+    function filter(){
+        var params = $(event.target).closest('form').serialize();
+        reload(props.data.url+'?'+params);
+    }
+
     //<div>{JSON.stringify(data)}</div>
     return (
-        <div>
+        <div className="queryset">
             <h1>{props.data.model} ({data.count})</h1>
             <GlobalActions data={data} reloader={reload}/>
             <ClearFix/>
-            <FilterForm/>
+            <FilterForm data={data} onfilter={filter}/>
             <Pagination data={data} reloader={reload}/>
             <DataTable data={data} reloader={reload}/>
             <BatchActions data={data}/>

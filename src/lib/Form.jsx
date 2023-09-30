@@ -14,9 +14,10 @@ function BooleanSelect(props){
     var field = props.data;
     return (
         <select className="form-control" id={field.name} name={field.name} data-label={field.name} value={field.value}>
-            <option value="null"></option>
+            <option></option>
             <option value="true">Sim</option>
             <option value="false">Não</option>
+            <option value="null">Não Informado</option>
         </select>
     )
 }
@@ -35,6 +36,8 @@ function Select(props){
 
 function Autocomplete(props){
     var field = props.data;
+    var value = null
+    if(field.value) value = field.value.id;
 
     useEffect(() => {
         autocomplete(field.name+"__xxx", field.name, false, '/api/v1/instituicoes/add/');
@@ -42,7 +45,7 @@ function Autocomplete(props){
 
     return (
         <div className="autocomplete">
-            <select className="form-control" id={field.name+'__xxx'} name={field.name} style={{display:'none'}} defaultValue={field.value.id}>
+            <select className="form-control" id={field.name+'__xxx'} name={field.name} style={{display:'none'}} defaultValue={value}>
                 { field.value &&
                     <option value={field.value.id}>{ field.value.text }</option>
                 }
@@ -82,7 +85,7 @@ function Field(props){
     var field = props.data;
     if(["text", "password"].indexOf(field.type)>=0){
         return <Input data={field}/>
-    } else if(field.type == "boolean"){
+    } else if(field.type == "boolean" || field.type == "bool"){
         return <BooleanSelect data={field}/>
     } else if(field.type == "select"){
         if(field.choices) return <Select data={field}/>
@@ -147,27 +150,33 @@ function Form(props){
         else request('GET', form.action+'?'+new URLSearchParams(new FormData(form)).toString(), callback);
     }
 
-    return (
-        <div>
-            <h2>Form Title</h2>
-            <div>{JSON.stringify(props.data)}</div>
-            <form data-method={props.data.method} id="form" className="form" action={props.data.action}>
+    function render(){
+        return (
+            <div>
+                <h2>Form Title</h2>
+                <div>{JSON.stringify(props.data)}</div>
+                <form data-method={props.data.method} id="form" className="form" action={props.data.action}>
 
-                {form.fields.map((field) => (
-                  <div className="form-group" key={Math.random()}>
-                    <label>{field.name}</label>
-                    <br/>
-                    <Field data={field}/>
-                    <div className={"field-error "+field.name}></div>
-                    <div className="help_text">{field.help_text}</div>
-                  </div>
-                ))}
+                    {form.fields.map((field) => (
+                      <div className="form-group" key={Math.random()}>
+                        <label>{field.name}</label>
+                        <br/>
+                        <Field data={field}/>
+                        <div className={"field-error "+field.name}></div>
+                        <div className="help_text">{field.help_text}</div>
+                      </div>
+                    ))}
 
-                <div className="right">
-                    <input className="btn submit" type="button" onClick={submit} value="Enviar"/>
-                </div>
-            </form>
-        </div>
-    )
+                    <div className="right">
+                        <input className="btn submit" type="button" onClick={submit} value="Enviar"/>
+                    </div>
+                </form>
+            </div>
+        )
+    }
+    return render()
 }
-export default Form
+
+
+export {Form, Field};
+export default Form;

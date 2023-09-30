@@ -14,17 +14,7 @@ function Root(props){
 
     useEffect(()=>{
         window.addEventListener('keydown', (event) => {
-          if(event.code=='Escape'){
-            var dialogs = document.getElementsByTagName('dialog');
-            for(var i=0; i<dialogs.length; i++){
-                var dialog = dialogs[i];
-                dialog.close();
-                dialog.classList.remove('opened');
-                dialog.remove();
-                $('.layer').hide();
-                if(window.reloader) window.reloader();
-            }
-          }
+          if(event.code=='Escape') closeDialogs();
         }, false);
     }, [])
 

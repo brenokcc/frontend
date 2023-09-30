@@ -12,6 +12,7 @@ function request(method, url, callback, data){
     var params = {method: method, headers: headers};
     if(data) params['body'] = data;
     var httpResponse = null;
+    console.log(method, url);
     fetch(url, params).then(
         function (response){
             httpResponse = response;
@@ -21,6 +22,19 @@ function request(method, url, callback, data){
         data => {callback(data, httpResponse);}
     );
 }
+
+function closeDialogs(){
+    var dialogs = document.getElementsByTagName('dialog');
+    for(var i=0; i<dialogs.length; i++){
+        var dialog = dialogs[i];
+        dialog.close();
+        dialog.classList.remove('opened');
+        dialog.remove();
+        $('.layer').hide();
+        if(window.reloader) window.reloader();
+    }
+}
+
 function initialize(element){
     if(!element) element = document;
     var message = getCookie('message');

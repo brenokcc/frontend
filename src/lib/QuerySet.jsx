@@ -74,7 +74,7 @@ function DataTable(props){
                             {Object.keys(props.data.results[0]).map((k) => (
                               <td key={Math.random()}>{JSON.stringify(item[k])}</td>
                             ))}
-                            <td><InstanceActions data={props.data} id={item.id}/></td>
+                            <td><InstanceActions data={props.data} id={item.id} reloader={props.reloader}/></td>
                           </tr>
                         ))}
                     </tbody>
@@ -114,7 +114,7 @@ function QuerySet(props){
     }, [])
 
     function reload(url){
-        request('GET', url, function(data){
+        request('GET', url || props.data.url, function(data){
             setdata(data);
         });
     }
@@ -122,11 +122,11 @@ function QuerySet(props){
     return (
         <div>
             <h1>{props.data.model} ({data.count})</h1>
-            <GlobalActions data={data} reloader={props.reloader}/>
+            <GlobalActions data={data} reloader={reload}/>
             <ClearFix/>
             <FilterForm/>
             <Pagination data={data} reloader={reload}/>
-            <DataTable data={data}/>
+            <DataTable data={data} reloader={reload}/>
             <BatchActions data={data}/>
             <Pagination data={data} reloader={reload}/>
         </div>

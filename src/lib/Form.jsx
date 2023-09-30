@@ -42,9 +42,9 @@ function Autocomplete(props){
 
     return (
         <div className="autocomplete">
-            <select className="form-control" id={field.name+'__xxx'} name={field.name} style={{display:'none'}}>
+            <select className="form-control" id={field.name+'__xxx'} name={field.name} style={{display:'none'}} defaultValue={field.value.id}>
                 { field.value &&
-                    <option selected value={field.value.id}>{ field.value.text }</option>
+                    <option value={field.value.id}>{ field.value.text }</option>
                 }
             </select>
             <input className="form-control" autoComplete="off" id={field.name+'__xxxautocomplete'} type="text" name={field.name+'__xxxautocomplete'} defaultValue={field.value ? field.value.text : ''} data-label={field.name}/>
@@ -55,8 +55,10 @@ function Autocomplete(props){
 function AutocompleteMultiple(props){
     var field = props.data;
     var options = [];
+    var values = [];
     if(field.value){
-        options = field.value.map((value) => (<option selected value={value.id}>{value.text}</option>));
+        options = field.value.map((value) => (<option key={Math.random()} value={value.id}>{value.text}</option>));
+        field.value.forEach(function(value){values.push(value.id)});
     }
 
     useEffect(() => {
@@ -67,7 +69,7 @@ function AutocompleteMultiple(props){
     return (
         <div className="autocomplete">
             <div id={field.name+"__xxxboxes"}></div>
-            <select className="form-control" id={field.name+'__xxx'} name={field.name} style={{display:'none'}} multiple>
+            <select className="form-control" id={field.name+'__xxx'} name={field.name} style={{display:'none'}} multiple defaultValue={values}>
                 {options}
             </select>
             <input className="form-control" autoComplete="off" id={field.name+'__xxxautocomplete'} type="text" name={field.name+'__xxxautocomplete'} defaultValue={field.value.text} data-label={field.name}/>
@@ -86,6 +88,8 @@ function Field(props){
         if(field.choices) return <Select data={field}/>
         else if(field.multiple) return <AutocompleteMultiple data={field}/>
         else return <Autocomplete data={field}/>
+    } else {
+        return <div>{field.value}</div>
     }
 }
 
@@ -99,9 +103,7 @@ function Form(props){
         {type: 'select', name:'tipo', value:{id: 1, text: ''}},
         {type: 'select', name:'pesquisadores_institucionais', multiple:true, value:[{id: 1, text: 'João'}]},
     ]
-
     function process(data, response){
-        console.log(response.headers);
         window['x'] = response.headers;
         if (response.status>=400){
              showErrors(data);
@@ -109,38 +111,17 @@ function Form(props){
             localStorage.setItem('token', data.token);
         }
         if(data.redirect){
-            function callback(){
-                if(document.querySelectorAll("dialog.opened").length>0){
-                    var dialog = document.querySelector("dialog.opened");
-                    dialog.close();
-                    dialog.classList.remove('opened');
-                    dialog.remove();
-                    displayLayer('none');
-                    if(window['formcallback']){
-                        window['formcallback']();
-                    } else {
-                        if(data.redirect==document.location.pathname){
-                            if(reloadable) {
-                                if(data.message) showMessage(data.message);
-                                filter(document.getElementById(reloadable));
-                            } else {
-                                if(data.message) setCookie('message', data.message);
-                                document.location.reload();
-                            }
-                        } else {
-                            if(data.message) setCookie('message', data.message);
-                            document.location.href = data.redirect;
-                        }
-                    }
-                } else {
-                    if(data.message) setCookie('message', data.message);
-                    document.location.href = data.redirect;
-                }
+            if(data.message) setCookie('message', data.message);
+            document.location.href = data.redirect;
+        } else {
+            if(data.message) showMessage(message);
+            if(data.task){
+                showTask(data.task, callback);
+            } else {
+                if (Object.keys(data).length) console.log(data);
+                closeDialogs();
+                showMessage('Ação realizada com sucesso');
             }
-            if(data.task) showTask(data.task, callback);
-            else callback()
-        } else if (Object.keys(data).length) {
-            alert(data);
         }
     }
 
@@ -162,7 +143,7 @@ function Form(props){
             button.value = label;
             process(data, response);
         }
-        if(form.method=='post') request('POST', form.action, callback, data);
+        if(form.dataset.method.toUpperCase()!='GET') request(form.dataset.method.toUpperCase(), form.action, callback, data);
         else request('GET', form.action+'?'+new URLSearchParams(new FormData(form)).toString(), callback);
     }
 
@@ -170,7 +151,7 @@ function Form(props){
         <div>
             <h2>Form Title</h2>
             <div>{JSON.stringify(props.data)}</div>
-            <form method="post" id="form" className="form">
+            <form data-method={props.data.method} id="form" className="form" action={props.data.action}>
 
                 {form.fields.map((field) => (
                   <div className="form-group" key={Math.random()}>

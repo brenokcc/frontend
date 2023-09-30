@@ -4,8 +4,20 @@ html {
 *, *:before, *:after {
   box-sizing: inherit;
 }
+@font-face {
+    font-family: 'Rawline';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Rawline'), url('fonts/rawline-400.woff') format('woff');
+}
+@font-face {
+    font-family: 'Rawline';
+    font-style: italic;
+    font-weight: 400;
+    src: local('Rawline'), url('fonts/rawline-400i.woff') format('woff');
+}
 body{
-    font-family: sans-serif;
+    font-family: Rawline, Raleway, sans-serif;
     font-size: 14px;
     margin: 0;
 }
@@ -20,7 +32,12 @@ body{
 }
 .form-group{ width: 100%; }
 .form-body.empty { display: none}
-.footer {text-align: center;}
+.footer {
+    height: 200px;
+    background-color: #071e41;
+    color: white;
+    text-align: center;
+}
 .loading{
     text-align:center;
     padding: 50px;
@@ -97,15 +114,66 @@ i{
     margin-left: 5px;
     margin-right: 5px;
 }
+i.clickable{
+    cursor: pointer;
+
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    padding-top: 10px;
+}
+i.clickable:hover{
+    background-color: #dae3f4;
+}
+.accordion .accordionTitle i{
+    font-size: 65%;
+    margin-right: 10px;
+}
+.accordion .accordionTitle{
+    cursor: pointer;
+    height: 55px;
+    padding-top: 15px;
+    padding-left: 10px;
+    border-top: solid 1px #DDD;
+    font-size: 1.1rem;
+}
+.accordion .accordionTitle:hover{
+    background-color: #dae3f4;
+}
+.accordion .accordionBody{
+    padding: 30px;
+    background-color: #f8f8f8;
+    border-bottom: solid 1px #DDD;
+    margin-bottom: 20px;
+}
 .viewer label{
     font-weight: bold;
 }
 .queryset table{
     width: 100%;
+    border-spacing: 0px;
+}
+.queryset table thead th{
+    background-color: #f8f8f8;
+    color: #1151b3;
+    text-align: left;
+    padding: 10px;
+}
+.queryset table tbody td{
+    border-bottom: solid 1px #DDD;
+    padding: 15px;
 }
 .queryset .filterForm > div{
     margin-right: 10px;
     display: inline-block;
+}
+.queryset .pagination{
+    margin-top: 20px;
+    height: 40px;
+}
+.queryset .pagination select{
+    border: 0px;
 }
 .queryset .subsets{
     width: 100%;

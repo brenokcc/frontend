@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Form from './Form'
 import QuerySet from './QuerySet'
 import Viewer from './Viewer'
@@ -98,10 +99,42 @@ function Icons(props){
 }
 
 function Icon(props){
+    var className = "fa-solid fa-"+props.icon;
+    if(props.onClick) className += " clickable";
     return (
-        <i className={"fa-solid fa-"+props.icon}></i>
+        <i className={className} onClick={props.onClick}></i>
     )
 }
 
-export {TitleCase, Value, ClearFix, Empty, Loading, Content, Icon};
+function Accordion(props){
+
+    const [expanded, expand] = useState(props.expanded || true);
+
+    function icon(){
+        return expanded ? "chevron-up" : "chevron-down";
+    }
+
+    function click(){
+        expand(!expanded);
+    }
+
+    return (
+        <div className="accordion">
+            <div className="accordionTitle" onClick={click}>
+                <div className="left">
+                    {props.title}
+                </div>
+                <div className="right">
+                    <Icon icon={icon()}/>
+                </div>
+            </div>
+            <ClearFix/>
+            {expanded && <div className="accordionBody">
+                {props.children}
+            </div>}
+        </div>
+    )
+}
+
+export {TitleCase, Value, ClearFix, Empty, Loading, Content, Icon, Accordion};
 export default Loading;

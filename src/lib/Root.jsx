@@ -34,7 +34,6 @@ function Root(props){
                     <button onClick={function(){ modal('/api/v1/health/check/') }}>Open Dialog!</button>
                     <Breadcrumbs/>
                     <Content data={data} reloader={load}/>
-                    <Icon icon="arrow-right"/>
                     <Footer/>
                     <Message/>
                     <Layer/>
@@ -47,12 +46,6 @@ function Root(props){
     }
     if(data==null) load();
     return content();
-}
-
-function Icon(props){
-    return (
-        <i className={"fa-solid fa-"+props.icon}></i>
-    )
 }
 
 function Layer(props){

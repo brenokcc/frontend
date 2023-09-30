@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Action from './Action'
 import {Field} from './Form'
-import {ClearFix, Empty, Loading} from './Utils'
+import {TitleCase, Value, ClearFix, Empty, Loading, Icon} from './Utils'
 
 
 function GlobalActions(props){
@@ -18,7 +18,7 @@ function GlobalActions(props){
 
 function InstanceActions(props){
     return (
-        <div className="globalActions right">
+        <div className="instanceActions right">
             {props.data.actions.map((action) => action.target == "instance" && (
               <Action href={action.url.replace('{id}', props.id)} key={Math.random()} modal={action.modal} reloader={props.reloader}>
                 {action.name}
@@ -40,7 +40,10 @@ function SearchField(props){
 function FilterButton(props){
     return (
         <div>
-            <input className="btn" type="button" value="filter" onClick={props.onfilter}/>
+            <button className="btn" type="button" onClick={props.onfilter}>
+                <Icon icon="filter"/>
+                filter
+            </button>
         </div>
     )
 }
@@ -51,9 +54,9 @@ function FilterForm(props){
             <SearchField state={props.state}/>
             {props.data.filters.map((filter) => (
               <div className="filterField" key={Math.random()}>
-                <label>{filter.name}</label>
+                <label><TitleCase text={filter.name}/></label>
                 <br/>
-                <Field data={filter} url={props.data.url}/>
+                <Field data={filter} url={props.url}/>
             </div>
             ))}
             <FilterButton onfilter={props.onfilter}/>
@@ -80,7 +83,7 @@ function DataTable(props){
                     <thead>
                         <tr>
                             {Object.keys(props.data.results[0]).map((k) => (
-                              <th key={Math.random()}>{k}</th>
+                              <th key={Math.random()}><TitleCase text={k}/></th>
                             ))}
                             <th></th>
                         </tr>
@@ -89,7 +92,7 @@ function DataTable(props){
                         {props.data.results.map((item) => (
                           <tr key={Math.random()}>
                             {Object.keys(props.data.results[0]).map((k) => (
-                              <td key={Math.random()}>{JSON.stringify(item[k])}</td>
+                              <td key={Math.random()}>{Value(item[k])}</td>
                             ))}
                             <td><InstanceActions data={props.data} id={item.id} reloader={props.reloader}/></td>
                           </tr>
@@ -127,47 +130,62 @@ function Subsets(props){
     var subsets = [];
     var style = "subset";
     var active = 'all';
-    Object.keys(props.data.subsets).map((k) => {
-        if(props.data.subset==k) active = k;
-    })
-    if(active=='all') style = "subset active"
-    subsets.push({k:'all', v:props.data.count, style:style});
-    {Object.keys(props.data.subsets).map((k) => {
-        style = "subset";
-        if(k==active) style = "subset active"
-        subsets.push({k:k, v:props.data.subsets[k], style:style});
-    })}
-    return (
-        <div className="subsets">
-            {subsets.map((subset) => (
-              <div className={subset.style} key={Math.random()} onClick={function(){props.onChange(subset.k)}}>
-                {subset.k} ({subset.v})
-              </div>
-            ))}
-        </div>
-    )
+    function render(){
+        if(props.data.subsets){
+            Object.keys(props.data.subsets).map((k) => {
+                if(props.data.subset==k) active = k;
+            })
+            if(active=='all') style = "subset active"
+            subsets.push({k:'all', v:props.data.count, style:style});
+            {Object.keys(props.data.subsets).map((k) => {
+                style = "subset";
+                if(k==active) style = "subset active"
+                subsets.push({k:k, v:props.data.subsets[k], style:style});
+            })}
+            return (
+                <div className="subsets">
+                    {subsets.map((subset) => (
+                      <div className={subset.style} key={Math.random()} onClick={function(){props.onChange(subset.k)}}>
+                        <TitleCase text={subset.k}/> ({subset.v})
+                      </div>
+                    ))}
+                </div>
+            )
+        }
+    }
 }
 
 function QuerySet(props){
     const [data, setdata] = useState(props.data);
     const [search, setsearch] = useState(props.data);
     var state = {}
+    var title = props.relation || data.model;
 
     useEffect(()=>{
 
     }, [])
 
+    function getContextURL(url){
+        var url = url || props.data.url;
+        if(props.relation){
+            if(url.indexOf('?')==-1) url+="?only="+props.relation;
+            else url+="&only="+props.relation;
+        }
+        return url;
+    }
+
     function reload(url){
-        request('GET', url || props.data.url, function(data){
-            setdata(data);
+        request('GET', getContextURL(url), function(data){
+            if(props.relation) setdata(data['result'][props.relation])
+            else setdata(data);
         });
     }
 
-    function filter(subset){
+    function filter(){
         state = {}
         var params = $(event.target).closest('form').serialize();
         var usp = new URLSearchParams(params);
-        if(subset) usp.set('subset', subset)
+        if(props.datasubset) usp.set('subset', props.data.subset)
         for(const [key, value] of usp.entries()) {
             console.log(key+' : '+value);
             state[key] = value;
@@ -177,17 +195,17 @@ function QuerySet(props){
 
     function subset(name){
         props.data.subset = name;
-        filter(name);
+        filter();
     }
 
     //<div>{JSON.stringify(data)}</div>
     return (
         <div className="queryset">
-            <h1>{data.model} ({data.count})</h1>
+            <h1><TitleCase text={title}/> ({data.count})</h1>
             <GlobalActions data={data} reloader={reload}/>
             <ClearFix/>
             <Subsets data={props.data} state={state} onChange={subset}/>
-            <FilterForm data={data} onfilter={filter}/>
+            <FilterForm data={data} onfilter={filter} url={getContextURL()}/>
             <Pagination data={data} reloader={reload}/>
             <ClearFix/>
             <DataTable data={data} reloader={reload}/>

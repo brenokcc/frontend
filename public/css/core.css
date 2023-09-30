@@ -74,8 +74,7 @@ body{
     background-color: #ffd43b;
 }
 .btn {
-    margin-left: 5px;
-    margin-right: 5px;
+    margin: 5px;
     display: inline-block;
     font-weight: 400;
     line-height: 1.5;
@@ -93,6 +92,16 @@ body{
     font-size: 1rem;
     border-radius: 100em;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+i{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.viewer label{
+    font-weight: bold;
+}
+.queryset table{
+    width: 100%;
 }
 .queryset .filterForm > div{
     margin-right: 10px;

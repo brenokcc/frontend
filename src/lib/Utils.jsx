@@ -1,5 +1,37 @@
 import Form from './Form'
 import QuerySet from './QuerySet'
+import Viewer from './Viewer'
+
+function TitleCase(props){
+    if(props.text){
+        var title = props.text.replace (/^[-_]*(.)/, (_, c) => c.toUpperCase()).replace (/[-_]+(.)/g, (_, c) => ' ' + c.toUpperCase());
+        return <span>{title}</span>
+    }
+    return <span></span>
+}
+
+function Format(obj){
+    if(obj===null) return '-';
+    if(obj==="") return '-';
+    if(obj===true) return 'Sim';
+    if(obj===false) return 'Não';
+    if(obj instanceof String) return obj;
+    if(typeof obj === "string") return obj;
+    return JSON.stringify(obj);
+}
+
+function Value(obj){
+    if(Array.isArray(obj)){
+        return (
+            <ul>
+                {obj.map((item) => (
+                  <li key={Math.random()}>{Format(item)}</li>
+                ))}
+            </ul>
+        )
+    }
+    return Format(obj)
+}
 
 function ClearFix(){
     return (
@@ -29,6 +61,8 @@ function Content(props){
               return (<Form data={props.data}/>);
             case 'queryset':
               return (<QuerySet data={props.data} reloader={props.reloader}/>);
+             case 'instance':
+              return (<Viewer data={props.data} reloader={props.reloader}/>);
             case 'icons':
               return (<Icons data={props.data}/>);
             default:
@@ -63,5 +97,11 @@ function Icons(props){
     )
 }
 
-export {ClearFix, Empty, Loading, Content};
+function Icon(props){
+    return (
+        <i className={"fa-solid fa-"+props.icon}></i>
+    )
+}
+
+export {TitleCase, Value, ClearFix, Empty, Loading, Content, Icon};
 export default Loading;

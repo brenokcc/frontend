@@ -95,7 +95,20 @@ body{
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 .queryset .filterForm > div{
+    margin-right: 10px;
     display: inline-block;
+}
+.queryset .subsets{
+    width: 100%;
+    text-align:center;
+}
+.queryset .subsets .subset{
+    cursor: pointer;
+    display: inline-block;
+    margin: 20px;
+}
+.queryset .subsets .subset.active{
+    font-weight: bold;
 }
 .autocomplete {
   /*the container must be positioned relative:*/

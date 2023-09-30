@@ -6,14 +6,14 @@ function Input(props){
     var readonly = "";
     if(field.value) value = field.value;
     return (
-        <input className="form-control" type={field.type} name={field.name} id={field.name} defaultValue={field.value} data-label={field.name} readOnly={field.read_only} />
+        <input className="form-control" type={field.type} name={field.name} id={field.name} defaultValue={field.value} data-label={field.name} readOnly={field.read_only}/>
     )
 }
 
 function BooleanSelect(props){
     var field = props.data;
     return (
-        <select className="form-control" id={field.name} name={field.name} data-label={field.name} value={field.value}>
+        <select className="form-control" id={field.name} name={field.name} data-label={field.name} defaultValue={field.value}>
             <option></option>
             <option value="true">Sim</option>
             <option value="false">Não</option>
@@ -40,7 +40,7 @@ function Autocomplete(props){
     if(field.value) value = field.value.id;
 
     useEffect(() => {
-        autocomplete(field.name+"__xxx", field.name, false, '/api/v1/instituicoes/add/');
+        autocomplete(field.name+"__xxx", field.name, false, props.url);
     });
 
     return (
@@ -65,7 +65,7 @@ function AutocompleteMultiple(props){
     }
 
     useEffect(() => {
-        autocomplete(field.name+"__xxx", field.name, true, '/api/v1/instituicoes/add/');
+        autocomplete(field.name+"__xxx", field.name, true, props.url);
     });
 
 
@@ -89,8 +89,8 @@ function Field(props){
         return <BooleanSelect data={field}/>
     } else if(field.type == "select"){
         if(field.choices) return <Select data={field}/>
-        else if(field.multiple) return <AutocompleteMultiple data={field}/>
-        else return <Autocomplete data={field}/>
+        else if(field.multiple) return <AutocompleteMultiple data={field} url={props.url}/>
+        else return <Autocomplete data={field} url={props.url}/>
     } else {
         return <div>{field.value}</div>
     }
@@ -161,7 +161,7 @@ function Form(props){
                       <div className="form-group" key={Math.random()}>
                         <label>{field.name}</label>
                         <br/>
-                        <Field data={field}/>
+                        <Field data={field} url={props.data.action}/>
                         <div className={"field-error "+field.name}></div>
                         <div className="help_text">{field.help_text}</div>
                       </div>

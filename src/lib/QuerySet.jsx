@@ -48,22 +48,16 @@ function FilterButton(props){
 function FilterForm(props){
     return (
         <form className="filterForm">
-            <SearchField/>
+            <SearchField state={props.state}/>
             {props.data.filters.map((filter) => (
               <div className="filterField" key={Math.random()}>
                 <label>{filter.name}</label>
                 <br/>
-                <Field data={filter}/>
+                <Field data={filter} url={props.data.url}/>
             </div>
             ))}
             <FilterButton onfilter={props.onfilter}/>
         </form>
-    )
-}
-
-function FilterField(props){
-     return (
-        <div className="filterField">Filter Field</div>
     )
 }
 
@@ -129,9 +123,35 @@ function BatchActions(props){
     )
 }
 
+function Subsets(props){
+    var subsets = [];
+    var style = "subset";
+    var active = 'all';
+    Object.keys(props.data.subsets).map((k) => {
+        if(props.data.subset==k) active = k;
+    })
+    if(active=='all') style = "subset active"
+    subsets.push({k:'all', v:props.data.count, style:style});
+    {Object.keys(props.data.subsets).map((k) => {
+        style = "subset";
+        if(k==active) style = "subset active"
+        subsets.push({k:k, v:props.data.subsets[k], style:style});
+    })}
+    return (
+        <div className="subsets">
+            {subsets.map((subset) => (
+              <div className={subset.style} key={Math.random()} onClick={function(){props.onChange(subset.k)}}>
+                {subset.k} ({subset.v})
+              </div>
+            ))}
+        </div>
+    )
+}
+
 function QuerySet(props){
     const [data, setdata] = useState(props.data);
     const [search, setsearch] = useState(props.data);
+    var state = {}
 
     useEffect(()=>{
 
@@ -143,22 +163,37 @@ function QuerySet(props){
         });
     }
 
-    function filter(){
+    function filter(subset){
+        state = {}
         var params = $(event.target).closest('form').serialize();
-        reload(props.data.url+'?'+params);
+        var usp = new URLSearchParams(params);
+        if(subset) usp.set('subset', subset)
+        for(const [key, value] of usp.entries()) {
+            console.log(key+' : '+value);
+            state[key] = value;
+        }
+        reload(props.data.url+'?'+usp);
+    }
+
+    function subset(name){
+        props.data.subset = name;
+        filter(name);
     }
 
     //<div>{JSON.stringify(data)}</div>
     return (
         <div className="queryset">
-            <h1>{props.data.model} ({data.count})</h1>
+            <h1>{data.model} ({data.count})</h1>
             <GlobalActions data={data} reloader={reload}/>
             <ClearFix/>
+            <Subsets data={props.data} state={state} onChange={subset}/>
             <FilterForm data={data} onfilter={filter}/>
             <Pagination data={data} reloader={reload}/>
+            <ClearFix/>
             <DataTable data={data} reloader={reload}/>
             <BatchActions data={data}/>
             <Pagination data={data} reloader={reload}/>
+            <ClearFix/>
         </div>
     )
 }

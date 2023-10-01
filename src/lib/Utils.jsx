@@ -2,6 +2,8 @@ import { useState } from 'react'
 import Form from './Form'
 import QuerySet from './QuerySet'
 import Viewer from './Viewer'
+import Dashboard from './Dashboard'
+
 
 function TitleCase(props){
     if(props.text){
@@ -64,7 +66,9 @@ function Content(props){
               return (<QuerySet data={props.data} reloader={props.reloader}/>);
              case 'instance':
               return (<Viewer data={props.data} reloader={props.reloader}/>);
-            case 'icons':
+             case 'dashboard':
+              return (<Dashboard data={props.data}/>);
+             case 'icons':
               return (<Icons data={props.data}/>);
             default:
               return (<Unknown data={props.data}/>);

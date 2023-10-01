@@ -85,6 +85,61 @@ body{
     margin-right: 10px;
     text-decoration: none;
 }
+.boxes{
+    margin-left: -20px;
+    margin-right: -20px;
+    text-align: center;
+    background-color: #f8f8f8;
+}
+.boxes h2{
+    color: #0c326f;
+    padding-top: 25px;
+    font-size: 1.5rem;
+}
+.boxes .item{
+    padding: 20px;
+    display: inline-flex;
+    flex-direction: column;
+    width: 250px;
+    height: 250px;
+    background-color: white;
+    box-shadow: 0px 15px 10px -15px #DDD;
+    margin: 10px;
+    text-decoration: none;
+
+}
+.boxes .item i{
+    margin-top: 30px;
+    font-size: 3rem;
+    color: #2670e8
+}
+.boxes .item .text{
+    margin-top: 40px;
+    font-weight: bold;
+    color: #0c326f;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    height: 70px;
+}
+.indicators{
+    padding: 30px;
+    margin-left: -20px;
+    margin-right: -20px;
+    color: white;
+    background-color: #0c326f;
+    text-align: center;
+}
+.indicators h2{
+    font-size: 1.5rem;
+}
+.indicators .item{
+    padding: 20px;
+    display: inline-flex;
+    flex-direction: column;
+}
+.indicators .item .value{
+    font-size: 3rem;
+}
 .header{
     height: 140px;
     box-shadow: 0px 15px 10px -15px #DDD;

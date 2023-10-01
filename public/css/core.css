@@ -140,6 +140,30 @@ body{
 .indicators .item .value{
     font-size: 3rem;
 }
+.warning{
+    padding: 30px;
+    background-color: #fff5c2;
+    margin-left: -20px;
+    margin-right: -20px;
+}
+.warning .icon{
+    width: 10%;
+    display: inline-block;
+}
+
+.warning .icon i{
+    font-size: 2.5rem;
+}
+
+.warning .detail{
+     width: 90%;
+    display: inline-block;
+}
+
+.warning .detail .actions{
+    text-align: right;
+}
+
 .header{
     height: 140px;
     box-shadow: 0px 15px 10px -15px #DDD;

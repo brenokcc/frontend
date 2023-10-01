@@ -7,8 +7,12 @@ function Input(props){
     var value = "";
     var readonly = "";
     if(field.value) value = field.value;
+
     return (
-        <input className="form-control" type={field.type} name={field.name} id={field.name} defaultValue={field.value} data-label={field.name} readOnly={field.read_only}/>
+        <>
+            {props.icon && <Icon icon={props.icon}/>}
+            <input className="form-control" type={field.type} name={field.name} id={field.name} defaultValue={field.value} data-label={field.name} readOnly={field.read_only}/>
+        </>
     )
 }
 
@@ -154,6 +158,7 @@ function Form(props){
         var button = form.querySelector(".btn.submit");
         var label = button.value;
         button.value = 'Aguarde...';
+        $(form).find('.field-error').hide();
         form.querySelectorAll("input[type=file]").forEach(function( widget ) {
             if(widget.blob){
                 data.delete(widget.name);
@@ -170,13 +175,12 @@ function Form(props){
     //<div>{JSON.stringify(props.data)}</div>
     function render(){
         return (
-            <div>
+            <div className={props.data.name+'-form'}>
                 <h2><TitleCase text={props.data.name}/></h2>
 
                 <form data-method={props.data.method} id="form" className="form" action={props.data.action}>
-
                     {form.fields.map((field) => (
-                      <div className="form-group" key={Math.random()}>
+                      <div className={"form-group "+field.name} key={Math.random()}>
                         <label>
                             <TitleCase text={field.name}/>
                             {field.required && <i>*</i>}

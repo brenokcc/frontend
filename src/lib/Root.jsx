@@ -83,9 +83,44 @@ function Header(props){
                         </div>
                     </div>
                 </div>
-                <div>
-                    <input type="text" className="form-control"/>
-                </div>
+                <Search/>
+            </div>
+        </div>
+    )
+}
+
+function Search(props){
+    const [items, setitems] = useState([]);
+
+    function onChange(){
+        var term = event.target.value;
+        request('GET', '/api/v1/user/resources/?choices_search='+term, function(data){
+            setitems(data);
+        });
+    }
+
+    function dropdown(){
+        if(items.length>0){
+            return (
+                <div className="searcher-items">
+                    {items.map((item) => (
+                        <a href={item.url}>
+                            <div key={Math.random()} data-label="Qualificação Profissional (FIC)">
+                                {item.name}
+                            </div>
+                        </a>
+                    ))}
+                 </div>
+            )
+        }
+    }
+    console.log(items);
+    return (
+        <div className="searcher">
+            <div>
+                <Icon icon="search"/>
+                <input type="text" className="form-control" placeholder="O que você procura?" onChange={onChange}/>
+                {dropdown()}
             </div>
         </div>
     )

@@ -161,8 +161,8 @@ function showMessage(text, style){
         feedback.style.backgroundColor='#61affe';
     } else {
         feedback.style.backgroundColor='#1351b4';
-        setTimeout(function(){feedback.style.display='none';}, 5000);
     }
+    setTimeout(function(){feedback.style.display='none';}, 5000);
 }
 
 function showTask(key, callback){

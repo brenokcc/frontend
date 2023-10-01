@@ -208,6 +208,21 @@ body{
     padding: 7px;
     color: #333;
     font-size: 0.8rem;
+    cursor: pointer;
+}
+.header .right .dropdown{
+    position: absolute;
+    z-index: 1;
+    background-color: white;
+}
+.header .right .dropdown li{
+    padding: 10px;
+    border-bottom: solid 1px #DDD;
+    list-style: none;
+    margin-left: -20px;
+}
+.header .right .user:hover{
+    background-color: #dae3f4;
 }
 .header .right .user .letter{
     background-color: #071e41;

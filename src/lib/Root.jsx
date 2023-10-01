@@ -74,12 +74,20 @@ function Header(props){
                         <Action href="/api/v1/user/" reloader={props.reloader} link={true}>Início</Action>
                         <Action href="/api/v1/icons/" modal={true} reloader={props.reloader} link={true}>Ícones</Action>
                     </div>
-                    <div className="user">
-                        <div className="letter">
-                            A
+                    <div>
+                        <div className="user">
+                            <div className="letter">
+                                A
+                            </div>
+                            <div className="username">
+                                Olá <strong>Admin</strong> <Icon icon="chevron-down"/>
+                            </div>
                         </div>
-                        <div className="username">
-                            Olá <strong>Admin</strong> <Icon icon="chevron-down"/>
+                        <div className="dropdown">
+                            <ul>
+                                <li><a href="#">Alterar Senha</a></li>
+                                <li><a href="/api/v1/token/">Sair</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>

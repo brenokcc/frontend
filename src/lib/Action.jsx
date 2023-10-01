@@ -1,8 +1,8 @@
 import modal from './Modal'
 
+
 function Action(props){
     var className = props.link ? "action" : "action btn";
-    console.log(className);
     function render(){
         if(props.modal){
             return (

@@ -9,7 +9,7 @@ function GlobalActions(props){
         <div className="globalActions right">
             {props.data.actions.map((action) => action.target == "queryset" && (
               <Action href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader}>
-                {action.name}
+                <TitleCase text={action.name}/>
               </Action>
             ))}
         </div>
@@ -21,7 +21,7 @@ function InstanceActions(props){
         <div className="instanceActions right">
             {props.data.actions.map((action) => action.target == "instance" && (
               <Action href={action.url.replace('{id}', props.id)} key={Math.random()} modal={action.modal} reloader={props.reloader}>
-                {action.name}
+                <TitleCase text={action.name}/>
               </Action>
             ))}
         </div>
@@ -80,7 +80,7 @@ function Pagination(props){
     }
     var start = ((page-1) * 10) + 1;
     var end = start + 10 - 1;
-    if(page>1){
+    if(props.data.count > 10){
         return (
             <div className="pagination">
                 <div className="left">
@@ -101,7 +101,7 @@ function DataTable(props){
     function render(){
         if(props.data.count){
             return (
-            <div>
+            <div className="responsive">
                 <table>
                     <thead>
                         <tr>
@@ -142,7 +142,7 @@ function BatchActions(props){
         <div className="batchActions left">
             {props.data.actions.map((action) => action.target == "instances" && (
               <Action href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader}>
-                {action.name}
+                <TitleCase text={action.name}/>
               </Action>
             ))}
         </div>

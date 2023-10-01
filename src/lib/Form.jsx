@@ -1,4 +1,6 @@
 import {useEffect} from 'react';
+import {TitleCase, Icon, ClearFix} from './Utils'
+
 
 function Input(props){
     var field = props.data;
@@ -26,9 +28,9 @@ function Select(props){
     var field = props.data;
 
     return (
-        <select className="form-control" id={field.name} name={field.name} data-label={field.name} value={field.value}>
+        <select className="form-control" id={field.name} name={field.name} data-label={field.name} defaultValue={field.value}>
             {field.choices.map((choice) => (
-              <option value={choice.id}>{choice.text}</option>
+              <option key={Math.random()} value={choice.id}>{choice.text}</option>
             ))}
         </select>
     )
@@ -83,7 +85,7 @@ function AutocompleteMultiple(props){
 
 function Field(props){
     var field = props.data;
-    if(["text", "password"].indexOf(field.type)>=0){
+    if(["text", "password", "email", "number"].indexOf(field.type)>=0){
         return <Input data={field}/>
     } else if(field.type == "boolean" || field.type == "bool"){
         return <BooleanSelect data={field}/>
@@ -110,6 +112,7 @@ function Form(props){
         window['x'] = response.headers;
         if (response.status>=400){
              showErrors(data);
+             return;
         } else if (data.token){
             localStorage.setItem('token', data.token);
         }
@@ -126,6 +129,21 @@ function Form(props){
                 showMessage('Ação realizada com sucesso');
             }
         }
+    }
+
+    function showErrors(data){
+        var message = null;
+        for(var k in data){
+            if(k=='non_field_errors' || k==0){
+                message = data[k];
+            } else {
+                var error = $('.field-error.'+ k);
+                error.find('span').html(data[k][0]);
+                error.show();
+            }
+        }
+        if(message) showMessage(message, 'error');
+        else showMessage('Corrija os erros indicados no formulário.', 'error');
     }
 
     function submit(){
@@ -149,27 +167,34 @@ function Form(props){
         if(form.dataset.method.toUpperCase()!='GET') request(form.dataset.method.toUpperCase(), form.action, callback, data);
         else request('GET', form.action+'?'+new URLSearchParams(new FormData(form)).toString(), callback);
     }
-
+    //<div>{JSON.stringify(props.data)}</div>
     function render(){
         return (
             <div>
-                <h2>Form Title</h2>
-                <div>{JSON.stringify(props.data)}</div>
+                <h2><TitleCase text={props.data.name}/></h2>
+
                 <form data-method={props.data.method} id="form" className="form" action={props.data.action}>
 
                     {form.fields.map((field) => (
                       <div className="form-group" key={Math.random()}>
-                        <label>{field.name}</label>
+                        <label>
+                            <TitleCase text={field.name}/>
+                            {field.required && <i>*</i>}
+                        </label>
                         <br/>
                         <Field data={field} url={props.data.action}/>
-                        <div className={"field-error "+field.name}></div>
+                        <div className={"field-error "+field.name}>
+                            <Icon icon='xmark-circle'/>
+                            <span></span>
+                        </div>
                         <div className="help_text">{field.help_text}</div>
                       </div>
                     ))}
-
+                    <ClearFix/>
                     <div className="right">
                         <input className="btn submit" type="button" onClick={submit} value="Enviar"/>
                     </div>
+                    <ClearFix/>
                 </form>
             </div>
         )

@@ -109,8 +109,9 @@ function Message(props){
 function Breadcrumbs(props){
     return (
         <div className="breadcrumbs">
-            <Icon icon  ="home"/>
-            <Action href="/api/v1/user/" link={true}>Início</Action>
+            <Action href="/api/v1/user/" link={true} icon="home">
+                <Icon icon  ="home"/>
+            </Action>
             Instituições
         </div>
     )

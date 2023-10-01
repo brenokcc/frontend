@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Form from './Form'
 import QuerySet from './QuerySet'
 import Viewer from './Viewer'
@@ -57,6 +57,11 @@ function Loading(props){
 }
 
 function Content(props){
+
+    useEffect(()=>{
+        $('.dialog').css('position', 'absolute').css('top', (document.documentElement.scrollTop || document.body.scrollTop) + 50);
+    }, [])
+
 
     function child(){
         switch(props.data.type) {

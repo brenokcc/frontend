@@ -156,25 +156,13 @@ function showMessage(text, style){
     feedback.innerHTML = text;
     feedback.style.display='block';
     if(style=='error'){
-        feedback.style.backgroundColor='#f93e3e';
+        feedback.style.backgroundColor='#e52207';
     } else if(style=='info'){
         feedback.style.backgroundColor='#61affe';
     } else {
-        feedback.style.backgroundColor='#49cc90';
+        feedback.style.backgroundColor='#1351b4';
         setTimeout(function(){feedback.style.display='none';}, 5000);
     }
-}
-function showErrors(data){
-    var message = null;
-    for(var k in data){
-        if(k=='non_field_errors' || k==0){
-            message = data[k];
-        } else {
-            document.querySelector('.field-error.'+k).innerHTML = data[k][0];
-        }
-    }
-    if(message) showMessage(message, 'error');
-    else showMessage('Corrija os erros indicados no formulário.', 'error');
 }
 
 function showTask(key, callback){

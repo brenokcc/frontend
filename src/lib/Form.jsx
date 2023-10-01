@@ -23,7 +23,7 @@ function BooleanSelect(props){
             <option></option>
             <option value="true">Sim</option>
             <option value="false">Não</option>
-            <option value="null">Não Informado</option>
+            <option value="null">-</option>
         </select>
     )
 }
@@ -113,12 +113,12 @@ function Form(props){
         {type: 'select', name:'pesquisadores_institucionais', multiple:true, value:[{id: 1, text: 'João'}]},
     ]
     function process(data, response){
-        window['x'] = response.headers;
         if (response.status>=400){
              showErrors(data);
              return;
         } else if (data.token){
             localStorage.setItem('token', data.token);
+            localStorage.setItem('user', data.user.username);
         }
         if(data.redirect){
             if(data.message) setCookie('message', data.message);
@@ -138,7 +138,7 @@ function Form(props){
     function showErrors(data){
         var message = null;
         for(var k in data){
-            if(k=='non_field_errors' || k==0){
+            if(k=='non_field_errors' || k=='detail' || k==0){
                 message = data[k];
             } else {
                 var error = $('.field-error.'+ k);

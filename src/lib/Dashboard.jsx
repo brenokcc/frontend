@@ -1,4 +1,5 @@
-import {Icon, TitleCase} from './Utils'
+import { useState } from 'react'
+import {Icon, TitleCase, Loading} from './Utils'
 import Action from './Action'
 
 function Boxes(props){
@@ -64,12 +65,33 @@ function Warning(props){
 function Dashboard(props){
     return (
         <>
-
         <Warning/>
         <Boxes title="acesso_rapido" data={props.data.result.acesso_rapido}/>
+        <Async title="percentual_carga_dados" data={props.data.result.percentual_carga_dados}/>
         <Indicators title="percentual_resolucao_inconsistencia" data={props.data.result.percentual_resolucao_inconsistencia}/>
         </>
     )
+}
+
+function Async(props){
+    const [data, setdata] = useState(props.data.async ? null : props.data);
+
+    function load(){
+        request('GET', props.data.async, function(data){
+            setdata(data.result.percentual_carga_dados);
+        });
+    }
+
+    function render(){
+        if(data){
+            return <Indicators title={props.title} data={data}/>
+        } else {
+            load();
+            return <Loading/>
+        }
+    }
+
+    return render();
 }
 
 export default Dashboard;

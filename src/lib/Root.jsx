@@ -10,7 +10,15 @@ function Root(props){
     const [data, setdata] = useState(null);
     const [key, setkey] = useState(0);
 
-    localStorage.setItem("token", "MTExMTExMTExMTE6MTIz");
+    //localStorage.setItem("token", "MTExMTExMTExMTE6MTIz");
+    if(document.location.pathname=='' || document.location.pathname=='/'){
+        document.location.href = '/api/v1/token/';
+    }
+    if(document.location.pathname=='/api/v1/token/'){
+        localStorage.clear();
+    } else if(localStorage.getItem("token")==null){
+        document.location.href = '/api/v1/token/';
+    }
 
     useEffect(()=>{
         window.addEventListener('keydown', (event) => {
@@ -41,7 +49,7 @@ function Root(props){
                 </div>
             )
         } else {
-            return <Loading/>
+            //return <Loading/>
         }
     }
     if(data==null) load();
@@ -55,6 +63,20 @@ function Layer(props){
 }
 
 function Header(props){
+
+    const [active, setactive] = useState(false);
+
+    function dropdown(){
+        if(active){
+            return (
+                <div className="dropdown">
+                    <Action href="/api/v1/user/change_password/" reloader={props.reloader} modal={true} link={true}>Alterar Senha</Action>
+                    <a href="/api/v1/token/">Sair</a>
+                </div>
+            )
+        }
+    }
+
     return (
         <div className="header">
             <div className="left">
@@ -68,31 +90,27 @@ function Header(props){
                     </div>
                 </div>
             </div>
+            { localStorage.getItem('user') &&
             <div className="right">
                 <div>
                     <div className="links">
-                        <Action href="/api/v1/user/" reloader={props.reloader} link={true}>Início</Action>
                         <Action href="/api/v1/icons/" modal={true} reloader={props.reloader} link={true}>Ícones</Action>
                     </div>
                     <div>
-                        <div className="user">
+                        <div className="user" onClick={function(){setactive(!active)}}>
                             <div className="letter">
-                                A
+                                {localStorage.getItem('user').toUpperCase()[0]}
                             </div>
                             <div className="username">
-                                Olá <strong>Admin</strong> <Icon icon="chevron-down"/>
+                                Olá <strong>{localStorage.getItem('user')}</strong> <Icon icon="chevron-down"/>
                             </div>
                         </div>
-                        <div className="dropdown">
-                            <ul>
-                                <li><a href="#">Alterar Senha</a></li>
-                                <li><a href="/api/v1/token/">Sair</a></li>
-                            </ul>
-                        </div>
+                        {dropdown()}
                     </div>
                 </div>
                 <Search/>
             </div>
+            }
         </div>
     )
 }
@@ -150,14 +168,16 @@ function Message(props){
 }
 
 function Breadcrumbs(props){
-    return (
-        <div className="breadcrumbs">
-            <Action href="/api/v1/user/" link={true} icon="home">
-                <Icon icon  ="home"/>
-            </Action>
-            Instituições
-        </div>
-    )
+    if(localStorage.getItem('user')){
+        return (
+            <div className="breadcrumbs">
+                <Action href="/api/v1/user/" link={true} icon="home">
+                    <Icon icon  ="home"/>
+                </Action>
+                Início
+            </div>
+        )
+    }
 }
 
 function Footer(props){

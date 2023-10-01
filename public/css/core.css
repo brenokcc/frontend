@@ -201,6 +201,7 @@ body{
 }
 .header .right .links{
     padding: 25px;
+    margin-right: 10px;
 }
 .header .right .user{
     background: #DDD;
@@ -214,12 +215,24 @@ body{
     position: absolute;
     z-index: 1;
     background-color: white;
+    position: absolute;
+    right: 0px;
+    width: 250px;
+    margin-left: 20px;
+    box-shadow: 15px 15px 15px 15px #DDD;
+    border-radius: 10px;
+    text-align: left;
 }
-.header .right .dropdown li{
-    padding: 10px;
+.header .right .dropdown a{
+    text-decoration: none;
+}
+.header .right .dropdown a{
+    display: block;
+    padding: 20px;
     border-bottom: solid 1px #DDD;
-    list-style: none;
-    margin-left: -20px;
+}
+.header .right .dropdown a:hover{
+    background-color: #dae3f4;
 }
 .header .right .user:hover{
     background-color: #dae3f4;
@@ -231,7 +244,7 @@ body{
     width: 30px;
     height: 30px;
     font-size: 1.1rem;
-    padding-left: 7px;
+    padding-left: 8px;
     font-weight: bold;
 }
 .header .right .user .username{

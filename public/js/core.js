@@ -6,7 +6,9 @@ document.addEventListener("DOMContentLoaded", function(e) {
 });
 
 function request(method, url, callback, data){
-    var headers = new Headers({'Authorization': 'Basic '+localStorage.getItem('token')});
+    const token = localStorage.getItem('token');
+    var headers = token!=null ? new Headers({'Authorization': 'Token '+token}) : {};
+    console.log(headers);
     url = url.replace(document.location.origin, '');
     if(url.indexOf(API_URL) == -1) url = API_URL + url;
     var params = {method: method, headers: headers};

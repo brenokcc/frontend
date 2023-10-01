@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Action from './Action'
-import {ClearFix, Loading, Content} from './Utils'
+import {ClearFix, Loading, Content, Icon} from './Utils'
 import modal from './Modal'
 
 
@@ -25,19 +25,19 @@ function Root(props){
         });
     }
 
+    //<button onClick={function(){ modal('/api/v1/health/check/') }}>Open Dialog!</button>
+
     function content(){
         if(data){
             return (
                 <div key={key}>
                     <Header reloader={load} data={data} open={open}/>
                     <ClearFix/>
-                    <button onClick={function(){ modal('/api/v1/health/check/') }}>Open Dialog!</button>
                     <Breadcrumbs/>
                     <Content data={data} reloader={load}/>
                     <Footer/>
                     <Message/>
                     <Layer/>
-                    <Counter/>
                 </div>
             )
         } else {
@@ -58,16 +58,34 @@ function Header(props){
     return (
         <div className="header">
             <div className="left">
-                <div className="brand">Header</div>
-                <div className="shortcuts">
-                    <Action href="/api/v1/user/" reloader={props.reloader}>Início</Action>
-                    <Action href="/api/v1/icons/" modal={true} reloader={props.reloader}>Ícones</Action>
-                    <Action href="/api/v1/instituicoes/" modal={true} reloader={props.reloader}>Instituições</Action>
-                    <Action href="/api/v1/instituicoes/add/" modal={true} reloader={props.reloader}>Adicionar Instituição</Action>
+                <div className="brand">
+                    <img src="/images/logo.svg"/>
+                    <div className="application">
+                        <div className="title">
+                            <Icon icon="align-justify"/>
+                            Plataforma Nilo Peçanha</div>
+                        <div className="subtitle">Ministério da Educação</div>
+                    </div>
                 </div>
             </div>
             <div className="right">
-                <div className="user">admin</div>
+                <div>
+                    <div className="links">
+                        <Action href="/api/v1/user/" reloader={props.reloader} link={true}>Início</Action>
+                        <Action href="/api/v1/icons/" modal={true} reloader={props.reloader} link={true}>Ícones</Action>
+                    </div>
+                    <div className="user">
+                        <div className="letter">
+                            A
+                        </div>
+                        <div className="username">
+                            Olá <strong>Admin</strong> <Icon icon="chevron-down"/>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <input type="text" className="form-control"/>
+                </div>
             </div>
         </div>
     )
@@ -90,13 +108,24 @@ function Message(props){
 
 function Breadcrumbs(props){
     return (
-        <div className="breadcrumbs">Breadcrumbs</div>
+        <div className="breadcrumbs">
+            <Icon icon  ="home"/>
+            <Action href="/api/v1/user/" link={true}>Início</Action>
+            Instituições
+        </div>
     )
 }
 
 function Footer(props){
     return (
-        <div className="footer">Footer</div>
+        <div className="footer">
+            <div className="footerContent">
+                <img src="/images/govbr.png"/>
+            </div>
+            <div className="footerVersion">
+                Versão 1.0.0
+            </div>
+        </div>
     )
 }
 

@@ -26,6 +26,9 @@ function Format(obj){
 }
 
 function Value(props){
+    if(props.obj == null){
+        return '-'
+    }
     if(props.obj.type=="queryset"){
         return (
             <ul>

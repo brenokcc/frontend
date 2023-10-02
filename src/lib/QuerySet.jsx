@@ -105,9 +105,11 @@ function DataTable(props){
                 <table>
                     <thead>
                         <tr>
+                            { props.selectable &&
                             <th className="selection">
                                 <input type="checkbox" className="selector all" value={0} onClick={props.onSelect}/>
                             </th>
+                            }
                             {Object.keys(props.data.results[0]).map((k) => (
                               <th key={Math.random()}><TitleCase text={k}/></th>
                             ))}
@@ -117,9 +119,11 @@ function DataTable(props){
                     <tbody>
                         {props.data.results.map((item) => (
                           <tr key={Math.random()}>
+                            { props.selectable &&
                             <td>
                                 <input type="checkbox" className="selector all" value={item.id} onClick={props.onSelect}/>
                             </td>
+                            }
                             {Object.keys(props.data.results[0]).map((k) => (
                               <td key={Math.random()}><Value obj={item[k]}/></td>
                             ))}
@@ -204,6 +208,13 @@ function QuerySet(props){
         configure();
     }
 
+    function hasBatchActions(){
+        for(var i=0; i<props.data.actions.length; i++){
+            if(props.data.actions[i].target=="instances") return true;
+        }
+        return false
+    }
+
     function configure(){
         var batchActions = $('.queryset.'+key).find('.batchActions');
         batchActions.find('a').each(function(i, a){
@@ -279,7 +290,7 @@ function QuerySet(props){
             <ClearFix/>
             <BatchActions data={data}/>
             <ClearFix/>
-            <DataTable data={data} reloader={reload} onSelect={onSelect}/>
+            <DataTable data={data} reloader={reload} onSelect={onSelect} selectable={hasBatchActions()}/>
             <BatchActions data={data}/>
             <ClearFix/>
             <Pagination data={data} reloader={reload} total={props.data.count}/>

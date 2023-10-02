@@ -7,7 +7,7 @@ function Viewer(props){
 
     function Field(k, v){
         return (
-            <div>
+            <div className="field">
                 <label><TitleCase text={k}/></label>
                 <div><Value obj={v}/></div>
             </div>
@@ -18,12 +18,14 @@ function Viewer(props){
         if(v.type=="queryset") return <QuerySet data={v} relation={k}/>;
         return (
             <div className="fieldset">
-                <h2>{TitleCase(k)}</h2>
-                {Object.keys(v).map((k2) => (
-                    <div key={Math.random()}>
-                        {Field(k2, v[k2])}
-                    </div>
-                 ))}
+                <h2><TitleCase text={k}/></h2>
+                <div className="fields">
+                    {Object.keys(v).map((k2) => (
+                        <div key={Math.random()}>
+                            {Field(k2, v[k2])}
+                        </div>
+                     ))}
+                </div>
             </div>
         )
     }

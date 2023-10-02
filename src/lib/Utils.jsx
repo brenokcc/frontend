@@ -4,8 +4,19 @@ import QuerySet from './QuerySet'
 import Viewer from './Viewer'
 import Dashboard from './Dashboard'
 
+var i18n = null
+
 function toTitleCase(text){
-    if(text) return text.replace (/^[-_]*(.)/, (_, c) => c.toUpperCase()).replace (/[-_]+(.)/g, (_, c) => ' ' + c.toUpperCase());
+    if(text){
+        text = text.replace (/^[-_]*(.)/, (_, c) => c.toUpperCase()).replace (/[-_]+(.)/g, (_, c) => ' ' + c.toUpperCase());
+        if(true || i18n==null){
+            const application = JSON.parse(localStorage.getItem('application'));
+            console.log(application);
+            i18n = application.i18n || {};
+        }
+        text = i18n[text] || text;
+    }
+    return text
 }
 
 function TitleCase(props){

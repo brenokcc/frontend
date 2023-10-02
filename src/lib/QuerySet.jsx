@@ -42,7 +42,7 @@ function FilterButton(props){
         <div>
             <button className="btn" type="button" onClick={props.onfilter}>
                 <Icon icon="filter"/>
-                filter
+                <TitleCase text="Filter"/>
             </button>
         </div>
     )

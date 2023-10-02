@@ -92,7 +92,7 @@ function Header(props){
             </div>
             { localStorage.getItem('user') &&
             <div className="right">
-                <div>
+                <div className="controls">
                     <div className="links">
                         <Action href="/api/v1/icons/" modal={true} reloader={props.reloader} link={true}>Ícones</Action>
                     </div>

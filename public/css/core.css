@@ -141,6 +141,7 @@ body{
     color: white;
     background-color: #0c326f;
     text-align: center;
+    border-top: solid 1px white;
 }
 .indicators h2{
     font-size: 1.5rem;
@@ -228,6 +229,10 @@ body{
 .header .subtitle{
     font-size: 1.1rem;
     margin-left: 30px;
+}
+.header .right .controls{
+    float: right;
+    margin-right: 20px;
 }
 .header .right .links{
     padding: 25px;
@@ -367,8 +372,15 @@ i.clickable:hover{
     border-bottom: solid 1px #DDD;
     margin-bottom: 20px;
 }
+.viewer{
+    min-height: 400px;
+}
 .viewer label{
     font-weight: bold;
+}
+.viewer .queryset h1{
+    font-size: 1.3rem;
+    margin-top: 60px;
 }
 input[type="checkbox"]{
   appearance: none;
@@ -396,16 +408,26 @@ input[type="checkbox"]::before {
 input[type="checkbox"]:checked::before {
   transform: scale(1);
 }
-
+.queryset {
+    min-height: 400px;
+}
+.queryset h1{
+    margin-top: 0px;
+}
 .queryset table{
     width: 100%;
     border-spacing: 0px;
+}
+.queryset .batchActions .counter{
+    color: white;
+    padding-top: 15px;
 }
 .queryset .batchActions{
     width: 100%;
     background-color: #1451b4;
     text-align: left;
     padding: 10px;
+    display: none;
 }
 .queryset table thead th.selection{
     width: 0px;
@@ -445,6 +467,9 @@ input[type="checkbox"]:checked::before {
 .queryset .subsets .subset.active{
     font-weight: bold;
 }
+.searcher{
+    margin-right: 20px;
+}
 .searcher i{
     position: absolute;
     margin: 17px;
@@ -453,6 +478,7 @@ input[type="checkbox"]:checked::before {
 }
 .searcher input{
     padding-left: 40px;
+    width: 300px;
 }
 .searcher > div{
   position: relative;

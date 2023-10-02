@@ -44,19 +44,20 @@ function Autocomplete(props){
     var field = props.data;
     var value = null
     if(field.value) value = field.value.id;
+    var key = '__'+Math.random();
 
     useEffect(() => {
-        autocomplete(field.name+"__xxx", field.name, false, props.url);
+        autocomplete(field.name+key, field.name, false, props.url);
     });
 
     return (
         <div className="autocomplete">
-            <select className="form-control" id={field.name+'__xxx'} name={field.name} style={{display:'none'}} defaultValue={value}>
+            <select className="form-control" id={field.name+key} name={field.name} style={{display:'none'}} defaultValue={value}>
                 { field.value &&
                     <option value={field.value.id}>{ field.value.text }</option>
                 }
             </select>
-            <input className="form-control" autoComplete="off" id={field.name+'__xxxautocomplete'} type="text" name={field.name+'__xxxautocomplete'} defaultValue={field.value ? field.value.text : ''} data-label={field.name}/>
+            <input className="form-control" autoComplete="off" id={field.name+key+'autocomplete'} type="text" name={field.name+'__autocomplete'} defaultValue={field.value ? field.value.text : ''} data-label={field.name}/>
         </div>
     )
 }
@@ -65,23 +66,25 @@ function AutocompleteMultiple(props){
     var field = props.data;
     var options = [];
     var values = [];
+    var key = '__'+Math.random();
+
     if(field.value){
         options = field.value.map((value) => (<option key={Math.random()} value={value.id}>{value.text}</option>));
         field.value.forEach(function(value){values.push(value.id)});
     }
 
     useEffect(() => {
-        autocomplete(field.name+"__xxx", field.name, true, props.url);
+        autocomplete(field.name+key, field.name, true, props.url);
     });
 
 
     return (
         <div className="autocomplete">
-            <div id={field.name+"__xxxboxes"}></div>
-            <select className="form-control" id={field.name+'__xxx'} name={field.name} style={{display:'none'}} multiple defaultValue={values}>
+            <div id={field.name+key+"boxes"}></div>
+            <select className="form-control" id={field.name+key} name={field.name} style={{display:'none'}} multiple defaultValue={values}>
                 {options}
             </select>
-            <input className="form-control" autoComplete="off" id={field.name+'__xxxautocomplete'} type="text" name={field.name+'__xxxautocomplete'} defaultValue={field.value.text} data-label={field.name}/>
+            <input className="form-control" autoComplete="off" id={field.name+key+'autocomplete'} type="text" name={field.name+'autocomplete'} defaultValue={field.value.text} data-label={field.name}/>
         </div>
     )
 }
@@ -89,7 +92,7 @@ function AutocompleteMultiple(props){
 
 function Field(props){
     var field = props.data;
-    if(["text", "password", "email", "number"].indexOf(field.type)>=0){
+    if(["text", "password", "email", "number", "date", "datetime-regional"].indexOf(field.type)>=0){
         return <Input data={field}/>
     } else if(field.type == "boolean" || field.type == "bool"){
         return <BooleanSelect data={field}/>

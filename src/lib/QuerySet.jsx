@@ -106,7 +106,7 @@ function DataTable(props){
                     <thead>
                         <tr>
                             <th className="selection">
-                                <input type="checkbox" className="selector all" onClick={props.onSelect}/>
+                                <input type="checkbox" className="selector all" value={0} onClick={props.onSelect}/>
                             </th>
                             {Object.keys(props.data.results[0]).map((k) => (
                               <th key={Math.random()}><TitleCase text={k}/></th>
@@ -145,12 +145,14 @@ function DataTable(props){
 
 function BatchActions(props){
     return (
-        <div className="batchActions left">
+        <div className="batchActions">
             {props.data.actions.map((action) => action.target == "instances" && (
+
               <Action icon={action.icon} href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader}>
                 <TitleCase text={action.name}/>
               </Action>
             ))}
+            <div className="counter right"></div>
         </div>
     )
 }
@@ -189,27 +191,39 @@ function QuerySet(props){
     const [search, setsearch] = useState(props.data);
     var state = {}
     var title = props.relation || data.model;
+    var key = props.relation;
 
     useEffect(()=>{
         configure();
     }, [])
 
     function onSelect(){
+        if(event.target.value==0){
+            $('.queryset.'+key).find('.selector').prop('checked', event.target.checked);
+        }
         configure();
     }
 
     function configure(){
-        $('.queryset.'+props.data.model).find('.batchActions a').each(function(i, a){
+        var batchActions = $('.queryset.'+key).find('.batchActions');
+        batchActions.find('a').each(function(i, a){
             var ids = [];
             var url = a.dataset.url;
             var checkboxes = a.parentNode.parentNode.getElementsByClassName('selector');
-            for(var i=0; i<checkboxes.length; i++) if(checkboxes[i].checked && checkboxes[i]!=0) ids.push(checkboxes[i].value);
+            for(var i=0; i<checkboxes.length; i++){
+                if(checkboxes[i].checked && checkboxes[i].value!=0) ids.push(checkboxes[i].value);
+            }
             if(ids.length>0){
                 a.href = a.dataset.url + ids.join(',') +  '/';
                 a.style.cursor='pointer';
+                batchActions.show();
+                if(ids.length===1) batchActions.find('.counter').html('1 registro selecionado');
+                else batchActions.find('.counter').html(ids.length+' registros selecionados');
             } else {
                 a.href = '#';
                 a.style.cursor='not-allowed';
+                batchActions.hide();
+                batchActions.find('.counter').html('');
             }
         });
     }
@@ -249,13 +263,21 @@ function QuerySet(props){
     }
     //<div>{JSON.stringify(data)}</div>
     return (
-        <div className={"queryset "+props.data.model}>
-            <h1><TitleCase text={title}/> ({data.count})</h1>
-            <GlobalActions data={data} reloader={reload}/>
+        <div className={"queryset "+key}>
+            <div>
+                <div className="left">
+                    <h1><TitleCase text={title}/> ({data.count})</h1>
+                </div>
+                <div className="right">
+                    <GlobalActions data={data} reloader={reload}/>
+                </div>
+            </div>
             <ClearFix/>
             <Subsets data={props.data} state={state} onChange={subset}/>
             <FilterForm data={data} onfilter={filter} url={getContextURL()}/>
             <Pagination data={data} reloader={reload} total={props.data.count}/>
+            <ClearFix/>
+            <BatchActions data={data}/>
             <ClearFix/>
             <DataTable data={data} reloader={reload} onSelect={onSelect}/>
             <BatchActions data={data}/>

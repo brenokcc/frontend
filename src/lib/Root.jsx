@@ -15,7 +15,7 @@ function Root(props){
         document.location.href = '/api/v1/token/';
     }
     if(document.location.pathname=='/api/v1/token/'){
-        localStorage.clear();
+        localStorage.removeItem("token")
     } else if(localStorage.getItem("token")==null){
         document.location.href = '/api/v1/token/';
     }
@@ -63,8 +63,8 @@ function Layer(props){
 }
 
 function Header(props){
-
     const [active, setactive] = useState(false);
+    const application = JSON.parse(localStorage.getItem('application'));
 
     function dropdown(){
         if(active){
@@ -81,12 +81,15 @@ function Header(props){
         <div className="header">
             <div className="left">
                 <div className="brand">
-                    <img src="/images/logo.svg"/>
+                    <img src={application.logo}/>
                     <div className="application">
                         <div className="title">
                             <Icon icon="align-justify"/>
-                            Plataforma Nilo Peçanha</div>
-                        <div className="subtitle">Ministério da Educação</div>
+                            {application.title}
+                        </div>
+                        <div className="subtitle">
+                            {application.subtitle}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -181,13 +184,14 @@ function Breadcrumbs(props){
 }
 
 function Footer(props){
+    const application = JSON.parse(localStorage.getItem('application'));
     return (
         <div className="footer">
             <div className="footerContent">
-                <img src="/images/govbr.png"/>
+                <img src={application.image}/>
             </div>
             <div className="footerVersion">
-                Versão 1.0.0
+                {application.version}
             </div>
         </div>
     )

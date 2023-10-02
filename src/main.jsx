@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Root from './lib/Root.jsx'
-import './index.css'
 
 function load(data){
     localStorage.setItem('application', JSON.stringify(data.result));

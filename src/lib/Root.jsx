@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Action from './Action'
-import {ClearFix, Loading, Content, Icon} from './Utils'
+import {toTitleCase, ClearFix, Loading, Content, Icon} from './Utils'
 import modal from './Modal'
 
 
@@ -71,7 +71,7 @@ function Header(props){
             return (
                 <div className="dropdown">
                     <Action href="/api/v1/user/change_password/" reloader={props.reloader} modal={true} link={true}>Alterar Senha</Action>
-                    <a href="/api/v1/token/">Sair</a>
+                    <a href="/api/v1/token/" data-label="Sair">Sair</a>
                 </div>
             )
         }
@@ -97,7 +97,7 @@ function Header(props){
                         <Action href="/api/v1/icons/" modal={true} reloader={props.reloader} link={true}>Ícones</Action>
                     </div>
                     <div>
-                        <div className="user" onClick={function(){setactive(!active)}}>
+                        <div className="user" onClick={function(){setactive(!active)}} data-label={localStorage.getItem('user')}>
                             <div className="letter">
                                 {localStorage.getItem('user').toUpperCase()[0]}
                             </div>

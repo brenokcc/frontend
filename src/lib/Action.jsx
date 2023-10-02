@@ -1,12 +1,15 @@
 import modal from './Modal'
+import {Icon} from './Utils'
 
 
 function Action(props){
     var className = props.link ? "" : "action btn";
+
     function render(){
         if(props.modal){
             return (
                 <a className={className} href={props.href} onClick={function(e){e.preventDefault();modal(props.href, props.reloader);}}>
+                    {props.icon && <Icon icon={props.icon}/>}
                     {props.children}
                 </a>
             )

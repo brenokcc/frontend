@@ -153,6 +153,36 @@ body{
 .indicators .item .value{
     font-size: 3rem;
 }
+
+.info{
+    padding: 30px;
+    background-color: #d4e5ff;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.info .icon{
+    width: 5%;
+    display: inline-block;
+    color: #155bcb;
+}
+
+.info .icon i{
+    font-size: 1.3rem;
+}
+
+.info .detail{
+    width: 95%;
+    display: inline-block;
+    color: #333;
+}
+.valueset dl dt{
+    font-weight: bold;
+    display: inline-block;
+}
+.valueset dl dd{
+    color: #333;
+    display: inline-block;
+}
 .warning{
     padding: 30px;
     background-color: #fff5c2;
@@ -551,10 +581,4 @@ form .field-error{
     right: 20px;
     text-align: center;
     z-index: 9999;
-}
-.info{
-    padding: 10;
-    background-color: rgba(97,175,254,.1);
-    border: solid 1px #61affe;
-
 }

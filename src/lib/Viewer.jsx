@@ -9,7 +9,7 @@ function Viewer(props){
         return (
             <div>
                 <label><TitleCase text={k}/></label>
-                <div>{Value(v)}</div>
+                <div><Value obj={v}/></div>
             </div>
         )
     }

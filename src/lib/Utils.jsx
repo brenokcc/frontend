@@ -4,11 +4,13 @@ import QuerySet from './QuerySet'
 import Viewer from './Viewer'
 import Dashboard from './Dashboard'
 
+function toTitleCase(text){
+    if(text) return text.replace (/^[-_]*(.)/, (_, c) => c.toUpperCase()).replace (/[-_]+(.)/g, (_, c) => ' ' + c.toUpperCase());
+}
 
 function TitleCase(props){
     if(props.text){
-        var title = props.text.replace (/^[-_]*(.)/, (_, c) => c.toUpperCase()).replace (/[-_]+(.)/g, (_, c) => ' ' + c.toUpperCase());
-        return <span>{title}</span>
+        return <span>{toTitleCase(props.text)}</span>
     }
     return <span></span>
 }
@@ -23,17 +25,38 @@ function Format(obj){
     return JSON.stringify(obj);
 }
 
-function Value(obj){
-    if(Array.isArray(obj)){
+function Value(props){
+    if(props.obj.type=="queryset"){
         return (
             <ul>
-                {obj.map((item) => (
+                {props.obj.results.map((item) => (
                   <li key={Math.random()}>{Format(item)}</li>
                 ))}
             </ul>
         )
     }
-    return Format(obj)
+    if(typeof props.obj == "object" && Array.isArray(props.obj)){
+        return (
+            <ul>
+                {props.obj.map((item) => (
+                  <li key={Math.random()}>{Format(item)}</li>
+                ))}
+            </ul>
+        )
+    }
+    if(typeof props.obj == "object" && !Array.isArray(props.obj)){
+        return (
+            <div className="valueset">
+                {Object.keys(props.obj).map((k)  => (
+                  <dl key={Math.random()}>
+                        <dt><TitleCase text={k}/></dt>
+                        <dd>{Format(props.obj[k])}</dd>
+                  </dl>
+                ))}
+            </div>
+        )
+    }
+    return Format(props.obj)
 }
 
 function ClearFix(){
@@ -44,7 +67,17 @@ function ClearFix(){
 
 function Empty(){
     return (
-        <div className="empty">Nenhum registro encontardo</div>
+        <div className="info">
+            <div className="icon">
+                <Icon icon="info-circle"/>
+            </div>
+            <div className="detail">
+                 <div className="text">
+                    <strong>Informação</strong>
+                    Nenhum registro encontrado.
+                 </div>
+            </div>
+        </div>
     )
 }
 
@@ -145,5 +178,5 @@ function Accordion(props){
     )
 }
 
-export {TitleCase, Value, ClearFix, Empty, Loading, Content, Icon, Accordion};
+export {toTitleCase, TitleCase, Value, ClearFix, Empty, Loading, Content, Icon, Accordion};
 export default Loading;

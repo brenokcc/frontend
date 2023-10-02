@@ -8,7 +8,7 @@ function GlobalActions(props){
     return (
         <div className="globalActions right">
             {props.data.actions.map((action) => action.target == "queryset" && (
-              <Action href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader}>
+              <Action icon={action.icon} href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader}>
                 <TitleCase text={action.name}/>
               </Action>
             ))}
@@ -20,7 +20,7 @@ function InstanceActions(props){
     return (
         <div className="instanceActions right">
             {props.data.actions.map((action) => action.target == "instance" && (
-              <Action href={action.url.replace('{id}', props.id)} key={Math.random()} modal={action.modal} reloader={props.reloader}>
+              <Action icon={action.icon} href={action.url.replace('{id}', props.id)} key={Math.random()} modal={action.modal} reloader={props.reloader}>
                 <TitleCase text={action.name}/>
               </Action>
             ))}
@@ -115,7 +115,7 @@ function DataTable(props){
                         {props.data.results.map((item) => (
                           <tr key={Math.random()}>
                             {Object.keys(props.data.results[0]).map((k) => (
-                              <td key={Math.random()}>{Value(item[k])}</td>
+                              <td key={Math.random()}><Value obj={item[k]}/></td>
                             ))}
                             <td><InstanceActions data={props.data} id={item.id} reloader={props.reloader}/></td>
                           </tr>
@@ -141,7 +141,7 @@ function BatchActions(props){
     return (
         <div className="batchActions left">
             {props.data.actions.map((action) => action.target == "instances" && (
-              <Action href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader}>
+              <Action icon={action.icon} href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader}>
                 <TitleCase text={action.name}/>
               </Action>
             ))}

@@ -7,14 +7,14 @@ document.addEventListener("DOMContentLoaded", function(e) {
 
 function request(method, url, callback, data){
     const token = localStorage.getItem('token');
-    var headers = token!=null ? new Headers({'Authorization': 'Token '+token}) : {};
+    var headers = {'Accept': 'application/json'}
+    if(token) headers['Authorization'] = 'Token '+token;
     console.log(headers);
     url = url.replace(document.location.origin, '');
     if(url.indexOf(API_URL) == -1) url = API_URL + url;
-    var params = {method: method, headers: headers};
+    var params = {method: method, headers: new Headers(headers)};
     if(data) params['body'] = data;
     var httpResponse = null;
-    console.log(method, url);
     fetch(url, params).then(
         function (response){
             httpResponse = response;

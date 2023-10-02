@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {TitleCase, Icon, ClearFix} from './Utils'
+import {toTitleCase, TitleCase, Icon, ClearFix} from './Utils'
 
 
 function Input(props){
@@ -11,7 +11,7 @@ function Input(props){
     return (
         <>
             {props.icon && <Icon icon={props.icon}/>}
-            <input className="form-control" type={field.type} name={field.name} id={field.name} defaultValue={field.value} data-label={field.name} readOnly={field.read_only}/>
+            <input className="form-control" type={field.type} name={field.name} id={field.name} defaultValue={field.value} data-label={toTitleCase(field.name)} readOnly={field.read_only}/>
         </>
     )
 }
@@ -196,7 +196,7 @@ function Form(props){
                     ))}
                     <ClearFix/>
                     <div className="right">
-                        <input className="btn submit" type="button" onClick={submit} value="Enviar"/>
+                        <input className="btn submit" type="button" onClick={submit} value="Enviar" data-label="Enviar"/>
                     </div>
                     <ClearFix/>
                 </form>

@@ -307,6 +307,9 @@ body{
 .icons .icon-box:hover{
     background-color: #ffd43b;
 }
+.btn:hover{
+    background-color: #4f79c6;
+}
 .btn {
     margin: 5px;
     display: inline-block;
@@ -367,9 +370,47 @@ i.clickable:hover{
 .viewer label{
     font-weight: bold;
 }
+input[type="checkbox"]{
+  appearance: none;
+  background-color: #fff;
+  margin: 0;
+  font: inherit;
+  width: 1.5em;
+  height: 1.5em;
+  border: solid 1px #DDD;
+  border-radius: 0.15em;
+  transform: translateY(-0.075em);
+  display: grid;
+  place-content: center;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em #1351b4;
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
 .queryset table{
     width: 100%;
     border-spacing: 0px;
+}
+.queryset .batchActions{
+    width: 100%;
+    background-color: #1451b4;
+    text-align: left;
+    padding: 10px;
+}
+.queryset table thead th.selection{
+    width: 0px;
+    text-align: center;
+    padding: 15px;
 }
 .queryset table thead th{
     background-color: #f8f8f8;

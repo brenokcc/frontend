@@ -267,16 +267,3 @@ function checkall(selector){
         if(checkboxes[i]!=selector) checkboxes[i].checked = selector.checked;
     }
 }
-function batch(a){
-    var ids = [];
-    var url = a.dataset.url;
-    var checkboxes = a.parentNode.parentNode.getElementsByClassName('selector');
-    for(var i=0; i<checkboxes.length; i++) if(checkboxes[i].checked && checkboxes[i]!=0) ids.push(checkboxes[i].value);
-    if(ids.length>0){
-        a.href = a.dataset.url + ids.join(',') +  '/';
-        a.style.cursor='pointer';
-    } else {
-        a.href = 'javascript:';
-        a.style.cursor='not-allowed';
-    }
-}

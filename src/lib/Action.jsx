@@ -8,7 +8,7 @@ function Action(props){
     function render(){
         if(props.modal){
             return (
-                <a className={className} href={props.href} onClick={function(e){e.preventDefault();modal(props.href, props.reloader);}}>
+                <a className={className} href={props.href} data-url={props.href} onClick={function(e){e.preventDefault();modal(e.target.closest("a").href, props.reloader);}}>
                     {props.icon && <Icon icon={props.icon}/>}
                     {props.children}
                 </a>

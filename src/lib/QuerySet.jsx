@@ -105,6 +105,9 @@ function DataTable(props){
                 <table>
                     <thead>
                         <tr>
+                            <th className="selection">
+                                <input type="checkbox" className="selector all" onClick={props.onSelect}/>
+                            </th>
                             {Object.keys(props.data.results[0]).map((k) => (
                               <th key={Math.random()}><TitleCase text={k}/></th>
                             ))}
@@ -114,6 +117,9 @@ function DataTable(props){
                     <tbody>
                         {props.data.results.map((item) => (
                           <tr key={Math.random()}>
+                            <td>
+                                <input type="checkbox" className="selector all" value={item.id} onClick={props.onSelect}/>
+                            </td>
                             {Object.keys(props.data.results[0]).map((k) => (
                               <td key={Math.random()}><Value obj={item[k]}/></td>
                             ))}
@@ -185,8 +191,28 @@ function QuerySet(props){
     var title = props.relation || data.model;
 
     useEffect(()=>{
-
+        configure();
     }, [])
+
+    function onSelect(){
+        configure();
+    }
+
+    function configure(){
+        $('.queryset.'+props.data.model).find('.batchActions a').each(function(i, a){
+            var ids = [];
+            var url = a.dataset.url;
+            var checkboxes = a.parentNode.parentNode.getElementsByClassName('selector');
+            for(var i=0; i<checkboxes.length; i++) if(checkboxes[i].checked && checkboxes[i]!=0) ids.push(checkboxes[i].value);
+            if(ids.length>0){
+                a.href = a.dataset.url + ids.join(',') +  '/';
+                a.style.cursor='pointer';
+            } else {
+                a.href = '#';
+                a.style.cursor='not-allowed';
+            }
+        });
+    }
 
     function getContextURL(url){
         var page = 1;
@@ -223,7 +249,7 @@ function QuerySet(props){
     }
     //<div>{JSON.stringify(data)}</div>
     return (
-        <div className="queryset">
+        <div className={"queryset "+props.data.model}>
             <h1><TitleCase text={title}/> ({data.count})</h1>
             <GlobalActions data={data} reloader={reload}/>
             <ClearFix/>
@@ -231,8 +257,9 @@ function QuerySet(props){
             <FilterForm data={data} onfilter={filter} url={getContextURL()}/>
             <Pagination data={data} reloader={reload} total={props.data.count}/>
             <ClearFix/>
-            <DataTable data={data} reloader={reload}/>
+            <DataTable data={data} reloader={reload} onSelect={onSelect}/>
             <BatchActions data={data}/>
+            <ClearFix/>
             <Pagination data={data} reloader={reload} total={props.data.count}/>
             <ClearFix/>
         </div>

@@ -91,7 +91,7 @@ function AutocompleteMultiple(props){
 
 function Field(props){
     var field = props.data;
-    if(["text", "password", "email", "number", "date", "datetime-regional"].indexOf(field.type)>=0){
+    if(["text", "password", "email", "number", "date", "datetime-regional",  "file", "image", "range", "search", "tel", "time", "url", "week"].indexOf(field.type)>=0){
         return <Input data={field}/>
     } else if(field.type == "boolean" || field.type == "bool"){
         return <BooleanSelect data={field}/>
@@ -218,7 +218,7 @@ function Form(props){
         //<div>{JSON.stringify(props.data)}</div>
         return (
             <div className={props.data.name+'-form'}>
-                <h1><TitleCase text={props.data.name}/></h1>
+                <h1 data-label={toLabelCase(props.data.name)}><TitleCase text={props.data.name}/></h1>
 
                 <form data-method={props.data.method} id="form" className="form" action={props.data.action}>
                     {toFields(form.fields)}

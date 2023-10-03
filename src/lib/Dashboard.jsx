@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import {Icon, TitleCase, Loading} from './Utils'
+import {toLabelCase, Icon, TitleCase, Loading} from './Utils'
 import Action from './Action'
 
 function Boxes(props){
@@ -8,7 +8,7 @@ function Boxes(props){
             <h2><TitleCase text={props.title}/></h2>
             <div>
                 {props.data.map((item) => (
-                      <a key={Math.random()} href={item.url} className="item">
+                      <a key={Math.random()} href={item.url} className="item" data-label={toLabelCase(item.label)}>
                         <div className="icon">
                             <Icon icon={item.icon}/>
                         </div>
@@ -23,23 +23,25 @@ function Boxes(props){
 }
 
 function Indicators(props){
-    return (
-        <div className="indicators">
-            <h2><TitleCase text={props.title}/></h2>
-            <div>
-                {Object.keys(props.data).map((k) => (
-                    <div key={Math.random()} className="item">
-                        <div className="value">
-                            {props.data[k]}
+    if(props.data){
+        return (
+            <div className="indicators">
+                <h2><TitleCase text={props.title}/></h2>
+                <div>
+                    {Object.keys(props.data).map((k) => (
+                        <div key={Math.random()} className="item">
+                            <div className="value">
+                                {props.data[k]}
+                            </div>
+                            <div className="text">
+                                <TitleCase text={k}/>
+                            </div>
                         </div>
-                        <div className="text">
-                            <TitleCase text={k}/>
-                        </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
-        </div>
-    )
+        )
+    }
 }
 
 function Warning(props){
@@ -55,7 +57,7 @@ function Warning(props){
                  </div>
                  <div className="actions">
                     <Action href="#" label="Realizar Capacitação">Realizar Capacitação</Action>
-                    <Action href="#" label="Confirmar Capacitação">Confirmar Capacitação</Action>
+                    <Action href="/api/v1/user/confirmar_capacitacao/" label="Confirmar Capacitação" modal={true}>Confirmar Capacitação</Action>
                  </div>
             </div>
         </div>
@@ -74,7 +76,7 @@ function Dashboard(props){
 }
 
 function Async(props){
-    const [data, setdata] = useState(props.data.async ? null : props.data);
+    const [data, setdata] = useState(props.data && props.data.async ? null : props.data);
 
     function load(){
         request('GET', props.data.async, function(data){
@@ -83,11 +85,13 @@ function Async(props){
     }
 
     function render(){
-        if(data){
-            return <Indicators title={props.title} data={data}/>
-        } else {
-            load();
-            return <Loading/>
+        if(props.data){
+            if(data){
+                return <Indicators title={props.title} data={data}/>
+            } else {
+                load();
+                return <Loading/>
+            }
         }
     }
 

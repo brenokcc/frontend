@@ -4,6 +4,7 @@ import {Loading, Content} from './Utils'
 
 
 function modal(url, reloader){
+    hideMessage();
     window.reloader = reloader;
     createRoot(document.body.appendChild(document.createElement( 'div' ))).render(<Dialog url={url} />);
 }

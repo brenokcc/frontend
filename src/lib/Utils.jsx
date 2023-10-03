@@ -7,7 +7,7 @@ import Dashboard from './Dashboard'
 var i18n = null
 
 function toLabelCase(text){
-    if(text) text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('_', ' ').toLowerCase();
+    if(text) text = toTitleCase(text.replace('-', '')).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('_', '').toLowerCase();
     return text;
 }
 

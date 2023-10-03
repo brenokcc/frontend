@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Action from './Action'
 import {Field} from './Form'
-import {toTitleCase, TitleCase, Value, ClearFix, Empty, Loading, Icon, Accordion} from './Utils'
+import {toLabelCase, toTitleCase, TitleCase, Value, ClearFix, Empty, Loading, Icon, Accordion} from './Utils'
 
 
 function GlobalActions(props){
@@ -33,14 +33,14 @@ function SearchField(props){
         <div>
             <label>Palavra-chave</label>
             <br/>
-            <input type="text" name="q" className="form-control"/>
+            <input type="text" name="q" className="form-control" data-label={toLabelCase("Palavras-chave")}/>
         </div>
     )
 }
 function FilterButton(props){
     return (
         <div>
-            <button className="btn" type="button" onClick={props.onfilter}>
+            <button className="btn" type="button" onClick={props.onfilter} data-label={toLabelCase("filter")}>
                 <Icon icon="filter"/>
                 <TitleCase text="Filter"/>
             </button>
@@ -277,7 +277,10 @@ function QuerySet(props){
         <div className={"queryset "+key}>
             <div>
                 <div className="left">
-                    <h1><TitleCase text={title}/> <span className="counter">{data.count}</span></h1>
+                    <h1 data-label={toLabelCase(title)}>
+                        <TitleCase text={title}/>
+                        {data.count > 0 && <span className="counter">{data.count}</span>}
+                    </h1>
                 </div>
                 <div className="right">
                     <GlobalActions data={data} reloader={reload}/>

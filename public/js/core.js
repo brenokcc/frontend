@@ -9,7 +9,6 @@ function request(method, url, callback, data){
     const token = localStorage.getItem('token');
     var headers = {'Accept': 'application/json'}
     if(token) headers['Authorization'] = 'Token '+token;
-    console.log(headers);
     url = url.replace(document.location.origin, '');
     if(url.indexOf(API_URL) == -1) url = API_URL + url;
     var params = {method: method, headers: new Headers(headers)};
@@ -18,10 +17,13 @@ function request(method, url, callback, data){
     fetch(url, params).then(
         function (response){
             httpResponse = response;
-            return response.json()
+            return response.text()
         }
     ).then(
-        data => {callback(data, httpResponse);}
+        text => {
+            var data = JSON.parse(text||'{}');
+            callback(data, httpResponse);
+        }
     );
 }
 

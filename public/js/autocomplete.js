@@ -37,7 +37,7 @@ function createBoxes(name){
     }
 }
 function normalize(text){
-    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('_', ' ').toLowerCase();
+    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('_', '').replace('-', '').toLowerCase();
 }
 function autocomplete(name, placeholder, multiple, url, callback, onselect) {
  var select = document.getElementById(name);

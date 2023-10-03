@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Action from './Action'
-import {toTitleCase, ClearFix, Loading, Content, Icon} from './Utils'
+import {toLabelCase, toTitleCase, ClearFix, Loading, Content, Icon} from './Utils'
 import modal from './Modal'
 
 
@@ -70,8 +70,8 @@ function Header(props){
         if(active){
             return (
                 <div className="dropdown">
-                    <Action href="/api/v1/user/change_password/" reloader={props.reloader} modal={true} link={true}>Alterar Senha</Action>
-                    <a href="/api/v1/token/" data-label="Sair">Sair</a>
+                    <Action label="Alterar Senha" href="/api/v1/user/change_password/" reloader={props.reloader} modal={true} link={true}>Alterar Senha</Action>
+                    <a href="/api/v1/token/" data-label={toLabelCase("Sair")}>Sair</a>
                 </div>
             )
         }
@@ -100,7 +100,7 @@ function Header(props){
                         <Action href="/api/v1/icons/" modal={true} reloader={props.reloader} link={true}>Ícones</Action>
                     </div>
                     <div>
-                        <div className="user" onClick={function(){setactive(!active)}} data-label={localStorage.getItem('user')}>
+                        <div className="user" onClick={function(){hideMessage();setactive(!active)}} data-label={toLabelCase(localStorage.getItem('user'))}>
                             <div className="letter">
                                 {localStorage.getItem('user').toUpperCase()[0]}
                             </div>
@@ -134,7 +134,7 @@ function Search(props){
                 <div className="searcher-items">
                     {items.map((item) => (
                         <a href={item.url}>
-                            <div key={Math.random()} data-label="Qualificação Profissional (FIC)">
+                            <div key={Math.random()} data-label={toLabelCase(item.name)}>
                                 {item.name}
                             </div>
                         </a>
@@ -143,12 +143,11 @@ function Search(props){
             )
         }
     }
-    console.log(items);
     return (
         <div className="searcher">
             <div>
                 <Icon icon="search"/>
-                <input type="text" className="form-control" placeholder="O que você procura?" onChange={onChange}/>
+                <input type="text" className="form-control" placeholder="O que você procura?" onChange={onChange} data-label={toLabelCase("Buscar...")}/>
                 {dropdown()}
             </div>
         </div>
@@ -174,7 +173,7 @@ function Breadcrumbs(props){
     if(localStorage.getItem('user')){
         return (
             <div className="breadcrumbs">
-                <Action href="/api/v1/user/" link={true} icon="home">
+                <Action label="Início" href="/api/v1/user/" link={true} icon="home">
                     <Icon icon  ="home"/>
                 </Action>
                 Início

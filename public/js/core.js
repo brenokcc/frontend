@@ -149,7 +149,7 @@ function getCookie(cname) {
   return "";
 }
 function hideMessage(){
-    var feedback = document.querySelector(".feedback");
+    var feedback = document.querySelector(".message");
     if(feedback) feedback.style.display='none';
 }
 function showMessage(text, style){
@@ -218,20 +218,24 @@ function formValue(id, value){
     }
 }
 function formControl(controls){
-    for (var i = 0; i < controls.hide.length; i++) formHide(controls.hide[i]);
-    for (var i = 0; i < controls.show.length; i++) formShow(controls.show[i]);
-    for (var k in controls.set) formValue(k, controls.set[k]);
+    if(controls){
+        for (var i = 0; i < controls.hide.length; i++) formHide(controls.hide[i]);
+        for (var i = 0; i < controls.show.length; i++) formShow(controls.show[i]);
+        for (var k in controls.set) formValue(k, controls.set[k]);
+    }
 }
 function formWatch(watch){
-    for (var i = 0; i < watch.length; i++){
-        var id = watch[i];
-        var group = document.querySelector(".form-group."+id);
-        var widget = group.querySelector('*[name="'+id+'"]');
-        widget.addEventListener("change", function (e) {
-            var form = widget.closest('form');
-            var data = new FormData(form);
-            request('POST', form.action+'?on_change='+this.name, formControl, data);
-        });
+    if(watch){
+        for (var i = 0; i < watch.length; i++){
+            var id = watch[i];
+            var group = document.querySelector(".form-group."+id);
+            var widget = group.querySelector('*[name="'+id+'"]');
+            widget.addEventListener("change", function (e) {
+                var form = widget.closest('form');
+                var data = new FormData(form);
+                request('POST', form.action+'?on_change='+this.name, formControl, data);
+            });
+        }
     }
 }
 

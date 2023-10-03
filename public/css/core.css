@@ -517,6 +517,7 @@ input[type="checkbox"]:checked::before {
   max-height: 200px;
   overflow-y: auto;
   margin-top: -5px;
+  z-index: 99999;
 }
 .searcher .searcher-items div {
   padding: 15px;
@@ -664,7 +665,7 @@ form .field-error{
     color: white;
     width: 300px;
     position: fixed;
-    top: 60px;
+    top: 125px;
     right: 20px;
     text-align: center;
     z-index: 9999;

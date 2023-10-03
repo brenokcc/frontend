@@ -6,6 +6,11 @@ import Dashboard from './Dashboard'
 
 var i18n = null
 
+function toLabelCase(text){
+    if(text) text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('_', ' ').toLowerCase();
+    return text;
+}
+
 function toTitleCase(text){
     if(text){
         text = text.replace (/^[-_]*(.)/, (_, c) => c.toUpperCase()).replace (/[-_]+(.)/g, (_, c) => ' ' + c.toUpperCase());
@@ -196,5 +201,5 @@ function Accordion(props){
     )
 }
 
-export {toTitleCase, TitleCase, Value, ClearFix, Empty, Loading, Content, Icon, Accordion};
+export {toLabelCase, toTitleCase, TitleCase, Value, ClearFix, Empty, Loading, Content, Icon, Accordion};
 export default Loading;

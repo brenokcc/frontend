@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
 import Action from './Action'
 import {Field} from './Form'
-import {TitleCase, Value, ClearFix, Empty, Loading, Icon, Accordion} from './Utils'
+import {toTitleCase, TitleCase, Value, ClearFix, Empty, Loading, Icon, Accordion} from './Utils'
 
 
 function GlobalActions(props){
     return (
         <div className="globalActions right">
             {props.data.actions.map((action) => action.target == "queryset" && (
-              <Action icon={action.icon} href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader}>
+              <Action label={toTitleCase(action.name)} icon={action.icon} href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader}>
                 <TitleCase text={action.name}/>
               </Action>
             ))}
@@ -20,7 +20,7 @@ function InstanceActions(props){
     return (
         <div className="instanceActions right">
             {props.data.actions.map((action) => action.target == "instance" && (
-              <Action icon={action.icon} href={action.url.replace('{id}', props.id)} key={Math.random()} modal={action.modal} reloader={props.reloader}>
+              <Action label={toTitleCase(action.name)} icon={action.icon} href={action.url.replace('{id}', props.id)} key={Math.random()} modal={action.modal} reloader={props.reloader}>
                 <TitleCase text={action.name}/>
               </Action>
             ))}
@@ -152,7 +152,7 @@ function BatchActions(props){
         <div className="batchActions">
             {props.data.actions.map((action) => action.target == "instances" && (
 
-              <Action icon={action.icon} href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader}>
+              <Action label={toTitleCase(action.name)} icon={action.icon} href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader}>
                 <TitleCase text={action.name}/>
               </Action>
             ))}

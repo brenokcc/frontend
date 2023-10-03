@@ -54,8 +54,8 @@ function Warning(props){
                     A conclusão de sua capacitação ainda não foi registrada na plataforma! Algumas funcionalidades tais como correção e monitoramento de correção de inconsistências só estarão disponíveis após a realização da capacitação
                  </div>
                  <div className="actions">
-                    <Action href="#">Realizar Capacitação</Action>
-                    <Action href="#">Confirmar Capacitação</Action>
+                    <Action href="#" label="Realizar Capacitação">Realizar Capacitação</Action>
+                    <Action href="#" label="Confirmar Capacitação">Confirmar Capacitação</Action>
                  </div>
             </div>
         </div>

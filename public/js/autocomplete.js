@@ -36,6 +36,9 @@ function createBoxes(name){
         }
     }
 }
+function normalize(text){
+    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('_', ' ').toLowerCase();
+}
 function autocomplete(name, placeholder, multiple, url, callback, onselect) {
  var select = document.getElementById(name);
  var inp = document.getElementById(name+'autocomplete');
@@ -45,7 +48,7 @@ function autocomplete(name, placeholder, multiple, url, callback, onselect) {
     inp.autocomplete = 'off';
     inp.type = 'text';
     inp.name = name+'autocomplete';
-    inp.dataset.label = placeholder;
+    inp.dataset.label = normalize(placeholder);
     inp.onclick = "this.select()";
     inp.placeholder = placeholder;
     inp.title = name;
@@ -97,7 +100,7 @@ function autocomplete(name, placeholder, multiple, url, callback, onselect) {
                       /*create a DIV element for each matching element:*/
                       b = document.createElement("DIV");
                       b.classList.add("autocomplete-item");
-                      b.dataset.label = data[i].text;
+                      b.dataset.label = normalize(data[i].text);
                       /*make the matching letters bold:*/
                       b.innerHTML = data[i].text;
                       /*insert a input field that will hold the current array item's value:*/

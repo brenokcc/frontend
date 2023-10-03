@@ -277,7 +277,7 @@ function QuerySet(props){
         <div className={"queryset "+key}>
             <div>
                 <div className="left">
-                    <h1><TitleCase text={title}/> ({data.count})</h1>
+                    <h1><TitleCase text={title}/> <span className="counter">{data.count}</span></h1>
                 </div>
                 <div className="right">
                     <GlobalActions data={data} reloader={reload}/>

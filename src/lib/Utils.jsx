@@ -11,7 +11,6 @@ function toTitleCase(text){
         text = text.replace (/^[-_]*(.)/, (_, c) => c.toUpperCase()).replace (/[-_]+(.)/g, (_, c) => ' ' + c.toUpperCase());
         if(true || i18n==null){
             const application = JSON.parse(localStorage.getItem('application'));
-            console.log(application);
             i18n = application.i18n || {};
         }
         text = i18n[text] || text;
@@ -33,12 +32,18 @@ function Format(obj){
     if(obj===false) return 'Não';
     if(obj instanceof String) return obj;
     if(typeof obj === "string") return obj;
+    if(typeof obj == "object" && Array.isArray(obj)){
+
+    }
+    if(typeof obj == "object" && !Array.isArray(obj) && obj.str){
+        return obj.str;
+    }
     return JSON.stringify(obj);
 }
 
 function Value(props){
     if(props.obj == null){
-        return '-'
+        return '-';
     }
     if(props.obj.type=="queryset"){
         return (
@@ -87,7 +92,6 @@ function Empty(){
             </div>
             <div className="detail">
                  <div className="text">
-                    <strong>Informação</strong>
                     Nenhum registro encontrado.
                  </div>
             </div>

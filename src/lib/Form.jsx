@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import { useState, useEffect } from 'react'
 import {toTitleCase, TitleCase, Icon, ClearFix} from './Utils'
 
 
@@ -115,6 +115,12 @@ function Form(props){
         {type: 'select', name:'tipo', value:{id: 1, text: ''}},
         {type: 'select', name:'pesquisadores_institucionais', multiple:true, value:[{id: 1, text: 'João'}]},
     ]
+
+    useEffect(()=>{
+        formControl(form.controls);
+        formWatch(form.watch);
+    }, [])
+
     function process(data, response){
         if (response.status>=400){
              showErrors(data);
@@ -175,28 +181,48 @@ function Form(props){
         if(form.dataset.method.toUpperCase()!='GET') request(form.dataset.method.toUpperCase(), form.action, callback, data);
         else request('GET', form.action+'?'+new URLSearchParams(new FormData(form)).toString(), callback);
     }
-    //<div>{JSON.stringify(props.data)}</div>
+
     function render(){
+
+        function toField(field){
+            return (
+                <div className={"form-group "+field.name} key={Math.random()}>
+                    <label>
+                        <TitleCase text={field.name}/>
+                        {field.required && <i>*</i>}
+                    </label>
+                    <br/>
+                    <Field data={field} url={props.data.action}/>
+                    <div className={"field-error "+field.name}>
+                        <Icon icon='xmark-circle'/>
+                        <span></span>
+                    </div>
+                    <div className="help_text">{field.help_text}</div>
+                  </div>
+            )
+        }
+
+        function toFields(fields){
+            if(Array.isArray(fields)){
+                return fields.map((field) => (
+                      toField(field)
+                ))
+            } else {
+                return Object.keys(fields).map((k) => (
+                  <div className="form-fieldset" key={Math.random()}>
+                    <h2>{<TitleCase text={k}/>}</h2>
+                    {toFields(fields[k])}
+                  </div>
+                ))
+            }
+        }
+        //<div>{JSON.stringify(props.data)}</div>
         return (
             <div className={props.data.name+'-form'}>
-                <h2><TitleCase text={props.data.name}/></h2>
+                <h1><TitleCase text={props.data.name}/></h1>
 
                 <form data-method={props.data.method} id="form" className="form" action={props.data.action}>
-                    {form.fields.map((field) => (
-                      <div className={"form-group "+field.name} key={Math.random()}>
-                        <label>
-                            <TitleCase text={field.name}/>
-                            {field.required && <i>*</i>}
-                        </label>
-                        <br/>
-                        <Field data={field} url={props.data.action}/>
-                        <div className={"field-error "+field.name}>
-                            <Icon icon='xmark-circle'/>
-                            <span></span>
-                        </div>
-                        <div className="help_text">{field.help_text}</div>
-                      </div>
-                    ))}
+                    {toFields(form.fields)}
                     <ClearFix/>
                     <div className="right">
                         <input className="btn submit" type="button" onClick={submit} value="Enviar" data-label="Enviar"/>

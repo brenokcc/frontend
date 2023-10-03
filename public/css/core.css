@@ -430,6 +430,12 @@ input[type="checkbox"]:checked::before {
 .queryset h1{
     margin-top: 0px;
 }
+.queryset h1 .counter{
+    position: absolute;
+    margin-left: 10px;
+    margin-top: 5px;
+    font-size: 50%;
+}
 .queryset table{
     width: 100%;
     border-spacing: 0px;
@@ -503,7 +509,6 @@ input[type="checkbox"]:checked::before {
 .searcher .searcher-items {
   position: absolute;
   border: 1px solid #d4d4d4;
-  border-bottom: none;
   border-top: none;
   z-index: 99;
   top: 100%;
@@ -514,7 +519,7 @@ input[type="checkbox"]:checked::before {
   margin-top: -5px;
 }
 .searcher .searcher-items div {
-  padding: 10px;
+  padding: 15px;
   cursor: pointer;
   background-color: #fff;
   border-bottom: 1px solid #d4d4d4;
@@ -536,7 +541,6 @@ input[type="checkbox"]:checked::before {
 .autocomplete-items {
   position: absolute;
   border: 1px solid #d4d4d4;
-  border-bottom: none;
   border-top: none;
   z-index: 99;
   top: 100%;
@@ -547,7 +551,7 @@ input[type="checkbox"]:checked::before {
   margin-top: -5px;
 }
 .autocomplete-items div {
-  padding: 10px;
+  padding: 15px;
   cursor: pointer;
   background-color: #fff;
   border-bottom: 1px solid #d4d4d4;

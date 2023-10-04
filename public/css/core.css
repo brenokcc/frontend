@@ -430,16 +430,59 @@ input[type="checkbox"]:checked::before {
 .queryset h1{
     margin-top: 0px;
 }
+.queryset .calendar td{
+    border: solid 1px #DDD;
+}
 .queryset h1 .counter{
     position: absolute;
     margin-left: 10px;
     margin-top: 5px;
     font-size: 50%;
 }
-.queryset table{
+.queryset .data table{
     width: 100%;
     border-spacing: 0px;
 }
+.queryset .calendar{
+    margin-bottom: 10px;
+}
+
+.queryset .calendar table{
+    width: 100%;
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+.queryset .calendar .day{
+    margin-left: 17px;
+}
+.queryset .calendar table td{
+    vertical-align: top;
+    width: 14.2%;
+    height: 55px;
+}
+.queryset .calendar table td .day{
+    text-align: right;
+    padding-right: 5px;
+    padding-top: 5px;
+    color: #DDD;
+}
+.queryset .calendar table td .total .number{
+    text-align: center;
+    background-color: #1351b4;
+    border-radius: 50%;
+    padding-top: 5px;
+    color: white;
+    display: block;
+    width: 35px;
+    height: 35px;
+    margin: auto;
+    cursor: pointer;
+}
+.queryset .calendar table td .total{
+    padding: 10px;
+    text-align: center;
+}
+
 .queryset .batchActions .counter{
     color: white;
     padding-top: 15px;
@@ -451,18 +494,18 @@ input[type="checkbox"]:checked::before {
     padding: 10px;
     display: none;
 }
-.queryset table thead th.selection{
+.queryset .data table thead th.selection{
     width: 0px;
     text-align: center;
     padding: 15px;
 }
-.queryset table thead th{
+.queryset .data table thead th{
     background-color: #f8f8f8;
     color: #1151b3;
     text-align: left;
     padding: 10px;
 }
-.queryset table tbody td{
+.queryset .data table tbody td{
     border-bottom: solid 1px #DDD;
     padding: 15px;
 }
@@ -538,6 +581,12 @@ input[type="checkbox"]:checked::before {
   /*the container must be positioned relative:*/
   position: relative;
   display: inline-block;
+}
+.autocomplete-box{
+    display: inline-block;
+    margin-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 .autocomplete-items {
   position: absolute;

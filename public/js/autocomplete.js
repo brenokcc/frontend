@@ -19,14 +19,15 @@ function createBoxes(name){
         var option = select.options[i];
         if(option.value){
             var box = document.createElement("DIV");
+            box.classList.add("autocomplete-box");
             var close = document.createElement("SPAN");
             var value = document.createElement("SPAN");
-            close.innerHTML = '[X]';
+            close.innerHTML = '<i class="fa-solid fa-trash"/>';
             close.id = i;
             close.style.cursor = 'pointer';
             value.innerHTML = option.innerHTML;
-            box.appendChild(value);
             box.appendChild(close);
+            box.appendChild(value);
             boxes.appendChild(box);
             close.addEventListener("click", function(e) {
                 this.parentNode.remove(this);

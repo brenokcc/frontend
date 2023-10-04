@@ -49,16 +49,27 @@ function FilterButton(props){
 }
 
 function FilterForm(props){
+
+    function field(filter){
+        if(filter.type == "hidden"){
+            return <Field data={filter} url={props.url}/>
+        } else {
+            return (
+              <div className="filterField" key={Math.random()}>
+                <label><TitleCase text={filter.name}/></label>
+                <br/>
+                <Field data={filter} url={props.url}/>
+              </div>
+            )
+        }
+    }
+
     return (
         <Accordion title="Filtros">
             <form className="filterForm">
                 <SearchField state={props.state}/>
                 {props.data.filters.map((filter) => (
-                  <div className="filterField" key={Math.random()}>
-                    <label><TitleCase text={filter.name}/></label>
-                    <br/>
-                    <Field data={filter} url={props.url}/>
-                </div>
+                   field(filter)
                 ))}
                 <FilterButton onfilter={props.onfilter}/>
             </form>
@@ -101,7 +112,7 @@ function DataTable(props){
     function render(){
         if(props.data.count){
             return (
-            <div className="responsive">
+            <div className="responsive data">
                 <table>
                     <thead>
                         <tr>
@@ -259,7 +270,7 @@ function QuerySet(props){
 
     function filter(){
         state = {}
-        var params = $(event.target).closest('form').serialize();
+        var params = $(event.target).closest('.queryset').find('form').serialize();
         var usp = new URLSearchParams(params);
         if(props.datasubset) usp.set('subset', props.data.subset)
         for(const [key, value] of usp.entries()) {
@@ -273,34 +284,46 @@ function QuerySet(props){
         filter();
     }
 
+    function calendarFilter(day, month, year){
+        var queryset = $(event.target).closest('.queryset');
+        queryset.find("input[name="+props.data.calendar.field+"__day]").val(day||"");
+        queryset.find("input[name="+props.data.calendar.field+"__month]").val(month||"");
+        queryset.find("input[name="+props.data.calendar.field+"__year]").val(year||"");
+        filter();
+    }
+
     function calendar(){
-        if(props.data.calendar){
+        if(data.calendar){
             var days = ["SEG", "TER", "QUA", "QUI", "SEX", "SAB", "DOM"];
+            var months = ['JANEIRO', 'FEVEVEIRO', 'MARÇO', 'ABRIL', 'MAIO', 'JUNHO', 'JULHO', 'AGOSTO', 'SETEMRO', 'OUTUBRO', 'NOVEMBRO', 'DEZEMBRO']
             var rows = [[], [], [], [], [], []];
-            var tokens = props.data.calendar.current.split('-');
-            console.log(tokens);
-            console.log(props.data.calendar.current)
-            var month = parseInt(tokens[1])-1;
-            var start = new Date(parseInt(tokens[0]), parseInt(tokens[1])-1, parseInt(tokens[2]))
-            console.log(start)
-            console.log('---')
+            var month = data.calendar.month-1;
+            var start = new Date(data.calendar.year, data.calendar.month-1, 1)
             while(start.getDay()>1) start.setDate(start.getDate() - 1);
-            console.log(start)
             var i = 0;
-            while(start.getMonth()<=month){
-                if(rows[i].length==7) i+=1
-                rows[i].push(start.getDate())
+            while(start.getMonth()<=month || rows[i].length<7){
+                if(rows[i].length==7) i+=1;
+                if(i==5) break;
+                rows[i].push({
+                date: start.getDate(), total: data.calendar.total[start.toLocaleDateString('pt-BR')]
+                })
                 start.setDate(start.getDate() + 1);
             }
             return (
                 <div className="calendar">
-                    <h3 align="center">Janeiro 2024</h3>
+                    <h3 align="center">{months[data.calendar.month-1]} {data.calendar.year}</h3>
+                    {data.calendar.day &&
+                        <div align="center" className="day">
+                            {new Date(data.calendar.year, data.calendar.month-1, data.calendar.day).toLocaleDateString('pt-BR')}
+                            <Icon icon="x" onClick={()=>calendarFilter(null, data.calendar.month, data.calendar.year)}/>
+                        </div>
+                    }
                     <div>
                         <div className="left">
-                            <Icon icon='arrow-left'/>
+                            <Icon icon='arrow-left' onClick={()=>calendarFilter(null, data.calendar.previous.month, data.calendar.previous.year)}/>
                         </div>
                         <div className="right">
-                            <Icon icon='arrow-right'/>
+                            <Icon icon='arrow-right' onClick={()=>calendarFilter(null, data.calendar.next.month, data.calendar.next.year)}/>
                         </div>
                     </div>
                     <table>
@@ -314,10 +337,15 @@ function QuerySet(props){
                         <tbody>
                             {rows.map((row) => (
                             <tr key={Math.random()}>
-                                {row.map((day) => (
+                                {row.map((item) => (
                                   <td key={Math.random()}>
-                                    <div className="day">{day}</div>
-                                    <div className="total">0</div>
+                                    <div className="day right">{item.date}</div>
+                                    {item.total &&
+                                        <div className="total" onClick={()=>calendarFilter(item.date, data.calendar.month, data.calendar.year)}>
+                                            <div className="number">{item.total}</div>
+                                        </div>
+                                    }
+                                    {!item.total && <div className="total">&nbsp;</div>}
                                   </td>
                                 ))}
                             </tr>
@@ -332,7 +360,7 @@ function QuerySet(props){
     //<div>{JSON.stringify(data)}</div>
     return (
         <div className={"queryset "+key}>
-            <div>{JSON.stringify(data)}</div>
+
             <div>
                 <div className="left">
                     <h1 data-label={toLabelCase(title)}>

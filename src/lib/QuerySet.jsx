@@ -272,9 +272,67 @@ function QuerySet(props){
         props.data.subset = name;
         filter();
     }
+
+    function calendar(){
+        if(props.data.calendar){
+            var days = ["SEG", "TER", "QUA", "QUI", "SEX", "SAB", "DOM"];
+            var rows = [[], [], [], [], [], []];
+            var tokens = props.data.calendar.current.split('-');
+            console.log(tokens);
+            console.log(props.data.calendar.current)
+            var month = parseInt(tokens[1])-1;
+            var start = new Date(parseInt(tokens[0]), parseInt(tokens[1])-1, parseInt(tokens[2]))
+            console.log(start)
+            console.log('---')
+            while(start.getDay()>1) start.setDate(start.getDate() - 1);
+            console.log(start)
+            var i = 0;
+            while(start.getMonth()<=month){
+                if(rows[i].length==7) i+=1
+                rows[i].push(start.getDate())
+                start.setDate(start.getDate() + 1);
+            }
+            return (
+                <div className="calendar">
+                    <h3 align="center">Janeiro 2024</h3>
+                    <div>
+                        <div className="left">
+                            <Icon icon='arrow-left'/>
+                        </div>
+                        <div className="right">
+                            <Icon icon='arrow-right'/>
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                {days.map((day) => (
+                                  <th key={Math.random()}>{day}</th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {rows.map((row) => (
+                            <tr key={Math.random()}>
+                                {row.map((day) => (
+                                  <td key={Math.random()}>
+                                    <div className="day">{day}</div>
+                                    <div className="total">0</div>
+                                  </td>
+                                ))}
+                            </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )
+        }
+    }
+
     //<div>{JSON.stringify(data)}</div>
     return (
         <div className={"queryset "+key}>
+            <div>{JSON.stringify(data)}</div>
             <div>
                 <div className="left">
                     <h1 data-label={toLabelCase(title)}>
@@ -289,6 +347,7 @@ function QuerySet(props){
             <ClearFix/>
             <Subsets data={props.data} state={state} onChange={subset}/>
             <FilterForm data={data} onfilter={filter} url={getContextURL()}/>
+            {calendar()}
             <Pagination data={data} reloader={reload} total={props.data.count}/>
             <ClearFix/>
             <BatchActions data={data}/>

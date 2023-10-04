@@ -227,10 +227,18 @@ function Form(props){
                         <input className="btn submit" type="button" onClick={submit} value="Enviar" data-label={toLabelCase("Enviar")}/>
                     </div>
                     <ClearFix/>
+                    {props.data.subactions &&
+                        <div className="subactions">
+                            {props.data.subactions.map((subaction) => (
+                                  <a key={Math.random()} className="subaction" href={subaction.url}>{subaction.label}</a>
+                            ))}
+                        </div>
+                    }
                 </form>
             </div>
         )
     }
+
     return render()
 }
 

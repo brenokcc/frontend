@@ -603,6 +603,14 @@ select {color: #757575;}
 .form .form-group.w33{ width: 33.1%; }
 .form .form-control{width: 100%;}
 .form .autocomplete{width: 100%;}
+.form .subactions{
+    text-align:center;
+    width: 100%;
+}
+.form .subactions a{
+    color: #333;
+    text-decoration: none;
+}
 form .field-error{
     color: white;
     background-color: #e52207;

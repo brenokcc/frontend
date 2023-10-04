@@ -5,19 +5,21 @@ import Action from './Action'
 import {toLabelCase, toTitleCase, ClearFix, Loading, Content, Icon} from './Utils'
 import modal from './Modal'
 
+const LOGIN_URL = '/api/v1/login/';
 
 function Root(props){
     const [data, setdata] = useState(null);
     const [key, setkey] = useState(0);
-
     //localStorage.setItem("token", "MTExMTExMTExMTE6MTIz");
     if(document.location.pathname=='' || document.location.pathname=='/'){
-        document.location.href = '/api/v1/token/';
+        document.location.href = '/api/v1/user/';
     }
-    if(document.location.pathname=='/api/v1/token/'){
+    if(document.location.pathname==LOGIN_URL){
         localStorage.removeItem("token")
+        localStorage.removeItem("user")
+
     } else if(localStorage.getItem("token")==null){
-        document.location.href = '/api/v1/token/';
+        document.location.href = LOGIN_URL;
     }
 
     useEffect(()=>{
@@ -27,8 +29,15 @@ function Root(props){
     }, [])
 
     function load(){
-        request('GET', document.location.pathname, function(data){
-            setdata(data);
+        request('GET', document.location.href, function(data){
+            if (data.token){
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', data.user.username);
+                if(data.message) setCookie('message', data.message);
+                document.location.href = data.redirect;
+            } else {
+                setdata(data);
+            }
             //setkey(key+1);
         });
     }
@@ -71,7 +80,7 @@ function Header(props){
             return (
                 <div className="dropdown">
                     <Action label="Alterar Senha" href="/api/v1/user/change_password/" reloader={props.reloader} modal={true} link={true}>Alterar Senha</Action>
-                    <a href="/api/v1/token/" data-label={toLabelCase("Sair")}>Sair</a>
+                    <a href="/api/v1/login/" data-label={toLabelCase("Sair")}>Sair</a>
                 </div>
             )
         }

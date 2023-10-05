@@ -118,7 +118,6 @@ function Content(props){
         $('.dialog').css('position', 'absolute').css('top', (document.documentElement.scrollTop || document.body.scrollTop) + 50);
     }, [])
 
-
     function child(){
         switch(props.data.type) {
             case 'form':
@@ -129,6 +128,8 @@ function Content(props){
               return (<Viewer data={props.data} reloader={props.reloader}/>);
              case 'dashboard':
               return (<Dashboard data={props.data}/>);
+             case 'info':
+              return (<Info data={props.data}/>);
              case 'icons':
               return (<Icons data={props.data}/>);
             default:
@@ -142,6 +143,22 @@ function Content(props){
 
 function Unknown(props){
     return <div>{JSON.stringify(props.data)}</div>
+}
+
+function Info(props){
+    return (
+        <div className="info">
+            <div className="icon">
+                <Icon icon="info"/>
+            </div>
+            <div className="detail">
+                 <div className="text">
+                    <strong>Informação</strong>:
+                    <p>{props.data.text}</p>
+                 </div>
+            </div>
+        </div>
+    )
 }
 
 function Icons(props){

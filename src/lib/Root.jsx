@@ -6,18 +6,18 @@ import {toLabelCase, toTitleCase, ClearFix, Loading, Content, Icon} from './Util
 import modal from './Modal'
 
 const LOGIN_URL = '/api/v1/login/';
+const HOME_URL = '/api/v1/user/'
 
 function Root(props){
     const [data, setdata] = useState(null);
     const [key, setkey] = useState(0);
-    //localStorage.setItem("token", "MTExMTExMTExMTE6MTIz");
+
     if(document.location.pathname=='' || document.location.pathname=='/'){
-        document.location.href = '/api/v1/user/';
+        document.location.href = HOME_URL;
     }
     if(document.location.pathname==LOGIN_URL){
         localStorage.removeItem("token")
         localStorage.removeItem("user")
-
     } else if(localStorage.getItem("token")==null){
         document.location.href = LOGIN_URL;
     }
@@ -30,6 +30,13 @@ function Root(props){
 
     function load(){
         request('GET', document.location.href, function(data){
+            /*
+               OAuth Authentication Flow:
+                1) The user access the authorization HOME_URL available as subaction of login action
+                2) After authorization, the code if sent to login URL: /api/v1/login/?code=xxxxxxx
+                3) The backend creates the token and sends it to the frontend
+                4) The token is received by the frontend and stored in the local storage as bellow
+            */
             if (data.token){
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', data.user.username);
@@ -38,7 +45,6 @@ function Root(props){
             } else {
                 setdata(data);
             }
-            //setkey(key+1);
         });
     }
 

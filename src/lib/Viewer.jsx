@@ -4,6 +4,8 @@ import QuerySet from './QuerySet'
 
 
 function Viewer(props){
+    const [data, setdata] = useState(props.data);
+    var reloadable = {};
 
     function Field(k, v){
         return (
@@ -16,19 +18,22 @@ function Viewer(props){
 
     function Fieldset(k, v){
         if(v){
-            if(v.type=="queryset") return <QuerySet data={v} relation={k}/>;
-            return (
-                <div className="fieldset">
-                    <h2 data-label={toLabelCase(k)}><TitleCase text={k}/></h2>
-                    <div className="fields">
-                        {Object.keys(v).map((k2) => (
-                            <div key={Math.random()}>
-                                {Field(k2, v[k2])}
-                            </div>
-                         ))}
+            if(v.type=="queryset"){
+                return <QuerySet data={v} relation={k} reloadable={reloadable} reloader={reload}/>;
+            } else {
+                return (
+                    <div className="fieldset">
+                        <h2 data-label={toLabelCase(k)}><TitleCase text={k}/></h2>
+                        <div className="fields">
+                            {Object.keys(v).map((k2) => (
+                                <div key={Math.random()}>
+                                    {Field(k2, v[k2])}
+                                </div>
+                             ))}
+                        </div>
                     </div>
-                </div>
-            )
+                )
+            }
         }
     }
 
@@ -40,13 +45,22 @@ function Viewer(props){
             return Field(k, v);
         }
     }
-    //<div>{JSON.stringify(props.data.result)}</div>
+
+    function reload(){
+        var keys = Object.keys(reloadable);
+        for(var i=0; i<keys.length; i++) reloadable[keys[i]]();
+        //request('GET', document.location.href, function(data){
+        //    setdata(data);
+        //});
+    }
+
+    //<div>{JSON.stringify(data.result)}</div>
     return (
         <div className="viewer">
-            <h1 data-label={toLabelCase(props.data.str)}>{props.data.str}</h1>
-            {Object.keys(props.data.result).map((k) => (
+            <h1 onClick={reload} data-label={toLabelCase(data.str)}>{data.str}</h1>
+            {Object.keys(data.result).map((k) => (
                 <div key={Math.random()}>
-                    {FieldOrFieldset(k, props.data.result[k])}
+                    {FieldOrFieldset(k, data.result[k])}
                 </div>
              ))}
         </div>

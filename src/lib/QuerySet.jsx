@@ -64,17 +64,23 @@ function FilterForm(props){
         }
     }
 
-    return (
-        <Accordion title="Filtros">
-            <form className="filterForm">
-                <SearchField state={props.state}/>
-                {props.data.filters.map((filter) => (
-                   field(filter)
-                ))}
-                <FilterButton onfilter={props.onfilter}/>
-            </form>
-        </Accordion>
-    )
+    function render(){
+        if(props.data.search.length>0 || props.data.filters.length>0){
+            return(
+              <Accordion title="Filtros">
+                <form className="filterForm">
+                    {props.data.search.length>0 && <SearchField state={props.state}/>}
+                    {props.data.filters.map((filter) => (
+                       field(filter)
+                    ))}
+                    <FilterButton onfilter={props.onfilter}/>
+                </form>
+              </Accordion>
+            )
+        }
+    }
+
+    return render()
 }
 
 function Pagination(props){
@@ -95,7 +101,7 @@ function Pagination(props){
         return (
             <div className="pagination">
                 <div className="left">
-                    Exibir <select><option>10</option></select> | {start}-{end} de {props.total} itens
+                    Exibir <select><option>10</option></select> | {start}-{end} de {props.data.count} itens
                 </div>
                 <div className="right">
                     Página {page}
@@ -261,7 +267,7 @@ function QuerySet(props){
         return url;
     }
 
-    function reload(){
+    function reload(url){
         state = {}
         var params = $('.queryset.'+key).find('form').serialize();
         var usp = new URLSearchParams(params);
@@ -269,11 +275,10 @@ function QuerySet(props){
         for(const [key, value] of usp.entries()) {
             state[key] = value;
         }
-        var url = props.data.url+'?'+usp;
+        if(url==null) url = props.data.url+'?'+usp;
         request('GET', getContextURL(url), function(data){
             if(props.relation) setdata(data['result'][props.relation])
             else setdata(data);
-            alert(1);
         });
     }
 
@@ -355,10 +360,13 @@ function QuerySet(props){
         }
     }
 
+    if(props.reloadable && !props.reloadable[key]){
+        props.reloadable[key] = reload;
+    }
+
     //<div>{JSON.stringify(data)}</div>
     return (
         <div className={"queryset "+key}>
-
             <div>
                 <div className="left">
                     <h1 data-label={toLabelCase(title)}>
@@ -374,14 +382,14 @@ function QuerySet(props){
             <Subsets data={props.data} state={state} onChange={subset}/>
             <FilterForm data={data} onfilter={reload} url={getContextURL()}/>
             {calendar()}
-            <Pagination data={data} reloader={reload} total={props.data.count}/>
+            <Pagination data={data} reloader={reload}/>
             <ClearFix/>
             <BatchActions data={data}/>
             <ClearFix/>
-            <DataTable data={data} reloader={reload} onSelect={onSelect} selectable={hasBatchActions()}/>
+            <DataTable data={data} reloader={props.reloader || reload} onSelect={onSelect} selectable={hasBatchActions()}/>
             <BatchActions data={data}/>
             <ClearFix/>
-            <Pagination data={data} reloader={reload} total={props.data.count}/>
+            <Pagination data={data} reloader={reload}/>
             <ClearFix/>
         </div>
     )

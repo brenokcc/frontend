@@ -261,27 +261,25 @@ function QuerySet(props){
         return url;
     }
 
-    function reload(url){
-        request('GET', getContextURL(url), function(data){
-            if(props.relation) setdata(data['result'][props.relation])
-            else setdata(data);
-        });
-    }
-
-    function filter(){
+    function reload(){
         state = {}
-        var params = $(event.target).closest('.queryset').find('form').serialize();
+        var params = $('.queryset.'+key).find('form').serialize();
         var usp = new URLSearchParams(params);
         if(props.datasubset) usp.set('subset', props.data.subset)
         for(const [key, value] of usp.entries()) {
             state[key] = value;
         }
-        reload(props.data.url+'?'+usp);
+        var url = props.data.url+'?'+usp;
+        request('GET', getContextURL(url), function(data){
+            if(props.relation) setdata(data['result'][props.relation])
+            else setdata(data);
+            alert(1);
+        });
     }
 
     function subset(name){
         props.data.subset = name;
-        filter();
+        reload();
     }
 
     function calendarFilter(day, month, year){
@@ -289,7 +287,7 @@ function QuerySet(props){
         queryset.find("input[name="+props.data.calendar.field+"__day]").val(day||"");
         queryset.find("input[name="+props.data.calendar.field+"__month]").val(month||"");
         queryset.find("input[name="+props.data.calendar.field+"__year]").val(year||"");
-        filter();
+        reload();
     }
 
     function calendar(){
@@ -374,7 +372,7 @@ function QuerySet(props){
             </div>
             <ClearFix/>
             <Subsets data={props.data} state={state} onChange={subset}/>
-            <FilterForm data={data} onfilter={filter} url={getContextURL()}/>
+            <FilterForm data={data} onfilter={reload} url={getContextURL()}/>
             {calendar()}
             <Pagination data={data} reloader={reload} total={props.data.count}/>
             <ClearFix/>

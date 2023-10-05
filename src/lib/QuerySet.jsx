@@ -37,16 +37,6 @@ function SearchField(props){
         </div>
     )
 }
-function FilterButton(props){
-    return (
-        <div>
-            <button className="btn" type="button" onClick={props.onfilter} data-label={toLabelCase("filter")}>
-                <Icon icon="filter"/>
-                <TitleCase text="Filter"/>
-            </button>
-        </div>
-    )
-}
 
 function FilterForm(props){
 
@@ -73,7 +63,12 @@ function FilterForm(props){
                     {props.data.filters.map((filter) => (
                        field(filter)
                     ))}
-                    <FilterButton onfilter={props.onfilter}/>
+                    <div>
+                        <button className="btn" type="button" onClick={()=>props.onfilter()} data-label={toLabelCase("filter")}>
+                            <Icon icon="filter"/>
+                            <TitleCase text="Filter"/>
+                        </button>
+                    </div>
                 </form>
               </Accordion>
             )
@@ -258,7 +253,6 @@ function QuerySet(props){
 
     function getContextURL(url){
         var page = 1;
-        var url = url || props.data.url;
         if(props.relation){
             if(url.indexOf('?')==-1) url+="?only="+props.relation;
             else url+="&only="+props.relation;
@@ -380,7 +374,7 @@ function QuerySet(props){
             </div>
             <ClearFix/>
             <Subsets data={props.data} state={state} onChange={subset}/>
-            <FilterForm data={data} onfilter={reload} url={getContextURL()}/>
+            <FilterForm data={data} onfilter={reload} url={getContextURL(data.url)}/>
             {calendar()}
             <Pagination data={data} reloader={reload}/>
             <ClearFix/>

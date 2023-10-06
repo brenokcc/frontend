@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Action from './Action'
 import {toLabelCase, toTitleCase, TitleCase, Value, ClearFix, Component} from './Utils'
 import QuerySet from './QuerySet'
+import Example from './Charts'
 
 
 function Viewer(props){
@@ -82,12 +83,12 @@ function Viewer(props){
                 </div>
             </div>
             <ClearFix/>
-
             {Object.keys(data.result).map((k) => (
                 <div key={Math.random()}>
                     {FieldOrFieldset(k, data.result[k])}
                 </div>
              ))}
+             <Example/>
         </div>
     )
 }

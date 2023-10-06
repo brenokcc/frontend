@@ -316,6 +316,7 @@ body{
     background-color: #4f79c6;
 }
 .btn {
+    white-space: nowrap;
     margin: 5px;
     display: inline-block;
     font-weight: 400;
@@ -442,6 +443,20 @@ input[type="checkbox"]:checked::before {
     margin-top: 5px;
     font-size: 50%;
 }
+.statistics table{
+    width: 100%;
+    border-spacing: 0px;
+}
+.statistics table th{
+    color: #1151b3;
+    text-align: left;
+    padding: 10px;
+    border-bottom: solid 1px #DDD;
+}
+.statistics table td{
+    border-bottom: solid 1px #DDD;
+    padding: 15px;
+}
 .queryset .data table{
     width: 100%;
     border-spacing: 0px;
@@ -532,10 +547,16 @@ input[type="checkbox"]:checked::before {
 .queryset .subsets .subset{
     cursor: pointer;
     display: inline-block;
-    margin: 20px;
+    margin: 30px;
 }
 .queryset .subsets .subset.active{
     font-weight: bold;
+}
+.queryset .subsets .subset .counter{
+    position: absolute;
+    margin-left: 5px;
+    margin-top: -5px;
+    font-size: 80%;
 }
 .searcher{
     margin-right: 20px;

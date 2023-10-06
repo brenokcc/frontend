@@ -3,6 +3,7 @@ import Form from './Form'
 import QuerySet from './QuerySet'
 import Viewer from './Viewer'
 import Dashboard from './Dashboard'
+import Statistics from './Statistics'
 
 var i18n = null
 
@@ -139,6 +140,8 @@ function Component(props){
                 return (<Fieldset data={props.data}/>)
              case 'instance':
               return (<Viewer data={props.data} reloader={props.reloader}/>);
+             case 'statistics':
+              return (<Statistics data={props.data}/>)
              case 'dashboard':
               return (<Dashboard data={props.data}/>);
              case 'info':

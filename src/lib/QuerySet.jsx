@@ -193,13 +193,14 @@ function Subsets(props){
                 <div className="subsets">
                     {subsets.map((subset) => (
                       <div className={subset.style} key={Math.random()} onClick={function(){props.onChange(subset.k)}}>
-                        <TitleCase text={subset.k}/> ({subset.v})
+                        <TitleCase text={subset.k}/> <span className="counter">{subset.v}</span>
                       </div>
                     ))}
                 </div>
             )
         }
     }
+    return render()
 }
 
 function QuerySet(props){
@@ -256,6 +257,10 @@ function QuerySet(props){
         if(props.relation){
             if(url.indexOf('?')==-1) url+="?only="+props.relation;
             else url+="&only="+props.relation;
+        }
+        if(props.data.subset){
+            if(url.indexOf('?')==-1) url+="?subset="+props.data.subset;
+            else url+="&subset="+props.data.subset;
         }
         var tokens = url.split('?');
         return url;

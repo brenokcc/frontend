@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import Action from './Action'
-import {toLabelCase, toTitleCase, TitleCase, Value, ClearFix} from './Utils'
+import {toLabelCase, toTitleCase, TitleCase, Value, ClearFix, Component} from './Utils'
 import QuerySet from './QuerySet'
 
 
@@ -21,7 +21,16 @@ function Viewer(props){
         if(v){
             if(v.type=="queryset"){
                 return <QuerySet data={v} relation={k} reloadable={reloadable} reloader={reload}/>;
-            } else {
+            } else if (v.type){
+                return (
+                    <div className="fieldset">
+                        <h2 data-label={toLabelCase(k)}>
+                            <TitleCase text={k}/>
+                        </h2>
+                        <Component data={v}/>
+                    </div>
+                )
+            }else {
                 return (
                     <div className="fieldset">
                         <h2 data-label={toLabelCase(k)}>

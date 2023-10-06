@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import {toLabelCase, toTitleCase, TitleCase, Icon, ClearFix} from './Utils'
+import {toLabelCase, toTitleCase, TitleCase, Icon, ClearFix, Content, Component} from './Utils'
 
 
 function Input(props){
@@ -105,6 +105,8 @@ function Field(props){
 }
 
 function Form(props){
+    const [data, setdata] = useState();
+
     var form = props.data;
     var fields = [
         {type: 'text', name:'username', value:'admin'},
@@ -121,6 +123,10 @@ function Form(props){
     }, [])
 
     function process(data, response){
+        if(data.type){
+            setdata(data);
+            return
+        }
         if (response.status>=400){
              showErrors(data);
              return;
@@ -181,45 +187,51 @@ function Form(props){
         else request('GET', form.action+'?'+new URLSearchParams(new FormData(form)).toString(), callback);
     }
 
+    function toField(field){
+        return (
+            <div className={"form-group "+field.name} key={Math.random()}>
+                <label>
+                    <TitleCase text={field.name}/>
+                    {field.required && <i>*</i>}
+                </label>
+                <br/>
+                <Field data={field} url={props.data.action}/>
+                <div className={"field-error "+field.name}>
+                    <Icon icon='xmark-circle'/>
+                    <span></span>
+                </div>
+                <div className="help_text">{field.help_text}</div>
+              </div>
+        )
+    }
+
+    function toFields(fields){
+        if(Array.isArray(fields)){
+            return fields.map((field) => (
+                  toField(field)
+            ))
+        } else {
+            return Object.keys(fields).map((k) => (
+              <div className="form-fieldset" key={Math.random()}>
+                <h2>{<TitleCase text={k}/>}</h2>
+                {toFields(fields[k])}
+              </div>
+            ))
+        }
+    }
+
     function render(){
-
-        function toField(field){
-            return (
-                <div className={"form-group "+field.name} key={Math.random()}>
-                    <label>
-                        <TitleCase text={field.name}/>
-                        {field.required && <i>*</i>}
-                    </label>
-                    <br/>
-                    <Field data={field} url={props.data.action}/>
-                    <div className={"field-error "+field.name}>
-                        <Icon icon='xmark-circle'/>
-                        <span></span>
-                    </div>
-                    <div className="help_text">{field.help_text}</div>
-                  </div>
-            )
-        }
-
-        function toFields(fields){
-            if(Array.isArray(fields)){
-                return fields.map((field) => (
-                      toField(field)
-                ))
-            } else {
-                return Object.keys(fields).map((k) => (
-                  <div className="form-fieldset" key={Math.random()}>
-                    <h2>{<TitleCase text={k}/>}</h2>
-                    {toFields(fields[k])}
-                  </div>
-                ))
-            }
-        }
         //<div>{JSON.stringify(props.data)}</div>
+        if(data){
+            return <Content data={data}/>
+        }
         return (
             <div className={props.data.name+'-form'}>
+                {props.data.display && <Component data={props.data.display}/>}
                 <h1 data-label={toLabelCase(props.data.name)}><TitleCase text={props.data.name}/></h1>
-
+                {props.data.prepend && props.data.prepend.map((item) => (
+                      <Component key={Math.random()} data={item}/>
+                ))}
                 <form data-method={props.data.method} id="form" className="form" action={props.data.action}>
                     {toFields(form.fields)}
                     <ClearFix/>
@@ -235,6 +247,9 @@ function Form(props){
                         </div>
                     }
                 </form>
+                {props.data.append && props.data.append.map((item) => (
+                      <Component key={Math.random()} data={item}/>
+                ))}
             </div>
         )
     }

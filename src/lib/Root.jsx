@@ -148,8 +148,8 @@ function Search(props){
             return (
                 <div className="searcher-items">
                     {items.map((item) => (
-                        <a href={item.url}>
-                            <div key={Math.random()} data-label={toLabelCase(item.name)}>
+                        <a key={Math.random()} href={item.url}>
+                            <div data-label={toLabelCase(item.name)}>
                                 {item.name}
                             </div>
                         </a>

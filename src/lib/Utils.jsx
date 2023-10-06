@@ -112,18 +112,31 @@ function Loading(props){
     )
 }
 
-function Content(props){
+function Fieldset(props){
+    return (
+        <div className="fieldset">
+            <h2 data-label={toLabelCase(props.data.title)}><TitleCase text={props.data.title}/></h2>
+            <div className="fields">
+                {Object.keys(props.data.fields).map((k) => (
+                    <div key={Math.random()} className="field">
+                        <label><TitleCase text={k}/></label>
+                        <div><Value obj={props.data.fields[k]}/></div>
+                    </div>
+                 ))}
+            </div>
+        </div>
+    )
+}
 
-    useEffect(()=>{
-        $('.dialog').css('position', 'absolute').css('top', (document.documentElement.scrollTop || document.body.scrollTop) + 50);
-    }, [])
-
-    function child(){
+function Component(props){
+    function render(){
         switch(props.data.type) {
             case 'form':
               return (<Form data={props.data}/>);
             case 'queryset':
               return (<QuerySet data={props.data} reloader={props.reloader}/>);
+            case 'fieldset':
+                return (<Fieldset data={props.data}/>)
              case 'instance':
               return (<Viewer data={props.data} reloader={props.reloader}/>);
              case 'dashboard':
@@ -136,8 +149,19 @@ function Content(props){
               return (<Unknown data={props.data}/>);
         }
     }
+    return render()
+}
+
+function Content(props){
+
+    useEffect(()=>{
+        $('.dialog').css('position', 'absolute').css('top', (document.documentElement.scrollTop || document.body.scrollTop) + 50);
+    }, [])
+
     return (
-        <div className="content">{child()}</div>
+        <div className="content">
+            <Component data={props.data}/>
+        </div>
     )
 }
 
@@ -218,5 +242,5 @@ function Accordion(props){
     )
 }
 
-export {toLabelCase, toTitleCase, TitleCase, Value, ClearFix, Empty, Loading, Content, Icon, Accordion};
+export {toLabelCase, toTitleCase, TitleCase, Value, ClearFix, Empty, Loading, Content, Icon, Accordion, Component};
 export default Loading;

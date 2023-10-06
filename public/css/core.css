@@ -341,12 +341,15 @@ i{
 }
 i.clickable{
     cursor: pointer;
-
+    color: #1351b4;
     border-radius: 50%;
     width: 35px;
     height: 35px;
     text-align: center;
     padding-top: 10px;
+}
+i.clickable:visited{
+    color: #1351b4
 }
 i.clickable:hover{
     background-color: #dae3f4;
@@ -372,8 +375,8 @@ i.clickable:hover{
     border-bottom: solid 1px #DDD;
     margin-bottom: 20px;
 }
-.viewer{
-
+.viewer h1{
+    margin: 0px;
 }
 .viewer .field{
     margin-left: 10px;
@@ -482,7 +485,9 @@ input[type="checkbox"]:checked::before {
     padding: 10px;
     text-align: center;
 }
-
+.queryset .batchActions i{
+    color: white;
+}
 .queryset .batchActions .counter{
     color: white;
     padding-top: 15px;

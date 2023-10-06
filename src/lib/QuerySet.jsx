@@ -164,7 +164,7 @@ function BatchActions(props){
         <div className="batchActions">
             {props.data.actions.map((action) => action.target == "instances" && (
 
-              <Action label={toTitleCase(action.name)} icon={action.icon} href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader}>
+              <Action label={toTitleCase(action.name)} icon={action.icon} href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader} button={true}>
                 <TitleCase text={action.name}/>
               </Action>
             ))}
@@ -206,7 +206,7 @@ function QuerySet(props){
     const [data, setdata] = useState(props.data);
     const [search, setsearch] = useState(props.data);
     var state = {}
-    var title = props.relation || data.model;
+    var title = props.relation || data.title;
     var key = props.relation;
 
     useEffect(()=>{

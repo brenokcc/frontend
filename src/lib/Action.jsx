@@ -3,20 +3,23 @@ import {toLabelCase, Icon} from './Utils'
 
 
 function Action(props){
-    var className = props.link ? "" : "action btn";
-    function render(){
+
+    function onClick(e){
         if(props.modal){
-            return (
-                <a className={className} href={props.href} data-url={props.href} onClick={function(e){e.preventDefault();modal(e.target.closest("a").href, props.reloader);}} data-label={toLabelCase(props.label)}>
-                    {props.icon && <Icon icon={props.icon}/>}
-                    {props.children}
-                </a>
-            )
-        } else {
-            return (
-                <a className={className} href={props.href} data-label={toLabelCase(props.label)}>{props.children}</a>
-            )
+            e.preventDefault();
+            modal(e.target.closest("a").href, props.reloader);
         }
+    }
+
+    function render(){
+        var compact = props.icon && !props.button;
+        var className = props.link || compact ? "" : "action btn";
+        return (
+            <a className={className} href={props.href} data-label={toLabelCase(props.label)} data-url={props.href} onClick={onClick}>
+                {props.icon && <Icon icon={props.icon} onClick={function(){}}/>}
+                {!compact && props.children}
+            </a>
+        )
     }
 
     return render();

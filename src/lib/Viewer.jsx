@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import {toLabelCase, TitleCase, Value} from './Utils'
+import Action from './Action'
+import {toLabelCase, toTitleCase, TitleCase, Value, ClearFix} from './Utils'
 import QuerySet from './QuerySet'
 
 
@@ -23,7 +24,9 @@ function Viewer(props){
             } else {
                 return (
                     <div className="fieldset">
-                        <h2 data-label={toLabelCase(k)}><TitleCase text={k}/></h2>
+                        <h2 data-label={toLabelCase(k)}>
+                            <TitleCase text={k}/>
+                        </h2>
                         <div className="fields">
                             {Object.keys(v).map((k2) => (
                                 <div key={Math.random()}>
@@ -57,7 +60,20 @@ function Viewer(props){
     //<div>{JSON.stringify(data.result)}</div>
     return (
         <div className="viewer">
-            <h1 onClick={reload} data-label={toLabelCase(data.str)}>{data.str}</h1>
+            <div>
+                <div className="left">
+                    <h1 onClick={reload} data-label={toLabelCase(data.str)}>{data.str}</h1>
+                </div>
+                <div className="right">
+                    {props.data.actions.map((action) =>
+                      <Action label={toTitleCase(action.name)} icon={action.icon} href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader}>
+                        <TitleCase text={action.name}/>
+                      </Action>
+                    )}
+                </div>
+            </div>
+            <ClearFix/>
+
             {Object.keys(data.result).map((k) => (
                 <div key={Math.random()}>
                     {FieldOrFieldset(k, data.result[k])}

@@ -188,7 +188,6 @@ function Info(props){
 function Icons(props){
 
     function click(icon){
-        console.log(icon);
         copyToClipboard(icon);
     }
 

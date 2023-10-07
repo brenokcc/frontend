@@ -1,4 +1,4 @@
-import {Pie, PieArea, Donut, Bar, StackedBar, Column, StackedColumn, TreeMap, Line, Area, Progress} from './Charts'
+import {ChartFactory} from './Charts'
 
 
 function Statistics(props){
@@ -7,6 +7,9 @@ function Statistics(props){
         for(var i=0; i<props.data.series.length; i++){
             rows.push([props.data.series[i][0], props.data.series[i][1]]);
         }
+        console.log(JSON.stringify(rows))
+        if(props.data.chart) return <ChartFactory type={props.chart} rows={rows}/>
+
         return (
             <div className="statistics">
                 <table>
@@ -20,22 +23,10 @@ function Statistics(props){
                         ))}
                     </tbody>
                 </table>
-                <Pie rows={rows}/>
-                <Donut rows={rows}/>
-                <PieArea rows={rows}/>
-                <Bar rows={rows}/>
-                <Column rows={rows}/>
-                <StackedColumn rows={rows}/>
-                <TreeMap rows={rows}/>
-                <Line rows={rows}/>
-                <Area rows={rows}/>
-                <Progress value={27}/>
             </div>
         )
     }
     function render2D(){
-        //console.log(props.data.series)
-
         var headers = []
         var rows = []
         var keys = Object.keys(props.data.series);
@@ -49,8 +40,11 @@ function Statistics(props){
             }
             rows.push(row);
         }
-        //console.log(headers);
-        //console.log(rows);
+        console.log(JSON.stringify(headers))
+        console.log(JSON.stringify(rows))
+
+        if(props.data.chart) return <ChartFactory type={props.chart} headers={headers} rows={rows}/>
+
         return (
             <div className="statistics">
                 <table>
@@ -69,19 +63,11 @@ function Statistics(props){
                         ))}
                     </tbody>
                 </table>
-                <Bar headers={headers} rows={rows}/>
-                <StackedBar headers={headers} rows={rows}/>
-                <Column headers={headers} rows={rows}/>
-                <StackedColumn headers={headers} rows={rows}/>
-                <Pie headers={headers} rows={rows}/>
-                <Donut headers={headers} rows={rows}/>
-                <PieArea headers={headers} rows={rows}/>
-                <TreeMap headers={headers} rows={rows}/>
             </div>
         )
     }
-    if(Array.isArray(props.data.series)) return render1D()
-    else return render2D()
+
+    return Array.isArray(props.data.series) ? render1D() : render2D();
 }
 
 export default Statistics;

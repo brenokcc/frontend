@@ -50,7 +50,7 @@ function Donut(props){
     return <Pie donut={true} headers={props.headers} rows={props.rows}/>
 }
 
-function PieArea(props){
+function Polar(props){
     return <Pie area={true} headers={props.headers} rows={props.rows}/>
 }
 
@@ -233,5 +233,88 @@ function Progress(props){
     return render();
 }
 
-export {Pie, PieArea, Donut, Bar, StackedBar, Column, StackedColumn, TreeMap, Line, Area, Progress}
-export default Chart;
+function ChartFactory(props){
+    function render(){
+        console.log(props.headers)
+        console.log(props.rows)
+        switch(props.type) {
+            case 'pie':
+              return (<Pie headers={props.headers} rows={props.rows} />);
+            case 'polar':
+              return (<Polar headers={props.headers} rows={props.rows} />);
+            case 'donut':
+              return (<Donut headers={props.headers} rows={props.rows} />);
+            case 'bar':
+              return (<Bar headers={props.headers} rows={props.rows} />);
+            case 'stacked_bar':
+              return (<StackedBar headers={props.headers} rows={props.rows} />);
+            case 'column':
+              return (<Column headers={props.headers} rows={props.rows} />);
+            case 'stacked_column':
+              return (<StackedColumn headers={props.headers} rows={props.rows} />);
+            case 'tree_map':
+              return (<TreeMap headers={props.headers} rows={props.rows} />);
+            case 'line':
+              return (<Line headers={props.headers} rows={props.rows} />);
+            case 'area':
+              return (<Area headers={props.headers} rows={props.rows} />);
+            case 'progress':
+              return (<Progress headers={props.headers} rows={props.rows} />);
+            default:
+              return (<Chart headers={props.headers} rows={props.rows} />);
+        }
+    }
+    return render()
+}
+
+function Example(props){
+    function render2D(){
+        var headers = ["","Não","Sim"];
+        var rows = [["EM_CURSO",93,383],["ABANDONO",227,61],["DESLIGADA",1,0],["CONCLUÍDA",260,94]]
+        return (
+            <>
+            <Donut headers={headers} rows={rows} />
+            <Bar headers={headers} rows={rows} />
+            <StackedBar headers={headers} rows={rows} />
+            <Column headers={headers} rows={rows} />
+            <StackedColumn headers={headers} rows={rows} />
+            <TreeMap headers={headers} rows={rows} />
+            <Line headers={headers} rows={rows} />
+            <Area headers={headers} rows={rows} />
+            </>
+        )
+    }
+
+    function render1D(){
+        var rows = [["EM_CURSO",476],["ABANDONO",288],["DESLIGADA",1],["CONCLUÍDA",354]];
+        return (
+            <>
+            <Pie rows={rows} />
+            <Polar rows={rows} />
+            <Donut rows={rows} />
+            <Bar rows={rows} />
+            <Column rows={rows} />
+            <TreeMap rows={rows} />
+            <Line rows={rows} />
+            <Area rows={rows} />
+            <Progress value={90} />
+            </>
+        )
+    }
+
+    function render(){
+        return (
+            <div>
+                <h1>Chart 1D</h1>
+                {render1D()}
+                <h1>Chart 2D</h1>
+                {render2D()}
+            </div>
+        )
+    }
+
+    return render()
+}
+
+export {Pie, Polar, Donut, Bar, StackedBar, Column, StackedColumn, TreeMap, Line, Area, Progress, ChartFactory, Example}
+export default ChartFactory;

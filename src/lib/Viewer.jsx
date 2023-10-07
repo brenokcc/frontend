@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Action from './Action'
 import {toLabelCase, toTitleCase, TitleCase, Value, ClearFix, Component} from './Utils'
 import QuerySet from './QuerySet'
+import {ChartFactory, Example} from './Charts'
 
 
 function Viewer(props){
@@ -67,6 +68,7 @@ function Viewer(props){
     }
 
     //<div>{JSON.stringify(data.result)}</div>
+    //return <Example/>
     return (
         <div className="viewer">
             <div>

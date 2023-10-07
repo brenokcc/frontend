@@ -1,149 +1,237 @@
-import React, { PureComponent } from 'react';
-import { Treemap, PieChart, Pie, BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import React from "react";
+import ReactEcharts from "echarts-for-react";
 
-const data = [
-  {
-    name: 'Page A',
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: 'Page B',
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: 'Page C',
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: 'Page D',
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: 'Page E',
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: 'Page F',
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: 'Page G',
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
 
-const data01 = [
-  { name: 'Group A', value: 400 },
-  { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 300 },
-  { name: 'Group D', value: 200 },
-];
-const data02 = [
-  { name: 'A1', value: 100 },
-  { name: 'A2', value: 300 },
-  { name: 'B1', value: 100 },
-  { name: 'B2', value: 80 },
-  { name: 'B3', value: 40 },
-  { name: 'B4', value: 30 },
-];
+function Pie(props){
+    var radius = [['70%', '78%'], ['60%', '68%'], ['50%', '58%'], ['40%', '48%'], ['30%', '48%'], ['20%', '28%'], ['10%', '18%']]
 
-const data03 = [
-  {
-    name: 'axis',
-    children: [
-      { name: 'Axes', size: 1302 },
-      { name: 'Axis', size: 4593 },
-      { name: 'AxisGridLine', size: 652 },
-      { name: 'AxisLabel', size: 636 },
-      { name: 'CartesianAxes', size: 6703 },
-    ]
-  },
-];
+    function series(){
+        if(props.headers){
+            return props.headers.slice(1).map(function(header, i){
+                return {
+                  name: header,
+                  type: 'pie',
+                  radius: radius[i],
+                  emphasis: {label: {show: true, fontWeight: 'bold'}},
+                  roseType: null,
+                  data: props.rows.map(function(row){
+                    return {name: row[0], value: row[i+1]}
+                  })
+                }
+          })
+        } else {
+            return {
+                  name: null,
+                  type: 'pie',
+                  radius: props.donut ? ['25%', '65%'] : ['0%', '75%'],
+                  emphasis: {label: {show: true, fontWeight: 'bold'}},
+                  roseType: props.area ? 'area' : null,
+                  data: props.rows.map(function(row, i){
+                    return {name: row[0], value: row[1]}
+                  })
+            }
+        }
+    }
 
-function Example(props) {
-  var height = 300;
-  function render() {
-    return (
-        <>
-            <div style={{ width: '50%', height: height, display: 'inline-block' }}>
-                <ResponsiveContainer>
-                    <AreaChart data={data}>
-                      <Area type="monotone" dataKey="uv" fill="#82ca9d" stroke="#FFF" />
-                      <Area type="monotone" dataKey="pv" fill="#8884d8" stroke="#FFF" />
-                      <Tooltip /><Legend /><XAxis dataKey="name"/><YAxis />
-                    </AreaChart>
-                </ResponsiveContainer>
-            </div>
+    function render(){
+        var option = {
+          tooltip: {trigger: 'item'},
+          legend: {},
+          label: {show: true, formatter(param) {return param.name + ' (' + param.percent * 2 + '%)'; }},
+          series: series()
+        };
+        return <ReactEcharts option={option}/>;
+    }
 
-            <div style={{ width: '50%', height: height, display: 'inline-block' }}>
-                <ResponsiveContainer>
-                    <LineChart data={data}>
-                      <XAxis dataKey="name" />
-                      <Tooltip /><Legend /><XAxis dataKey="name"/><YAxis />
-                      <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
-                      <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-                    </LineChart>
-                </ResponsiveContainer>
-            </div>
-
-            <div style={{ width: '50%', height: height, display: 'inline-block' }}>
-                <ResponsiveContainer>
-                    <BarChart data={data}>
-                      <XAxis dataKey="name" />
-                      <Tooltip /><Legend /><XAxis dataKey="name"/><YAxis />
-                      <Bar type="monotone" dataKey="pv"  fill="#8884d8"/>
-                      <Bar type="monotone" dataKey="uv" fill="#82ca9d"/>
-                    </BarChart>
-                </ResponsiveContainer>
-            </div>
-
-            <div style={{ width: '50%', height: height, display: 'inline-block' }}>
-                <ResponsiveContainer>
-                    <BarChart data={data}>
-                      <XAxis dataKey="name" />
-                      <Tooltip /><Legend /><XAxis dataKey="name"/><YAxis />
-                      <Bar type="monotone" dataKey="pv"  fill="#8884d8"  stackId="a"/>
-                      <Bar type="monotone" dataKey="uv" fill="#82ca9d"  stackId="a"/>
-                    </BarChart>
-                </ResponsiveContainer>
-            </div>
-
-            <div style={{ width: '50%', height: height, display: 'inline-block' }}>
-                <ResponsiveContainer>
-                    <PieChart>
-                      <Tooltip /><Legend />
-                      <Pie data={data01} dataKey="value" cx="50%" cy="50%" outerRadius={60} fill="#8884d8" />
-                      <Pie data={data02} dataKey="value" cx="50%" cy="50%" innerRadius={70} outerRadius={90} fill="#82ca9d" label />
-                    </PieChart>
-                </ResponsiveContainer>
-            </div>
-
-            <div style={{ width: '50%', height: height, display: 'inline-block' }}>
-                <ResponsiveContainer>
-                    <Treemap data={data03} dataKey="size" aspectRatio={4 / 3} stroke="#fff" fill="#8884d8" label>
-                      <Tooltip /><Legend />
-                    </Treemap>
-                </ResponsiveContainer>
-            </div>
-        </>
-    );
-  }
-  return render();
+    return render();
 }
 
+function Donut(props){
+    return <Pie donut={true} headers={props.headers} rows={props.rows}/>
+}
 
-export default Example;
+function PieArea(props){
+    return <Pie area={true} headers={props.headers} rows={props.rows}/>
+}
+
+function Chart(props){
+    var invert = props.invert || false;
+    var type = props.type || 'bar';
+    var stack = props.stack;
+    var yAxis = {type: 'value'};
+    var toolbox = {show: true, feature: {mark: { show: true }, saveAsImage: { show: true }}};
+    var areaStyle = props.area ? {} : null;
+
+    function xAxis(){
+        if(props.headers){
+            return {type: 'category', data: props.headers.slice(1)}
+        } else {
+            return {type: 'category', data: props.rows.map(function (row){return row[0]})}
+        }
+    }
+
+    function series(){
+        if(props.headers){
+            return props.rows.map(function(row){
+              return {
+                name: row[0],
+                data: row.slice(1),
+                type: type,
+                stack: stack,
+                areaStyle: areaStyle,
+              }
+            })
+        } else {
+            return [{
+                name: null,
+                data: props.rows.map(function (row){return row[1]}),
+                type: type,
+                stack: stack,
+                areaStyle: areaStyle,
+              }]
+        }
+    }
+
+    function render(){
+        var option = {
+          toolbox: toolbox,
+          tooltip: { trigger: 'axis', axisPointer: {type: 'shadow'}},
+          legend: {},
+          label: {show: true},
+          xAxis: invert? yAxis: xAxis(),
+          yAxis: invert? xAxis() : yAxis,
+          series: series()
+        };
+        return <ReactEcharts option={option}/>;
+    }
+
+    return render();
+}
+
+function Bar(props){
+    return <Chart headers={props.headers} rows={props.rows}/>
+}
+
+function Line(props){
+    return <Chart type="line" headers={props.headers} rows={props.rows}/>
+}
+
+function Area(props){
+    return <Chart area={true} type="line" headers={props.headers} rows={props.rows}/>
+}
+
+function StackedBar(props){
+    return <Chart stack="1" headers={props.headers} rows={props.rows}/>
+}
+
+function Column(props){
+    return <Chart invert={true} headers={props.headers} rows={props.rows}/>
+}
+
+function StackedColumn(props){
+    return <Chart invert={true} stack="1" headers={props.headers} rows={props.rows}/>
+}
+
+function TreeMap(props){
+
+    function series(){
+        if(props.headers){
+            return [
+                {
+                  type: 'treemap',
+                  roam: 'move',
+                  nodeClick: true,
+                  data: props.headers.slice(1).map(function(header, i){
+                        return {
+                          name: header,
+                          type: 'pie',
+                          children: props.rows.map(function(row){
+                            return {name: row[0], value: row[i+1]}
+                          })
+                        }
+                  }),
+                }
+              ]
+        } else {
+            return [
+                {
+                  type: 'treemap',
+                  roam: 'move',
+                  nodeClick: false,
+                  data: props.rows.map(function(row){
+                    return {
+                      name: row[0],
+                      value: row[1],
+                    }
+                  })
+                }
+              ]
+        }
+    }
+
+    function render(){
+        var option = {
+            tooltip: {trigger: 'item'},
+          legend: {},
+          label: {show: true, formatter(param) {return param.name + ' (' + param.value + ')'; }},
+          series: series()
+        };
+        return <ReactEcharts option={option}/>;
+    }
+
+    return render();
+}
+
+function Progress(props){
+    function render(){
+        var option = {
+          series: [
+            {
+              type: 'gauge',
+              startAngle: 0,
+              endAngle: 360,
+              min: 0,
+              max: 100,
+              progress: {
+                show: true,
+                width: 38
+              },
+              pointer: null,
+              axisTick: null,
+              splitLine: {
+                length: 0,
+              },
+              axisLine: {
+                lineStyle: {
+                  width: 38
+                }
+              },
+              axisLabel: null,
+              detail: {
+                backgroundColor: '#fff',
+                fontSize: '2.5rem',
+                width: '60%',
+                lineHeight: 40,
+                height: 40,
+                borderRadius: 8,
+                offsetCenter: [0, '0%'],
+                valueAnimation: true,
+                formatter: function (value) {
+                  return value.toFixed(0) + '%';
+                }
+              },
+              data: [
+                {
+                  value: props.value
+                }
+              ]
+            }
+          ]
+        };
+        return <ReactEcharts option={option}/>;
+    }
+    return render();
+}
+
+export {Pie, PieArea, Donut, Bar, StackedBar, Column, StackedColumn, TreeMap, Line, Area, Progress}
+export default Chart;

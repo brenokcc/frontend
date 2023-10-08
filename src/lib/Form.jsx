@@ -123,6 +123,7 @@ function Form(props){
     }, [])
 
     function process(data, response){
+        console.log(data);
         if(data.type){
             setdata(data);
             return
@@ -138,14 +139,14 @@ function Form(props){
             if(data.message) setCookie('message', data.message);
             document.location.href = data.redirect;
         } else {
-            if(data.message) showMessage(message);
-            if(data.task){
+            if(data.message){
+                showMessage(data.message);
+            } else if(data.task){
                 showTask(data.task, callback);
             } else {
-                if (Object.keys(data).length) console.log(data);
-                closeDialogs();
                 showMessage('Ação realizada com sucesso');
             }
+            closeDialogs();
         }
     }
 

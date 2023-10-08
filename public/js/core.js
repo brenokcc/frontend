@@ -1,4 +1,3 @@
-var API_URL = "http://localhost:8000";
 var reloadable = null;
 
 document.addEventListener("DOMContentLoaded", function(e) {

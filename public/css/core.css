@@ -1,3 +1,13 @@
+:root{
+    --primary-color: #1351b4;
+    --secondary-color: #071e41;
+    --auxiliary-color: #2670e8;
+    --highlight-color: #0c326f;
+    --info-color: #d4e5ff;
+    --success-color: #1351b4;
+    --warning-color: #fff5c2;
+    --danger-color: #e52207;
+}
 html {
   box-sizing: border-box;
 }
@@ -34,7 +44,7 @@ body{
 .form-group{ width: 100%; }
 .form-body.empty { display: none}
 .footer {
-    background-color: #071e41;
+    background-color: var(--secondary-color);
     color: white;
 }
 .footer .footerContent{
@@ -105,7 +115,7 @@ body{
     background-color: #f8f8f8;
 }
 .boxes h2{
-    color: #0c326f;
+    color: var(--highlight-color);
     padding-top: 25px;
     font-size: 1.5rem;
 }
@@ -119,17 +129,16 @@ body{
     box-shadow: 0px 15px 10px -15px #DDD;
     margin: 10px;
     text-decoration: none;
-
 }
 .boxes .item i{
     margin-top: 30px;
     font-size: 3rem;
-    color: #2670e8
+    color: var(--auxiliary-color)
 }
 .boxes .item .text{
     margin-top: 40px;
     font-weight: bold;
-    color: #0c326f;
+    color: var(--highlight-color);
     font-size: 1.2rem;
     text-transform: uppercase;
     height: 70px;
@@ -139,7 +148,7 @@ body{
     margin-left: -20px;
     margin-right: -20px;
     color: white;
-    background-color: #0c326f;
+    background-color: var(--highlight-color);
     text-align: center;
     border-top: solid 1px white;
 }
@@ -157,7 +166,7 @@ body{
 
 .info{
     padding: 30px;
-    background-color: #d4e5ff;
+    background-color: var(--info-color);
     margin-top: 20px;
     margin-bottom: 20px;
 }
@@ -189,7 +198,7 @@ body{
 }
 .warning{
     padding: 30px;
-    background-color: #fff5c2;
+    background-color: var(--warning-color);
     margin-left: -20px;
     margin-right: -20px;
 }
@@ -276,7 +285,7 @@ body{
     background-color: #dae3f4;
 }
 .header .right .user .letter{
-    background-color: #071e41;
+    background-color: var(--secondary-color);
     color: white;
     border-radius: 50%;
     width: 30px;
@@ -316,7 +325,7 @@ body{
     background-color: #ffd43b;
 }
 .btn:hover{
-    background-color: #4f79c6;
+    opacity: 0.75;
 }
 .btn {
     white-space: nowrap;
@@ -332,7 +341,7 @@ body{
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
-    background-color: #1351b4;
+    background-color: var(--primary-color);
     border: 1px solid transparent;
     padding: 0.375rem 0.75rem;
     font-size: 1rem;
@@ -345,7 +354,7 @@ i{
 }
 i.clickable{
     cursor: pointer;
-    color: #1351b4;
+    color: var(--primary-color);
     border-radius: 50%;
     width: 35px;
     height: 35px;
@@ -353,7 +362,7 @@ i.clickable{
     padding-top: 10px;
 }
 i.clickable:visited{
-    color: #1351b4
+    color: var(--primary-color)
 }
 i.clickable:hover{
     background-color: #dae3f4;
@@ -425,7 +434,7 @@ input[type="checkbox"]::before {
   height: 0.65em;
   transform: scale(0);
   transition: 120ms transform ease-in-out;
-  box-shadow: inset 1em 1em #1351b4;
+  box-shadow: inset 1em 1em var(--primary-color);
 }
 
 input[type="checkbox"]:checked::before {
@@ -489,7 +498,7 @@ input[type="checkbox"]:checked::before {
 }
 .queryset .calendar table td .total .number{
     text-align: center;
-    background-color: #1351b4;
+    background-color: var(--primary-color);
     border-radius: 50%;
     padding-top: 5px;
     color: white;
@@ -524,7 +533,7 @@ input[type="checkbox"]:checked::before {
 }
 .queryset .data table thead th{
     background-color: #f8f8f8;
-    color: #1151b3;
+    color: var(--primary-color);
     text-align: left;
     padding: 10px;
 }
@@ -691,7 +700,7 @@ select {color: #757575;}
 }
 form .field-error{
     color: white;
-    background-color: #e52207;
+    background-color: var(--danger-color);
     display: block;
     padding: 10px;
     width: fit-content;

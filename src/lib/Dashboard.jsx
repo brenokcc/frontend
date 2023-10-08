@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import {toLabelCase, Icon, TitleCase, Loading} from './Utils'
+import {toLabelCase, Icon, TitleCase, Loading, Component} from './Utils'
 import Action from './Action'
 
 function Boxes(props){
@@ -79,6 +79,9 @@ function Dashboard(props){
             {props.data.result.percentual_resolucao_inconsistencia &&
                 <Indicators title="percentual_resolucao_inconsistencia" data={props.data.result.percentual_resolucao_inconsistencia}/>
             }
+            {Object.keys(props.data.result).map((k) => (
+                props.data.result[k].type && <Component key={Math.random()} data={props.data.result[k]} />
+            ))}
         </div>
     )
 }

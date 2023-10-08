@@ -1,6 +1,17 @@
 import React from "react";
-import ReactEcharts from "echarts-for-react";
+import { useState, useEffect } from 'react'
 
+
+function Echarts(props){
+    var id = Math.random();
+
+    useEffect(()=>{
+        var chart = echarts.init(document.getElementById(id));
+        chart.setOption(props.option);
+    }, [])
+
+    return <div id={id} style={{width: '100%', height:400}}></div>
+}
 
 function Pie(props){
     var radius = [['70%', '78%'], ['60%', '68%'], ['50%', '58%'], ['40%', '48%'], ['30%', '48%'], ['20%', '28%'], ['10%', '18%']]
@@ -40,7 +51,7 @@ function Pie(props){
           label: {show: true, formatter(param) {return param.name + ' (' + param.percent * 2 + '%)'; }},
           series: series()
         };
-        return <ReactEcharts option={option}/>;
+        return <Echarts option={option}/>;
     }
 
     return render();
@@ -102,7 +113,7 @@ function Chart(props){
           yAxis: invert? xAxis() : yAxis,
           series: series()
         };
-        return <ReactEcharts option={option}/>;
+        return <Echarts option={option}/>;
     }
 
     return render();
@@ -176,7 +187,7 @@ function TreeMap(props){
           label: {show: true, formatter(param) {return param.name + ' (' + param.value + ')'; }},
           series: series()
         };
-        return <ReactEcharts option={option}/>;
+        return <Echarts option={option}/>;
     }
 
     return render();
@@ -228,7 +239,7 @@ function Progress(props){
             }
           ]
         };
-        return <ReactEcharts option={option}/>;
+        return <Echarts option={option}/>;
     }
     return render();
 }

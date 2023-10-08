@@ -8,6 +8,7 @@ function Action(props){
         if(props.modal){
             e.preventDefault();
             modal(e.target.closest("a").href, props.reloader);
+            if(props.onClick) props.onClick();
         }
     }
 

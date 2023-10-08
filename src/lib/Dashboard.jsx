@@ -66,12 +66,20 @@ function Warning(props){
 //<div>{JSON.stringify(props.data)}</div>
 function Dashboard(props){
     return (
-        <>
-        <Warning/>
-        <Boxes title="acesso_rapido" data={props.data.result.acesso_rapido}/>
-        <Async title="percentual_carga_dados" data={props.data.result.percentual_carga_dados}/>
-        <Indicators title="percentual_resolucao_inconsistencia" data={props.data.result.percentual_resolucao_inconsistencia}/>
-        </>
+        <div className="dashboard">
+            {props.data.result.capacitacao &&
+                <Warning/>
+            }
+            {props.data.result.acesso_rapido &&
+                <Boxes title="acesso_rapido" data={props.data.result.acesso_rapido}/>
+            }
+            {props.data.result.percentual_carga_dados &&
+                <Async title="percentual_carga_dados" data={props.data.result.percentual_carga_dados}/>
+            }
+            {props.data.result.percentual_resolucao_inconsistencia &&
+                <Indicators title="percentual_resolucao_inconsistencia" data={props.data.result.percentual_resolucao_inconsistencia}/>
+            }
+        </div>
     )
 }
 

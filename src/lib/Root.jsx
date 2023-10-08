@@ -5,22 +5,11 @@ import Action from './Action'
 import {toLabelCase, toTitleCase, ClearFix, Loading, Content, Icon} from './Utils'
 import modal from './Modal'
 
-const LOGIN_URL = '/api/v1/login/';
-const HOME_URL = '/api/v1/user/'
+
 
 function Root(props){
     const [data, setdata] = useState(null);
     const [key, setkey] = useState(0);
-
-    if(document.location.pathname=='' || document.location.pathname=='/'){
-        document.location.href = HOME_URL;
-    }
-    if(document.location.pathname==LOGIN_URL){
-        localStorage.removeItem("token")
-        localStorage.removeItem("user")
-    } else if(localStorage.getItem("token")==null){
-        document.location.href = LOGIN_URL;
-    }
 
     useEffect(()=>{
         window.addEventListener('keydown', (event) => {
@@ -81,11 +70,15 @@ function Header(props){
     const [active, setactive] = useState(false);
     const application = JSON.parse(localStorage.getItem('application'));
 
+    function onClickDropdownLink(){
+        setactive(false);
+    }
+
     function dropdown(){
         if(active){
             return (
                 <div className="dropdown">
-                    <Action label="Alterar Senha" href="/api/v1/user/change_password/" reloader={props.reloader} modal={true} link={true}>Alterar Senha</Action>
+                    <Action label="Alterar Senha" href="/api/v1/user/change_password/" reloader={props.reloader} modal={true} link={true} onClick={onClickDropdownLink}>Alterar Senha</Action>
                     <a href="/api/v1/login/" data-label={toLabelCase("Sair")}>Sair</a>
                 </div>
             )
@@ -199,16 +192,25 @@ function Breadcrumbs(props){
 
 function Footer(props){
     const application = JSON.parse(localStorage.getItem('application'));
-    return (
-        <div className="footer">
-            <div className="footerContent">
-                <img src={application.image}/>
-            </div>
-            <div className="footerVersion">
-                {application.version}
-            </div>
-        </div>
-    )
+
+    function render(){
+        console.log(application.footer);
+       if(application.footer){
+            return (
+                    <div className="footer">
+                        {application.footer.logo &&
+                            <div className="footerContent">
+                                <img src={application.footer.logo}/>
+                            </div>
+                        }
+                        <div className="footerVersion">
+                            {application.footer.version}
+                        </div>
+                    </div>
+            )
+       }
+    }
+    return render();
 }
 
 function Counter(props) {

@@ -176,6 +176,9 @@ body{
     display: inline-block;
     color: #333;
 }
+.dashboard{
+    min-height: 400px;
+}
 .valueset dl dt{
     font-weight: bold;
     display: inline-block;

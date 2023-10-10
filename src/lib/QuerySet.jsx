@@ -58,12 +58,12 @@ function FilterForm(props){
         if(props.data.search.length>0 || props.data.filters.length>0){
             return(
               <Accordion title="Filtros">
-                <form className="filterForm">
+                <form className="filter">
                     {props.data.search.length>0 && <SearchField state={props.state}/>}
                     {props.data.filters.map((filter) => (
                        field(filter)
                     ))}
-                    <div>
+                    <div className="filter">
                         <button className="btn" type="button" onClick={()=>props.onfilter()} data-label={toLabelCase("filter")}>
                             <Icon icon="filter"/>
                             <TitleCase text="Filter"/>

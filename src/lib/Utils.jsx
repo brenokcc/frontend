@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import modal from './Modal';
-import Form from './Form'
+import {Form, Filter} from './Form'
 import QuerySet from './QuerySet'
 import Viewer from './Viewer'
 import Dashboard from './Dashboard'
@@ -213,6 +213,26 @@ function GerenciarInconsistencias(props){
         }
     }
 
+    function render(){
+        return (
+            <div id="table">
+                <h1>Inconsistências</h1>
+                <form>
+                    <Subsets data={data.subsets} active={data.subset} onChange={subset}/>
+                    <Filter data={data.filters} onfilter={reload}/>
+                    <Flags data={data.flags} onChange={reload}/>
+                    <ClearFix/>
+                    <Pagination/>
+                    <ClearFix/>
+                    {table()}
+                    <ClearFix/>
+                    <Pagination/>
+                    <ClearFix/>
+                </form>
+            </div>
+        )
+    }
+
     function table(){
         if(data.rows.length>0){
             //return <div>{JSON.stringify(data.rows[0])}</div>
@@ -249,19 +269,30 @@ function GerenciarInconsistencias(props){
         }
     }
 
-    return (
-        <div id="table">
-            <h1>Inconsistências</h1>
-            <form>
-                <Flags data={data.flags} onChange={reload}/>
-                <Subsets data={data.subsets} active={data.subset} onChange={subset}/>
-                <div>{false && JSON.stringify(data)}</div>
-                {table()}
-                <br/>
-            </form>
-        </div>
-    )
+    return render()
 }
+
+function Pagination(props){
+    var count = 100;
+    var page = 5
+    var start = ((page-1) * 10) + 1;
+    var end = start + 10 - 1;
+    if(count > 10){
+        return (
+            <div className="pagination">
+                <div className="left">
+                    Exibir <select><option>10</option></select> | {start}-{end} de {count} itens
+                </div>
+                <div className="right">
+                    Página {page}
+                    {1 && <Icon icon="chevron-left" onClick={function(){alert(1)}}/>}
+                    {1 && <Icon icon="chevron-right" onClick={function(){alert(2)}}/>}
+                </div>
+            </div>
+        )
+    }
+}
+
 
 function Component(props){
     function render(){

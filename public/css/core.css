@@ -205,6 +205,13 @@ body{
     margin-top: -5px;
     font-size: 80%;
 }
+.pagination{
+    margin-top: 20px;
+    height: 40px;
+}
+.pagination select{
+    border: 0px;
+}
 .flags{
     text-align: center;
 }
@@ -595,18 +602,6 @@ input[type="checkbox"]:checked::before {
     padding: 10px;
     display: none;
 }
-
-.queryset .filterForm > div{
-    margin-right: 10px;
-    display: inline-block;
-}
-.queryset .pagination{
-    margin-top: 20px;
-    height: 40px;
-}
-.queryset .pagination select{
-    border: 0px;
-}
 .searcher{
     margin-right: 20px;
 }
@@ -721,7 +716,10 @@ select {color: #757575;}
   color: #BBBBBB;
   opacity: 1;
 }
-
+.filter > div{
+    margin-right: 10px;
+    display: inline-block;
+}
 .form .form-group{display: inline-block;}
 .form .form-group.w50{ width: 49.8%; }
 .form .form-group.w33{ width: 33.1%; }

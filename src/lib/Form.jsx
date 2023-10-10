@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import {toLabelCase, toTitleCase, TitleCase, Icon, ClearFix, Content, Component} from './Utils'
+import {toLabelCase, toTitleCase, TitleCase, Icon, ClearFix, Content, Component, Accordion} from './Utils'
 
 
 function Input(props){
@@ -258,5 +258,43 @@ function Form(props){
 }
 
 
-export {Form, Field};
+function Filter(props){
+
+    function field(filter){
+        if(filter.type == "hidden"){
+            return <Field data={filter} url={props.url}/>
+        } else {
+            return (
+              <div className="filterField" key={Math.random()}>
+                <label><TitleCase text={filter.name}/></label>
+                <br/>
+                <Field data={filter} url={props.url}/>
+              </div>
+            )
+        }
+    }
+
+    function render(){
+        if(props.data.length>0){
+            return(
+              <Accordion title="Filtros">
+                <div className="filter">
+                    {props.data.map((filter) => (field(filter)))}
+                    <div>
+                        <button className="btn" type="button" onClick={()=>props.onfilter()} data-label={toLabelCase("filter")}>
+                            <Icon icon="filter"/>
+                            <TitleCase text="Filter"/>
+                        </button>
+                    </div>
+                </div>
+              </Accordion>
+            )
+        }
+    }
+
+    return render()
+}
+
+
+export {Form, Field, Filter};
 export default Form;

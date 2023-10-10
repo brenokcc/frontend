@@ -194,7 +194,6 @@ function Footer(props){
     const application = JSON.parse(localStorage.getItem('application'));
 
     function render(){
-        console.log(application.footer);
        if(application.footer){
             return (
                     <div className="footer">

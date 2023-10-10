@@ -27,7 +27,6 @@ function load(data){
     root.style.setProperty('--success-color', application.theme.success);
     root.style.setProperty('--warning-color', application.theme.warning);
     root.style.setProperty('--danger-color', application.theme.danger);
-    console.log(application.theme);
 
     document.getElementById('title').innerHTML = data.result.title;
     document.getElementById('icon').href = data.result.icon;

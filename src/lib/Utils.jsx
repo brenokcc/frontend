@@ -1,20 +1,22 @@
 import { useState, useEffect } from 'react'
+import modal from './Modal';
 import Form from './Form'
 import QuerySet from './QuerySet'
 import Viewer from './Viewer'
 import Dashboard from './Dashboard'
 import Statistics from './Statistics'
+import Action from './Action'
 
 var i18n = null
 
 function toLabelCase(text){
-    if(text) text = toTitleCase(text.replace('-', '')).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('_', '').toLowerCase();
+    if(text!=null) text = toTitleCase(text.toString().replace('-', '')).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace('_', '').toLowerCase();
     return text;
 }
 
 function toTitleCase(text){
-    if(text){
-        text = text.replace (/^[-_]*(.)/, (_, c) => c.toUpperCase()).replace (/[-_]+(.)/g, (_, c) => ' ' + c.toUpperCase());
+    if(text!=null){
+        text = text.toString().replace (/^[-_]*(.)/, (_, c) => c.toUpperCase()).replace (/[-_]+(.)/g, (_, c) => ' ' + c.toUpperCase());
         if(true || i18n==null){
             const application = JSON.parse(localStorage.getItem('application'));
             i18n = application.i18n || {};
@@ -149,6 +151,7 @@ function Subsets(props){
             })}
             return (
                 <div className="subsets">
+                    <input type="hidden" name="subset" defaultValue={active}/>
                     {subsets.map((subset) => (
                       <div className={subset.style} key={Math.random()} onClick={function(){props.onChange(subset.k)}}>
                         <TitleCase text={subset.k}/> <span className="counter">{subset.v}</span>
@@ -168,7 +171,7 @@ function Flags(props){
                 <div className="flags">
                     {Object.keys(props.data).map((k) => (
                         <div key={Math.random()} className="flag">
-                             <input type="checkbox"/>
+                             <input type="checkbox" name={k} onChange={props.onChange} checked={props.data[k]}/>
                              <label>{toTitleCase(k)}</label>
                         </div>
                     ))}
@@ -180,33 +183,59 @@ function Flags(props){
 }
 
 function GerenciarInconsistencias(props){
+    const [data, setdata] = useState(props.data);
+    const key = "table";
 
     function subset(k){
-        alert(k);
+        $('#table form input[name=subset]').val(k);
+        reload();
+    }
+
+    function select(){
+        $('#table form input[name=id]').prop('checked', event.target.checked);
+    }
+
+    function reload(){
+        var params = $('#table form').serialize();
+        request('GET', document.location.pathname+'?'+params, function(data){
+            setdata(data.result);
+        });
+    }
+
+    useEffect(()=>{}, [])
+
+    function open(url){
+        if(url){
+            event.preventDefault();
+            modal(url, function(){
+                reload();
+            });
+        }
     }
 
     function table(){
-        if(props.data.rows.length>0){
-            //return <div>{JSON.stringify(props.data.rows[0])}</div>
+        if(data.rows.length>0){
+            //return <div>{JSON.stringify(data.rows[0])}</div>
             return (
-                <div>
+                <div className="responsive">
                     <table className="table">
                         <thead>
                             <tr>
-                            {props.data.rows[0].map((col)  => (
+                            {data.rows[0].map((col, i)  => (
                               <th key={Math.random()}>
-                                <TitleCase text={col.name}/>
+                                {i==0 && <input type="checkbox" name="id" value="0" onChange={select}/>}
+                                {i!=0 && <TitleCase text={col.name}/>}
                               </th>
                             ))}
                             </tr>
                         </thead>
                         <tbody>
-                            {props.data.rows.map((row, i)  => (
-                                <tr>
+                            {data.rows.map((row, i)  => (
+                                <tr key={Math.random()}>
                                     {row.map((col, j)  => (
-                                      <td key={Math.random()}>
-                                        {j==0 && <input type="checkbox"/>}
-                                        {j>0 && <span>{col.value}</span>}
+                                      <td key={Math.random()} onClick={function(){open(col.url);}} className={(col.url ? "clickable " : "")+col.style}>
+                                        {j==0 && <input type="checkbox" name="id" value={row[0].value}/>}
+                                        {j!=0 && <span>{col.value!=null && Format(col.value)}</span>}
                                       </td>
                                     ))}
                                 </tr>
@@ -221,12 +250,15 @@ function GerenciarInconsistencias(props){
     }
 
     return (
-        <div>
+        <div id="table">
             <h1>Inconsistências</h1>
-            <Flags data={props.data.flags}/>
-            <Subsets data={props.data.subsets} active={props.data.subset} onChange={subset}/>
-            <div>{false && JSON.stringify(props.data)}</div>
-            {table()}
+            <form>
+                <Flags data={data.flags} onChange={reload}/>
+                <Subsets data={data.subsets} active={data.subset} onChange={subset}/>
+                <div>{false && JSON.stringify(data)}</div>
+                {table()}
+                <br/>
+            </form>
         </div>
     )
 }

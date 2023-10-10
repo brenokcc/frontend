@@ -163,6 +163,30 @@ body{
     border-bottom: solid 1px #DDD;
     padding: 15px;
 }
+.table tbody td.clickable{
+    cursor: pointer;
+}
+.table tbody td.success{
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border-bottom: solid 1px #FFF;
+    border-left: solid 1px #FFF;
+    border-right: solid 1px #FFF;
+}
+.table tbody td.warning{
+    background-color: #ffeeba;
+    color: #856404;
+    border-bottom: solid 1px #FFF;
+    border-left: solid 1px #FFF;
+    border-right: solid 1px #FFF;
+}
+.table tbody td.danger{
+    color: #721c24;
+    background-color: #f5c6cb;
+    border-bottom: solid 1px #FFF;
+    border-left: solid 1px #FFF;
+    border-right: solid 1px #FFF;
+}
 .subsets{
     width: 100%;
     text-align:center;
@@ -187,6 +211,9 @@ body{
 .flags .flag{
     display: inline-flex;
     margin: 10px;
+}
+.flags .flag label{
+    margin-left: 10px;
 }
 .indicators{
     padding: 60px;

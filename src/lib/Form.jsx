@@ -123,7 +123,6 @@ function Form(props){
     }, [])
 
     function process(data, response){
-        console.log(data);
         if(data.type){
             setdata(data);
             return

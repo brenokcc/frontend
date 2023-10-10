@@ -1,5 +1,5 @@
-import modal from './Modal'
-import {toLabelCase, Icon} from './Utils'
+import modal from './Modal';
+import {toLabelCase, Icon} from './Utils';
 
 
 function Action(props){

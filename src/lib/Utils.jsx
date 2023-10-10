@@ -129,6 +129,108 @@ function Fieldset(props){
     )
 }
 
+function Subsets(props){
+    var subsets = [];
+    var style = "subset";
+    var active = props.count ? 'all' : null;
+    function render(){
+        if(props.data){
+            Object.keys(props.data).map((k) => {
+                if(props.active==k || active==null) active = k;
+            })
+            if(props.count!=null){
+                if(active=='all') style = "subset active"
+                subsets.push({k:'all', v:props.data.count, style:style});
+            }
+            {Object.keys(props.data).map((k) => {
+                style = "subset";
+                if(k==active) style = "subset active"
+                subsets.push({k:k, v:props.data[k], style:style});
+            })}
+            return (
+                <div className="subsets">
+                    {subsets.map((subset) => (
+                      <div className={subset.style} key={Math.random()} onClick={function(){props.onChange(subset.k)}}>
+                        <TitleCase text={subset.k}/> <span className="counter">{subset.v}</span>
+                      </div>
+                    ))}
+                </div>
+            )
+        }
+    }
+    return render()
+}
+
+function Flags(props){
+    function render(){
+        if(props.data){
+            return (
+                <div className="flags">
+                    {Object.keys(props.data).map((k) => (
+                        <div key={Math.random()} className="flag">
+                             <input type="checkbox"/>
+                             <label>{toTitleCase(k)}</label>
+                        </div>
+                    ))}
+                </div>
+            )
+        }
+    }
+    return render();
+}
+
+function GerenciarInconsistencias(props){
+
+    function subset(k){
+        alert(k);
+    }
+
+    function table(){
+        if(props.data.rows.length>0){
+            //return <div>{JSON.stringify(props.data.rows[0])}</div>
+            return (
+                <div>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                            {props.data.rows[0].map((col)  => (
+                              <th key={Math.random()}>
+                                <TitleCase text={col.name}/>
+                              </th>
+                            ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {props.data.rows.map((row, i)  => (
+                                <tr>
+                                    {row.map((col, j)  => (
+                                      <td key={Math.random()}>
+                                        {j==0 && <input type="checkbox"/>}
+                                        {j>0 && <span>{col.value}</span>}
+                                      </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )
+        } else {
+            return <Empty/>
+        }
+    }
+
+    return (
+        <div>
+            <h1>Inconsistências</h1>
+            <Flags data={props.data.flags}/>
+            <Subsets data={props.data.subsets} active={props.data.subset} onChange={subset}/>
+            <div>{false && JSON.stringify(props.data)}</div>
+            {table()}
+        </div>
+    )
+}
+
 function Component(props){
     function render(){
         switch(props.data.type) {
@@ -148,6 +250,8 @@ function Component(props){
               return (<Info data={props.data}/>);
              case 'icons':
               return (<Icons data={props.data}/>);
+             case 'gerenciar_inconsistencias':
+             return <GerenciarInconsistencias data={props.data.result}/>
             default:
               return (<Unknown data={props.data}/>);
         }
@@ -244,5 +348,5 @@ function Accordion(props){
     )
 }
 
-export {toLabelCase, toTitleCase, TitleCase, Value, ClearFix, Empty, Loading, Content, Icon, Accordion, Component};
+export {toLabelCase, toTitleCase, TitleCase, Value, ClearFix, Empty, Loading, Content, Icon, Accordion, Component, Subsets};
 export default Loading;

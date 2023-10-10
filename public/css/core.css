@@ -143,6 +143,51 @@ body{
     text-transform: uppercase;
     height: 70px;
 }
+.table{
+    width: 100%;
+    border-spacing: 0px;
+}
+
+.table thead th.selection{
+    width: 0px;
+    text-align: center;
+    padding: 15px;
+}
+.table thead th{
+    background-color: #f8f8f8;
+    color: var(--primary-color);
+    text-align: left;
+    padding: 10px;
+}
+.table tbody td{
+    border-bottom: solid 1px #DDD;
+    padding: 15px;
+}
+.subsets{
+    width: 100%;
+    text-align:center;
+}
+.subsets .subset{
+    cursor: pointer;
+    display: inline-block;
+    margin: 30px;
+}
+.subsets .subset.active{
+    color: var(--primary-color);
+}
+.subsets .subset .counter{
+    position: absolute;
+    margin-left: 5px;
+    margin-top: -5px;
+    font-size: 80%;
+}
+.flags{
+    text-align: center;
+}
+.flags .flag{
+    display: inline-flex;
+    margin: 10px;
+}
 .indicators{
     padding: 60px;
     margin-left: -20px;
@@ -469,10 +514,7 @@ input[type="checkbox"]:checked::before {
     border-bottom: solid 1px #DDD;
     padding: 15px;
 }
-.queryset .data table{
-    width: 100%;
-    border-spacing: 0px;
-}
+
 .queryset .calendar{
     margin-bottom: 10px;
 }
@@ -526,21 +568,7 @@ input[type="checkbox"]:checked::before {
     padding: 10px;
     display: none;
 }
-.queryset .data table thead th.selection{
-    width: 0px;
-    text-align: center;
-    padding: 15px;
-}
-.queryset .data table thead th{
-    background-color: #f8f8f8;
-    color: var(--primary-color);
-    text-align: left;
-    padding: 10px;
-}
-.queryset .data table tbody td{
-    border-bottom: solid 1px #DDD;
-    padding: 15px;
-}
+
 .queryset .filterForm > div{
     margin-right: 10px;
     display: inline-block;
@@ -551,24 +579,6 @@ input[type="checkbox"]:checked::before {
 }
 .queryset .pagination select{
     border: 0px;
-}
-.queryset .subsets{
-    width: 100%;
-    text-align:center;
-}
-.queryset .subsets .subset{
-    cursor: pointer;
-    display: inline-block;
-    margin: 30px;
-}
-.queryset .subsets .subset.active{
-    font-weight: bold;
-}
-.queryset .subsets .subset .counter{
-    position: absolute;
-    margin-left: 5px;
-    margin-top: -5px;
-    font-size: 80%;
 }
 .searcher{
     margin-right: 20px;

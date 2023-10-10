@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Action from './Action'
 import {Field} from './Form'
-import {toLabelCase, toTitleCase, TitleCase, Value, ClearFix, Empty, Loading, Icon, Accordion} from './Utils'
+import {toLabelCase, toTitleCase, TitleCase, Value, ClearFix, Empty, Loading, Icon, Accordion, Subsets} from './Utils'
 
 
 function GlobalActions(props){
@@ -114,7 +114,7 @@ function DataTable(props){
         if(props.data.count){
             return (
             <div className="responsive data">
-                <table>
+                <table className="table">
                     <thead>
                         <tr>
                             { props.selectable &&
@@ -171,36 +171,6 @@ function BatchActions(props){
             <div className="counter right"></div>
         </div>
     )
-}
-
-function Subsets(props){
-    var subsets = [];
-    var style = "subset";
-    var active = 'all';
-    function render(){
-        if(props.data.subsets){
-            Object.keys(props.data.subsets).map((k) => {
-                if(props.data.subset==k) active = k;
-            })
-            if(active=='all') style = "subset active"
-            subsets.push({k:'all', v:props.data.count, style:style});
-            {Object.keys(props.data.subsets).map((k) => {
-                style = "subset";
-                if(k==active) style = "subset active"
-                subsets.push({k:k, v:props.data.subsets[k], style:style});
-            })}
-            return (
-                <div className="subsets">
-                    {subsets.map((subset) => (
-                      <div className={subset.style} key={Math.random()} onClick={function(){props.onChange(subset.k)}}>
-                        <TitleCase text={subset.k}/> <span className="counter">{subset.v}</span>
-                      </div>
-                    ))}
-                </div>
-            )
-        }
-    }
-    return render()
 }
 
 function QuerySet(props){
@@ -378,7 +348,7 @@ function QuerySet(props){
                 </div>
             </div>
             <ClearFix/>
-            <Subsets data={props.data} state={state} onChange={subset}/>
+            <Subsets data={props.data.subsets} count={props.data.count} active={props.data.subset} onChange={subset}/>
             <FilterForm data={data} onfilter={reload} url={getContextURL(data.url)}/>
             {calendar()}
             <Pagination data={data} reloader={reload}/>

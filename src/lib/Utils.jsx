@@ -153,7 +153,7 @@ function Subsets(props){
                 <div className="subsets">
                     <input type="hidden" name="subset" defaultValue={active}/>
                     {subsets.map((subset) => (
-                      <div className={subset.style} key={Math.random()} onClick={function(){props.onChange(subset.k)}}>
+                      <div className={subset.style} key={Math.random()} onClick={function(){props.onChange(subset.k)}} data-label={toLabelCase(subset.k)}>
                         <TitleCase text={subset.k}/> <span className="counter">{subset.v}</span>
                       </div>
                     ))}
@@ -222,11 +222,11 @@ function GerenciarInconsistencias(props){
                     <Filter data={data.filters} onfilter={reload}/>
                     <Flags data={data.flags} onChange={reload}/>
                     <ClearFix/>
-                    <Pagination/>
+                    <Pagination data={data.pagination} onChange={reload}/>
                     <ClearFix/>
                     {table()}
                     <ClearFix/>
-                    <Pagination/>
+                    <Pagination data={data.pagination} onChange={reload} auxiliar={true}/>
                     <ClearFix/>
                 </form>
             </div>
@@ -273,20 +273,38 @@ function GerenciarInconsistencias(props){
 }
 
 function Pagination(props){
-    var count = 100;
-    var page = 5
-    var start = ((page-1) * 10) + 1;
-    var end = start + 10 - 1;
-    if(count > 10){
+    var total = props.data.total;
+    var page = props.data.page;
+    var size = props.data.size;
+    var sizes = props.data.sizes;
+    var start = ((page-1) * size) + 1;
+    var end = start + size - 1;
+
+    function paginate(n, size){
+        var input = $(event.target).closest('form').find('input[name=page]');
+        input.val(parseInt(input.val())+n);
+        $(event.target).closest('form').find('input[name=size]').val(size);
+        if(props.onChange) props.onChange();
+    }
+
+    if(1 || total > 10){
         return (
             <div className="pagination">
+                {!props.auxiliar && <input type="hidden" name="page" defaultValue={page}/>}
+                {!props.auxiliar && <input type="hidden" name="size" defaultValue={size}/>}
                 <div className="left">
-                    Exibir <select><option>10</option></select> | {start}-{end} de {count} itens
+                    Exibir
+                    <select onChange={function(){paginate(0, $(event.target).val())}} value={size}>
+                        {sizes.map((n) => (
+                            <option value={n} key={Math.random()}>{n}</option>
+                        ))}
+                    </select>
+                    | {start}-{end} de {total} itens
                 </div>
                 <div className="right">
+                    {start > 1 && <Icon icon="chevron-left" onClick={function(){paginate(-1, size)}}/>}
                     Página {page}
-                    {1 && <Icon icon="chevron-left" onClick={function(){alert(1)}}/>}
-                    {1 && <Icon icon="chevron-right" onClick={function(){alert(2)}}/>}
+                    {end < total && <Icon icon="chevron-right" onClick={function(){paginate(+1, size)}}/>}
                 </div>
             </div>
         )

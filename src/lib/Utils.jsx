@@ -182,6 +182,29 @@ function Flags(props){
     return render();
 }
 
+function Actions(props){
+
+    function trigger(name){
+        $(event.target).closest('form').find('input[name=action]').val(name);
+        if(props.onClick) props.onClick();
+        $(event.target).closest('form').find('input[name=action]').val('');
+    }
+
+    function render(){
+        return (
+            <div className="globalActions right">
+                <input type="hidden" name="action"/>
+                {props.data.map((action) =>  (
+                  <button type="button" className="btn" onClick={function(){trigger(action.name)}} data-label={toLabelCase(action.label)}>
+                    {action.label}
+                  </button>
+                ))}
+            </div>
+        )
+    }
+    return render()
+}
+
 function GerenciarInconsistencias(props){
     const [data, setdata] = useState(props.data);
     const key = "table";
@@ -218,6 +241,7 @@ function GerenciarInconsistencias(props){
             <div id="table">
                 <h1>Inconsistências</h1>
                 <form>
+                    <Actions data={data.actions} onClick={reload}/>
                     <Subsets data={data.subsets} active={data.subset} onChange={subset}/>
                     <Filter data={data.filters} onfilter={reload}/>
                     <Flags data={data.flags} onChange={reload}/>

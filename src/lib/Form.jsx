@@ -11,7 +11,7 @@ function Input(props){
     return (
         <>
             {props.icon && <Icon icon={props.icon}/>}
-            <input className="form-control" type={field.type} name={field.name} id={field.name} defaultValue={field.value} data-label={toLabelCase(field.name)} readOnly={field.read_only}/>
+            <input className="form-control" type={field.type} name={field.name} id={field.name} defaultValue={field.value} data-label={toLabelCase(field.label)} readOnly={field.read_only}/>
         </>
     )
 }
@@ -19,7 +19,7 @@ function Input(props){
 function BooleanSelect(props){
     var field = props.data;
     return (
-        <select className="form-control" id={field.name} name={field.name} data-label={toLabelCase(field.name)} defaultValue={field.value}>
+        <select className="form-control" id={field.name} name={field.name} data-label={toLabelCase(field.label)} defaultValue={field.value}>
             <option></option>
             <option value="true">Sim</option>
             <option value="false">Não</option>
@@ -32,7 +32,7 @@ function Select(props){
     var field = props.data;
 
     return (
-        <select className="form-control" id={field.name} name={field.name} data-label={toLabelCase(field.name)} defaultValue={field.value}>
+        <select className="form-control" id={field.name} name={field.name} data-label={toLabelCase(field.label)} defaultValue={field.value}>
             {field.choices.map((choice) => (
               <option key={Math.random()} value={choice.id}>{choice.text}</option>
             ))}
@@ -57,7 +57,7 @@ function Autocomplete(props){
                     <option value={field.value.id}>{ field.value.text }</option>
                 }
             </select>
-            <input className="form-control" autoComplete="off" id={field.name+key+'autocomplete'} type="text" name={field.name+'__autocomplete'} defaultValue={field.value ? field.value.text : ''} data-label={toLabelCase(field.name)}/>
+            <input className="form-control" autoComplete="off" id={field.name+key+'autocomplete'} type="text" name={field.name+'__autocomplete'} defaultValue={field.value ? field.value.text : ''} data-label={toLabelCase(field.label)}/>
         </div>
     )
 }
@@ -83,7 +83,7 @@ function AutocompleteMultiple(props){
             <select className="form-control" id={field.name+key} name={field.name} style={{display:'none'}} multiple defaultValue={values}>
                 {options}
             </select>
-            <input className="form-control" autoComplete="off" id={field.name+key+'autocomplete'} type="text" name={field.name+'autocomplete'} defaultValue={field.value.text} data-label={toLabelCase(field.name)}/>
+            <input className="form-control" autoComplete="off" id={field.name+key+'autocomplete'} type="text" name={field.name+'autocomplete'} defaultValue={field.value.text} data-label={toLabelCase(field.label)}/>
         </div>
     )
 }
@@ -191,7 +191,7 @@ function Form(props){
         return (
             <div className={"form-group "+field.name} key={Math.random()}>
                 <label>
-                    <TitleCase text={field.name}/>
+                    <TitleCase text={field.label}/>
                     {field.required && <i>*</i>}
                 </label>
                 <br/>
@@ -266,7 +266,7 @@ function Filter(props){
         } else {
             return (
               <div className="filterField" key={Math.random()}>
-                <label><TitleCase text={filter.name}/></label>
+                <label><TitleCase text={filter.label || filter.name}/></label>
                 <br/>
                 <Field data={filter} url={props.url}/>
               </div>

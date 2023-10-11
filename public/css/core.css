@@ -720,9 +720,10 @@ select {color: #757575;}
     margin-right: 10px;
     display: inline-block;
 }
-.form .form-group{display: inline-block;}
+.form .form-group{display: inline-block; padding: 5px;}
+.form .form-group.w100{ width: 100%; }
 .form .form-group.w50{ width: 49.8%; }
-.form .form-group.w33{ width: 33.1%; }
+.form .form-group.w33{ width: 33.1%;}
 .form .form-control{width: 100%;}
 .form .autocomplete{width: 100%;}
 .form .subactions{

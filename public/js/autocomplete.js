@@ -11,6 +11,14 @@ function setAcValue(name, value, label){
     if(select.multiple) createBoxes(name);
     else input.value = label;
 }
+function escapeHtml(unsafe){
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+}
 function createBoxes(name){
     var select = document.getElementById(name)
     var boxes = document.getElementById(name+"boxes");
@@ -103,7 +111,7 @@ function autocomplete(name, placeholder, multiple, url, callback, onselect) {
                       b.classList.add("autocomplete-item");
                       b.dataset.label = normalize(data[i].text);
                       /*make the matching letters bold:*/
-                      b.innerHTML = data[i].text;
+                      b.innerHTML = escapeHtml(data[i].text);
                       /*insert a input field that will hold the current array item's value:*/
                       b.innerHTML += "<input class='" + data[i].id + "' type='hidden' value='" + data[i].text + "'>";
                       /*execute a function when someone clicks on the item value (DIV element):*/

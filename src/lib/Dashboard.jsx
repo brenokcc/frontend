@@ -45,30 +45,34 @@ function Indicators(props){
 }
 
 function Warning(props){
-    return (
-        <div className="warning">
-            <div className="icon">
-                <Icon icon="warning"/>
+    function render(){
+        if(props.data.realizada) return null;
+        return (
+            <div className="warning">
+                <div className="icon">
+                    <Icon icon="warning"/>
+                </div>
+                <div className="detail">
+                     <div className="text">
+                        <strong>Atenção</strong>
+                        A conclusão de sua capacitação ainda não foi registrada na plataforma! Algumas funcionalidades tais como correção e monitoramento de correção de inconsistências só estarão disponíveis após a realização da capacitação
+                     </div>
+                     <div className="actions">
+                        <Action href={props.data.url} label="Realizar Capacitação">Realizar Capacitação</Action>
+                        <Action href={props.data.url2} label="Confirmar Capacitação" modal={true}>Confirmar Capacitação</Action>
+                     </div>
+                </div>
             </div>
-            <div className="detail">
-                 <div className="text">
-                    <strong>Atenção</strong>
-                    A conclusão de sua capacitação ainda não foi registrada na plataforma! Algumas funcionalidades tais como correção e monitoramento de correção de inconsistências só estarão disponíveis após a realização da capacitação
-                 </div>
-                 <div className="actions">
-                    <Action href="#" label="Realizar Capacitação">Realizar Capacitação</Action>
-                    <Action href="/api/v1/user/confirmar_capacitacao/" label="Confirmar Capacitação" modal={true}>Confirmar Capacitação</Action>
-                 </div>
-            </div>
-        </div>
-    )
+        )
+    }
+    return render();
 }
 //<div>{JSON.stringify(props.data)}</div>
 function Dashboard(props){
     return (
         <div className="dashboard">
             {props.data.result.capacitacao &&
-                <Warning/>
+                <Warning data={props.data.result.capacitacao}/>
             }
             {props.data.result.acesso_rapido &&
                 <Boxes title="acesso_rapido" data={props.data.result.acesso_rapido}/>

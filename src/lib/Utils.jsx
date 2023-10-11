@@ -41,7 +41,7 @@ function Format(obj){
     if(obj instanceof String) return obj;
     if(typeof obj === "string") return obj;
     if(typeof obj == "object" && Array.isArray(obj)){
-
+        return obj.join(", ")
     }
     if(typeof obj == "object" && !Array.isArray(obj) && obj.str){
         return obj.str;
@@ -417,7 +417,7 @@ function Icons(props){
 
 function Icon(props){
     var className = "fa-solid fa-"+props.icon;
-    if(props.onClick) className += " clickable";
+    if(props.onClick || props.clickable) className += " clickable";
     return (
         <i className={className} onClick={props.onClick}></i>
     )

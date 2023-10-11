@@ -189,7 +189,7 @@ function Form(props){
 
     function toField(field){
         return (
-            <div className={"form-group "+field.name} key={Math.random()}>
+            <div className={"form-group "+field.name+" w"+field.width} key={Math.random()}>
                 <label>
                     <TitleCase text={field.label}/>
                     {field.required && <i>*</i>}
@@ -200,7 +200,7 @@ function Form(props){
                     <Icon icon='xmark-circle'/>
                     <span></span>
                 </div>
-                <div className="help_text">{field.help_text}</div>
+                <div className="help_text" dangerouslySetInnerHTML={{__html: field.help_text}}></div>
               </div>
         )
     }
@@ -212,7 +212,7 @@ function Form(props){
             ))
         } else {
             return Object.keys(fields).map((k) => (
-              <div className="form-fieldset" key={Math.random()}>
+              <div className={"form-fieldset " + toTitleCase(k)} key={Math.random()}>
                 <h2>{<TitleCase text={k}/>}</h2>
                 {toFields(fields[k])}
               </div>
@@ -228,7 +228,10 @@ function Form(props){
         return (
             <div className={props.data.name+'-form'}>
                 {props.data.display && <Component data={props.data.display}/>}
-                <h1 data-label={toLabelCase(props.data.name)}><TitleCase text={props.data.name}/></h1>
+                <h1 data-label={toLabelCase(props.data.name)}>
+                    {props.data.icon && <Icon icon={props.data.icon}/>}
+                    <TitleCase text={props.data.name}/>
+                </h1>
                 {props.data.prepend && props.data.prepend.map((item) => (
                       <Component key={Math.random()} data={item}/>
                 ))}

@@ -17,7 +17,7 @@ function Action(props){
         var className = props.link || compact ? "" : "action btn";
         return (
             <a className={className} href={props.href} data-label={toLabelCase(props.label)} data-url={props.href} onClick={onClick}>
-                {props.icon && <Icon icon={props.icon} onClick={function(){}}/>}
+                {props.icon && <Icon icon={props.icon} clickable={true && !props.button}/>}
                 {!compact && props.children}
             </a>
         )

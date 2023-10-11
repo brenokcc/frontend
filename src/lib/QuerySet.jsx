@@ -8,7 +8,7 @@ function GlobalActions(props){
     return (
         <div className="globalActions right">
             {props.data.actions.map((action) => action.target == "queryset" && (
-              <Action label={toTitleCase(action.name)} icon={action.icon} href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader}>
+              <Action label={toTitleCase(action.name)} icon={action.icon} href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader} button={true}>
                 <TitleCase text={action.name}/>
               </Action>
             ))}

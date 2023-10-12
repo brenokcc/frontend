@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import Root from './lib/Root.jsx'
 
 const LOGIN_URL = '/api/v1/login/';
-const HOME_URL = '/api/v1/user/';
+const HOME_URL = '/api/v1/dashboard/';
 const APP_URL = '/api/v1/application/';
 
 
@@ -12,9 +12,8 @@ if(document.location.pathname=='' || document.location.pathname=='/'){
 }  else if(document.location.pathname==LOGIN_URL){
     localStorage.removeItem("token")
     localStorage.removeItem("user")
-} else if(!localStorage.getItem("token")){
-    document.location.href = LOGIN_URL;
 }
+
 function load(data){
     var application = data.result;
 

@@ -3,7 +3,6 @@ import modal from './Modal';
 import {Form, Filter} from './Form'
 import QuerySet from './QuerySet'
 import Viewer from './Viewer'
-import Dashboard from './Dashboard'
 import Statistics from './Statistics'
 import Action from './Action'
 
@@ -205,7 +204,7 @@ function Actions(props){
     return render()
 }
 
-function GerenciarInconsistencias(props){
+function Table(props){
     const [data, setdata] = useState(props.data);
     const key = "table";
 
@@ -221,7 +220,7 @@ function GerenciarInconsistencias(props){
     function reload(){
         var params = $('#table form').serialize();
         request('GET', document.location.pathname+'?'+params, function(data){
-            setdata(data.result);
+            setdata(data);
         });
     }
 
@@ -230,9 +229,7 @@ function GerenciarInconsistencias(props){
     function open(url){
         if(url){
             event.preventDefault();
-            modal(url, function(){
-                reload();
-            });
+            modal(url, function(){reload()});
         }
     }
 
@@ -340,29 +337,36 @@ function Component(props){
     function render(){
         switch(props.data.type) {
             case 'form':
-              return (<Form data={props.data}/>);
+                return <Form data={props.data}/>
             case 'queryset':
-              return (<QuerySet data={props.data} reloader={props.reloader}/>);
+                return <QuerySet data={props.data} reloader={props.reloader}/>
             case 'fieldset':
-                return (<Fieldset data={props.data}/>)
+                return <Fieldset data={props.data}/>
              case 'instance':
-              return (<Viewer data={props.data} reloader={props.reloader}/>);
+                return <Viewer data={props.data} reloader={props.reloader}/>
              case 'statistics':
-              return (<Statistics data={props.data}/>)
-             case 'dashboard':
-              return (<Dashboard data={props.data}/>);
+                return <Statistics data={props.data}/>
              case 'info':
-              return (<Info data={props.data}/>);
+                return <Info data={props.data}/>
+             case 'indicators':
+                return <Indicators data={props.data}/>
+             case 'boxes':
+                return <Boxes data={props.data}/>
+             case 'warning':
+                return <Warning data={props.data}/>
+             case 'async':
+                return <Async data={props.data}/>
              case 'icons':
-              return (<Icons data={props.data}/>);
-             case 'gerenciar_inconsistencias':
-             return <GerenciarInconsistencias data={props.data.result}/>
+                return <Icons data={props.data}/>
+             case 'table':
+                return <Table data={props.data}/>
             default:
-              return (<Unknown data={props.data}/>);
+              return <Unknown data={props.data}/>
         }
     }
     return render()
 }
+
 
 function Content(props){
 
@@ -377,8 +381,104 @@ function Content(props){
     )
 }
 
+function Boxes(props){
+    return (
+        <div className="boxes">
+            <h2><TitleCase text={props.data.title}/></h2>
+            <div>
+                {props.data.items.map((item) => (
+                      <a key={Math.random()} href={item.url} className="item" data-label={toLabelCase(item.label)}>
+                        <div className="icon">
+                            <Icon icon={item.icon}/>
+                        </div>
+                        <div className="text">
+                            {item.label}
+                        </div>
+                      </a>
+                ))}
+            </div>
+        </div>
+    )
+}
+
+
+function Indicators(props){
+    if(props.data){
+        return (
+            <div className="indicators">
+                <h2><TitleCase text={props.data.title}/></h2>
+                <div>
+                    {props.data.items.map((item) => (
+                        <div key={Math.random()} className="item">
+                            <div className="value">
+                                {item.value}
+                            </div>
+                            <div className="text">
+                                <TitleCase text={item.name}/>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        )
+    }
+}
+
+function Async(props){
+    const [data, setdata] = useState();
+
+    function load(){
+        request('GET', props.data.url, function(data){
+            setdata(data);
+        });
+    }
+
+    function render(){
+        if(data==null){
+            load();
+            return <Loading/>
+        } else {
+            return <Component data={data}/>
+        }
+    }
+    return render();
+}
+
+function Warning(props){
+    function render(){
+        return (
+            <div className="warning">
+                <div className="icon">
+                    <Icon icon="warning"/>
+                </div>
+                <div className="detail">
+                     <div className="text">
+                        <p><strong>{props.data.title}:</strong> {props.data.message}</p>
+                     </div>
+                     <div className="actions">
+                        {props.data.actions.map((action)  => (
+                            <Action href={action.url} label={action.label} modal={action.modal}>{action.label}</Action>
+                        ))}
+                     </div>
+                </div>
+            </div>
+        )
+    }
+    return render();
+}
+
 function Unknown(props){
-    return <div>{JSON.stringify(props.data)}</div>
+    if(Array.isArray(props.data.result)){
+        return (
+            <div>
+                {props.data.result.map((data)  => (
+                  <Component key={Math.random()} data={data}/>
+                ))}
+            </div>
+        )
+    } else {
+        return <div>{JSON.stringify(props.data)}</div>
+    }
 }
 
 function Info(props){

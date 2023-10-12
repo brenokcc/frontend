@@ -84,7 +84,6 @@ function Header(props){
             )
         }
     }
-
     return (
         <div className="header">
             <div className="left">
@@ -92,7 +91,7 @@ function Header(props){
                     <img src={application.logo}/>
                     <div className="application">
                         <div className="title">
-                            <Icon icon="align-justify"/>
+                            {application.menu.length > 0 && <Icon icon="align-justify"/>}
                             {application.title}
                         </div>
                         <div className="subtitle">
@@ -101,27 +100,37 @@ function Header(props){
                     </div>
                 </div>
             </div>
-            { localStorage.getItem('user') &&
+
             <div className="right">
-                <div className="controls">
-                    <div className="links">
-                        <Action href="/api/v1/icons/" modal={true} reloader={props.reloader} link={true}>Ícones</Action>
-                    </div>
-                    <div>
-                        <div className="user" onClick={function(){hideMessage();setactive(!active)}} data-label={toLabelCase(localStorage.getItem('user'))}>
-                            <div className="letter">
-                                {localStorage.getItem('user').toUpperCase()[0]}
-                            </div>
-                            <div className="username">
-                                Olá <strong>{localStorage.getItem('user')}</strong> <Icon icon="chevron-down"/>
-                            </div>
+                { localStorage.getItem('user') &&
+                <>
+                    <div className="controls">
+                        <div className="links">
+                            <Action href="/api/v1/icons/" modal={true} reloader={props.reloader} link={true}>Ícones</Action>
                         </div>
-                        {dropdown()}
+                        <div>
+                            <div className="user" onClick={function(){hideMessage();setactive(!active)}} data-label={toLabelCase(localStorage.getItem('user'))}>
+                                <div className="letter">
+                                    {localStorage.getItem('user').toUpperCase()[0]}
+                                </div>
+                                <div className="username">
+                                    Olá <strong>{localStorage.getItem('user')}</strong> <Icon icon="chevron-down"/>
+                                </div>
+                            </div>
+                            {dropdown()}
+                        </div>
                     </div>
-                </div>
-                <Search/>
+                    <Search/>
+                </>
+                }
+                { application.oauth.length>0 && !localStorage.getItem('user') &&
+                    <div className="controls oauth">
+                        {application.oauth.map((provider) => (
+                            <Action key={Math.random} icon="user" href={provider.url} button={true}>{provider.label}</Action>
+                        ))}
+                    </div>
+                }
             </div>
-            }
         </div>
     )
 }
@@ -181,7 +190,7 @@ function Breadcrumbs(props){
     if(localStorage.getItem('user')){
         return (
             <div className="breadcrumbs">
-                <Action label="Início" href="/api/v1/user/" link={true} icon="home">
+                <Action label="Início" href="/api/v1/dashboard/" link={true} icon="home">
                     <Icon icon  ="home"/>
                 </Action>
                 Início

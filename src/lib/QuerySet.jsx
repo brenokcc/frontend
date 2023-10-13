@@ -64,7 +64,7 @@ function FilterForm(props){
                        field(filter)
                     ))}
                     <div className="filter">
-                        <button className="btn" type="button" onClick={()=>props.onfilter()} data-label={toLabelCase("filter")}>
+                        <button className="btn primary" type="button" onClick={()=>props.onfilter()} data-label={toLabelCase("filter")}>
                             <Icon icon="filter"/>
                             <TitleCase text="Filter"/>
                         </button>
@@ -353,10 +353,10 @@ function QuerySet(props){
             {calendar()}
             <Pagination data={data} reloader={reload}/>
             <ClearFix/>
-            <BatchActions data={data}/>
+            <BatchActions data={data} reloader={reload}/>
             <ClearFix/>
             <DataTable data={data} reloader={props.reloader || reload} onSelect={onSelect} selectable={hasBatchActions()}/>
-            <BatchActions data={data}/>
+            <BatchActions data={data} reloader={reload}/>
             <ClearFix/>
             <Pagination data={data} reloader={reload}/>
             <ClearFix/>

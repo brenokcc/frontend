@@ -4,6 +4,15 @@ document.addEventListener("DOMContentLoaded", function(e) {
 
 });
 
+function scrollIntoViewWithOffset(element){
+  window.scrollTo({
+    behavior: 'smooth',
+    top:
+      element.getBoundingClientRect().top -
+      document.body.getBoundingClientRect().top
+  })
+}
+
 function request(method, url, callback, data){
     const token = localStorage.getItem('token');
     var headers = {'Accept': 'application/json'}

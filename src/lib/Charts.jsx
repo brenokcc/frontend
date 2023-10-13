@@ -246,8 +246,7 @@ function Progress(props){
 
 function ChartFactory(props){
     function render(){
-        console.log(props.headers)
-        console.log(props.rows)
+        console.log(props.type)
         switch(props.type) {
             case 'pie':
               return (<Pie headers={props.headers} rows={props.rows} />);

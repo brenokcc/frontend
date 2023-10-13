@@ -104,6 +104,10 @@ function Field(props){
     }
 }
 
+function Output(props){
+
+}
+
 function Form(props){
     const [data, setdata] = useState();
 
@@ -123,7 +127,7 @@ function Form(props){
     }, [])
 
     function process(data, response){
-        if(data.type){
+        if(data.type && data.type!='form'){
             setdata(data);
             return
         }
@@ -222,9 +226,6 @@ function Form(props){
 
     function render(){
         //<div>{JSON.stringify(props.data)}</div>
-        if(data){
-            return <Content data={data}/>
-        }
         return (
             <div className={props.data.name+'-form'}>
                 {props.data.display && <Component data={props.data.display}/>}
@@ -239,7 +240,7 @@ function Form(props){
                     {toFields(form.fields)}
                     <ClearFix/>
                     <div className="right">
-                        <input className="btn submit" type="button" onClick={submit} value="Enviar" data-label={toLabelCase("Enviar")}/>
+                        <input className="btn submit primary" type="button" onClick={submit} value="Enviar" data-label={toLabelCase("Enviar")}/>
                     </div>
                     <ClearFix/>
                     {props.data.subactions &&
@@ -253,6 +254,7 @@ function Form(props){
                 {props.data.append && props.data.append.map((item) => (
                       <Component key={Math.random()} data={item}/>
                 ))}
+                {data && <Content data={data}/>}
             </div>
         )
     }
@@ -284,7 +286,7 @@ function Filter(props){
                 <div className="filter">
                     {props.data.map((filter) => (field(filter)))}
                     <div>
-                        <button className="btn" type="button" onClick={()=>props.onfilter()} data-label={toLabelCase("filter")}>
+                        <button className="btn primary" type="button" onClick={()=>props.onfilter()} data-label={toLabelCase("filter")}>
                             <Icon icon="filter"/>
                             <TitleCase text="Filter"/>
                         </button>

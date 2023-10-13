@@ -7,8 +7,7 @@ function Statistics(props){
         for(var i=0; i<props.data.series.length; i++){
             rows.push([props.data.series[i][0], props.data.series[i][1]]);
         }
-        console.log(JSON.stringify(rows))
-        if(props.data.chart) return <ChartFactory type={props.chart} rows={rows}/>
+        if(props.data.chart) return <ChartFactory type={props.data.chart} rows={rows}/>
 
         return (
             <div className="statistics">
@@ -40,10 +39,8 @@ function Statistics(props){
             }
             rows.push(row);
         }
-        console.log(JSON.stringify(headers))
-        console.log(JSON.stringify(rows))
 
-        if(props.data.chart) return <ChartFactory type={props.chart} headers={headers} rows={rows}/>
+        if(props.data.chart) return <ChartFactory type={props.data.chart} headers={headers} rows={rows}/>
 
         return (
             <div className="statistics">

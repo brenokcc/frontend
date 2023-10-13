@@ -93,7 +93,7 @@ function ClearFix(){
 
 function Empty(){
     return (
-        <div className="info">
+        <div className="empty">
             <div className="icon">
                 <Icon icon="info-circle"/>
             </div>
@@ -194,7 +194,7 @@ function Actions(props){
             <div className="globalActions right">
                 <input type="hidden" name="action"/>
                 {props.data.map((action) =>  (
-                  <button type="button" className="btn" onClick={function(){trigger(action.name)}} data-label={toLabelCase(action.label)}>
+                  <button type="button" className="btn primary" onClick={function(){trigger(action.name)}} data-label={toLabelCase(action.label)}>
                     {action.label}
                   </button>
                 ))}
@@ -360,11 +360,17 @@ function Component(props){
                 return <Icons data={props.data}/>
              case 'table':
                 return <Table data={props.data}/>
+             case 'html':
+                return <Html data={props.data}/>
             default:
               return <Unknown data={props.data}/>
         }
     }
     return render()
+}
+
+function Html(props){
+    return <div dangerouslySetInnerHTML={{__html: props.data.content}}></div>
 }
 
 
@@ -457,6 +463,29 @@ function Warning(props){
                      </div>
                      <div className="actions">
                         {props.data.actions.map((action)  => (
+                            <Action key={Math.random()} href={action.url} label={action.label} modal={action.modal}>{action.label}</Action>
+                        ))}
+                     </div>
+                </div>
+            </div>
+        )
+    }
+    return render();
+}
+
+function Info(props){
+    function render(){
+        return (
+            <div className="info">
+                <div className="icon">
+                    <Icon icon="info"/>
+                </div>
+                <div className="detail">
+                     <div className="text">
+                        <p><strong>{props.data.title}:</strong> {props.data.message}</p>
+                     </div>
+                     <div className="actions">
+                        {props.data.actions.map((action)  => (
                             <Action href={action.url} label={action.label} modal={action.modal}>{action.label}</Action>
                         ))}
                      </div>
@@ -479,22 +508,6 @@ function Unknown(props){
     } else {
         return <div>{JSON.stringify(props.data)}</div>
     }
-}
-
-function Info(props){
-    return (
-        <div className="info">
-            <div className="icon">
-                <Icon icon="info"/>
-            </div>
-            <div className="detail">
-                 <div className="text">
-                    <strong>Informação</strong>:
-                    <p>{props.data.text}</p>
-                 </div>
-            </div>
-        </div>
-    )
 }
 
 function Icons(props){

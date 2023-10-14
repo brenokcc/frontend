@@ -78,7 +78,7 @@ function autocomplete(name, placeholder, multiple, url, callback, onselect) {
             url = tokens[0];
             if(tokens.length>1) var usp = new URLSearchParams(tokens[1]);
             else var usp = new URLSearchParams();
-            usp.set('choices_field', name.split('__')[0]);
+            usp.set('choices_field', name.split('__0.')[0]);
             usp.set('choices_search', val);
             var form = inp.closest('form');
             if(form){

@@ -46,7 +46,7 @@ function FilterForm(props){
         } else {
             return (
               <div className="filterField" key={Math.random()}>
-                <label><TitleCase text={filter.name}/></label>
+                <label><TitleCase text={filter.label}/></label>
                 <br/>
                 <Field data={filter} url={props.url}/>
               </div>
@@ -244,7 +244,10 @@ function QuerySet(props){
         for(const [key, value] of usp.entries()) {
             state[key] = value;
         }
-        if(url==null) url = props.data.url+'?'+usp;
+        if(url==null){
+            var sep = props.data.url.indexOf('?') < 0 ? '?' : '&';
+            url = props.data.url+sep+usp;
+        }
         request('GET', getContextURL(url), function(data){
             if(props.relation) setdata(data['result'][props.relation])
             else setdata(data);

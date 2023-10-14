@@ -425,6 +425,11 @@ function Indicators(props){
                         </div>
                     ))}
                 </div>
+                <div className="actions">
+                    {props.data.actions.map((action)  => (
+                        <Action key={Math.random()} href={action.url} label={action.label} modal={action.modal}>{action.label}</Action>
+                    ))}
+                 </div>
             </div>
         )
     }

@@ -217,7 +217,7 @@ function Form(props){
         } else {
             return Object.keys(fields).map((k) => (
               <div className={"form-fieldset " + toTitleCase(k)} key={Math.random()}>
-                <h2>{<TitleCase text={k}/>}</h2>
+                {k && <h2>{<TitleCase text={k}/>}</h2>}
                 {toFields(fields[k])}
               </div>
             ))

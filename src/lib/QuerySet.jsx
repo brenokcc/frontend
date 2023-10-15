@@ -351,7 +351,7 @@ function QuerySet(props){
                 </div>
             </div>
             <ClearFix/>
-            <Subsets data={props.data.subsets} count={props.data.count} active={props.data.subset} onChange={subset}/>
+            <Subsets data={data.subsets} count={data.count} active={data.subset} onChange={subset}/>
             <FilterForm data={data} onfilter={reload} url={getContextURL(data.url)}/>
             {calendar()}
             <Pagination data={data} reloader={reload}/>

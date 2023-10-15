@@ -360,6 +360,8 @@ function Component(props){
                 return <Icons data={props.data}/>
              case 'table':
                 return <Table data={props.data}/>
+             case 'progress':
+                return <Progress data={props.data}/>
              case 'html':
                 return <Html data={props.data}/>
             default:
@@ -570,6 +572,18 @@ function Accordion(props){
         </div>
     )
 }
+
+function Progress(props){
+    function render(){
+        return (
+            <span class="progress">
+                <span style={{ width: props.data.value+'%' }} className="value">{ props.data.value }%</span>
+            </span>
+        )
+    }
+    return render();
+}
+
 
 export {toLabelCase, toTitleCase, TitleCase, Value, ClearFix, Empty, Loading, Content, Icon, Accordion, Component, Subsets};
 export default Loading;

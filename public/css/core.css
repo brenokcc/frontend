@@ -847,3 +847,16 @@ form .field-error{
     text-align: center;
     z-index: 9999;
 }
+.progress{
+    display: inline-block;
+    width: 100%;
+    background-color: #DDD;
+    border-radius: 5px;
+}
+.progress .value{
+    display: block;
+    background-color: var(--primary-color);
+    padding: 2;
+    color: white;
+    border-radius: 5px;
+}

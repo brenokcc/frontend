@@ -13,7 +13,6 @@ function Action(props){
     }
 
     function render(){
-        console.log(props.style);
         var compact = props.icon && !props.button;
         var className = props.link || compact ? "" : ("action btn "+(props.style || "primary"));
         return (

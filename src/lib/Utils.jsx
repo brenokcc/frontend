@@ -588,7 +588,7 @@ function Accordion(props){
 function Progress(props){
     function render(){
         return (
-            <span class="progress">
+            <span className="progress">
                 <span style={{ width: props.data.value+'%' }} className="value">{ props.data.value }%</span>
             </span>
         )

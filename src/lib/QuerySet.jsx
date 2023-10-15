@@ -347,7 +347,7 @@ function QuerySet(props){
                     </h1>
                 </div>
                 <div className="right">
-                    <GlobalActions data={data} reloader={reload}/>
+                    <GlobalActions data={data} reloader={props.reloader || reload}/>
                 </div>
             </div>
             <ClearFix/>
@@ -356,10 +356,10 @@ function QuerySet(props){
             {calendar()}
             <Pagination data={data} reloader={reload}/>
             <ClearFix/>
-            <BatchActions data={data} reloader={reload}/>
+            <BatchActions data={data} reloader={props.reloader || reload}/>
             <ClearFix/>
             <DataTable data={data} reloader={props.reloader || reload} onSelect={onSelect} selectable={hasBatchActions()}/>
-            <BatchActions data={data} reloader={reload}/>
+            <BatchActions data={data} reloader={props.reloader || reload}/>
             <ClearFix/>
             <Pagination data={data} reloader={reload}/>
             <ClearFix/>

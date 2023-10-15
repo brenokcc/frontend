@@ -4,14 +4,30 @@ import {toLabelCase, toTitleCase, TitleCase, Icon, ClearFix, Content, Component,
 
 function Input(props){
     var field = props.data;
-    var value = "";
     var readonly = "";
-    if(field.value) value = field.value;
+    var className = ""
+    var id = field.name+Math.random();
+
+    if(field.mask=='decimal'){
+        className = 'decimal';
+        if(field.value) field.value = Math.round(parseFloat(field.value)).toFixed(2).replace('.', ',');
+    }
+
+    useEffect(()=>{
+        if(field.mask){
+            var input = document.getElementById(id);
+            if(field.mask=='decimal'){
+                VMasker(input).maskMoney({precision: 2, separator: ',', delimiter: '.'}); // unit: 'R$', suffixUnit: 'reais', zeroCents: true
+            } else {
+                VMasker(input).maskPattern(field.mask);
+            }
+        }
+    }, [])
 
     return (
         <>
             {props.icon && <Icon icon={props.icon}/>}
-            <input className="form-control" type={field.type} name={field.name} id={field.name} defaultValue={field.value} data-label={toLabelCase(field.label)} readOnly={field.read_only}/>
+            <input className={"form-control "+className} type={field.type} name={field.name} id={id} defaultValue={field.value} data-label={toLabelCase(field.label)} readOnly={field.read_only}/>
         </>
     )
 }
@@ -90,18 +106,22 @@ function AutocompleteMultiple(props){
 
 
 function Field(props){
-    var field = props.data;
-    if(["text", "password", "email", "number", "date", "datetime-regional",  "file", "image", "range", "search", "tel", "time", "url", "week", "hidden"].indexOf(field.type)>=0){
-        return <Input data={field}/>
-    } else if(field.type == "boolean" || field.type == "bool"){
-        return <BooleanSelect data={field}/>
-    } else if(field.type == "select"){
-        if(field.choices) return <Select data={field}/>
-        else if(field.multiple) return <AutocompleteMultiple data={field} url={props.url}/>
-        else return <Autocomplete data={field} url={props.url}/>
-    } else {
-        return <div>{field.value}</div>
+
+    function render(){
+        var field = props.data;
+        if(["text", "password", "email", "number", "date", "datetime-regional",  "file", "image", "range", "search", "tel", "time", "url", "week", "hidden"].indexOf(field.type)>=0){
+            return <Input data={field}/>
+        } else if(field.type == "boolean" || field.type == "bool"){
+            return <BooleanSelect data={field}/>
+        } else if(field.type == "select"){
+            if(field.choices) return <Select data={field}/>
+            else if(field.multiple) return <AutocompleteMultiple data={field} url={props.url}/>
+            else return <Autocomplete data={field} url={props.url}/>
+        } else {
+            return <div>{field.value}</div>
+        }
     }
+    return render()
 }
 
 function Output(props){
@@ -182,6 +202,9 @@ function Form(props){
                 data.delete(widget.name);
                 data.append(widget.name, widget.blob, new Date().getTime()+'.'+'png');
             }
+        });
+        form.querySelectorAll(".decimal").forEach(function( widget ) {
+            data.set(widget.name, data.get(widget.name).replace(',', '.'));
         });
         function callback(data, response){
             button.value = label;

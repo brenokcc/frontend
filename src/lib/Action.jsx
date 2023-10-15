@@ -13,8 +13,9 @@ function Action(props){
     }
 
     function render(){
+        console.log(props.style);
         var compact = props.icon && !props.button;
-        var className = props.link || compact ? "" : "action btn primary";
+        var className = props.link || compact ? "" : ("action btn "+(props.style || "primary"));
         return (
             <a className={className} href={props.href} data-label={toLabelCase(props.label)} data-url={props.href} onClick={onClick}>
                 {props.icon && <Icon icon={props.icon} clickable={true && !props.button}/>}

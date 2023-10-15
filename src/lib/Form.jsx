@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import {toLabelCase, toTitleCase, TitleCase, Icon, ClearFix, Content, Component, Accordion} from './Utils'
+import {toLabelCase, toTitleCase, TitleCase, Icon, ClearFix, Content, Component, Accordion, Message} from './Utils'
 
 
 function Input(props){
@@ -233,6 +233,7 @@ function Form(props){
                     {props.data.icon && <Icon icon={props.data.icon}/>}
                     <TitleCase text={props.data.name}/>
                 </h1>
+                {props.data.help_text && <Message text={props.data.help_text}/>}
                 {props.data.prepend && props.data.prepend.map((item) => (
                       <Component key={Math.random()} data={item}/>
                 ))}

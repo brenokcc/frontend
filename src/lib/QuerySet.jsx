@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Action from './Action'
 import {Field} from './Form'
-import {toLabelCase, toTitleCase, TitleCase, Value, ClearFix, Empty, Loading, Icon, Accordion, Subsets} from './Utils'
+import {toLabelCase, toTitleCase, TitleCase, Value, ClearFix, Message, Loading, Icon, Accordion, Subsets} from './Utils'
 
 
 function GlobalActions(props){
@@ -20,7 +20,7 @@ function InstanceActions(props){
     return (
         <div className="instanceActions right">
             {props.data.actions.map((action) => action.target == "instance" && (
-              <Action label={toTitleCase(action.name)} icon={action.icon} href={action.url.replace('{id}', props.id)} key={Math.random()} modal={action.modal} reloader={props.reloader}>
+              <Action label={toTitleCase(action.name)} icon={action.icon} href={action.url.replace('{id}', props.id)} key={Math.random()} modal={action.modal} reloader={props.reloader} style={action.style}>
                 <TitleCase text={action.name}/>
               </Action>
             ))}
@@ -147,7 +147,7 @@ function DataTable(props){
             </div>
             )
         } else {
-            return <Empty/>
+            return <Message text="Nenhum registro encontrado."/>
         }
     }
 

@@ -159,12 +159,12 @@ function getCookie(cname) {
   return "";
 }
 function hideMessage(){
-    var feedback = document.querySelector(".message");
+    var feedback = document.querySelector(".notification");
     if(feedback) feedback.style.display='none';
 }
 function showMessage(text, style){
     hideMessage();
-    var feedback = document.querySelector(".message");
+    var feedback = document.querySelector(".notification");
     feedback.innerHTML = text;
     feedback.style.display='block';
     if(style=='error'){

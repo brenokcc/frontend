@@ -37,8 +37,13 @@ function Format(obj){
     if(obj==="") return '-';
     if(obj===true) return 'Sim';
     if(obj===false) return 'Não';
-    if(obj instanceof String) return obj;
-    if(typeof obj === "string") return obj;
+    if(typeof obj === "string"){
+        if(obj.length==19 && obj[13]==':' && obj[16]==':'){
+            var tokens = obj.split('T')[0].split('-');
+            return new Date(tokens[0], tokens[1]-1, tokens[2]).toLocaleDateString()
+        }
+        return obj
+    }
     if(typeof obj == "object" && Array.isArray(obj)){
         return obj.join(", ")
     }
@@ -52,14 +57,18 @@ function Value(props){
     if(props.obj == null){
         return '-';
     }
-    if(props.obj.type=="queryset"){
-        return (
-            <ul>
-                {props.obj.results.map((item) => (
-                  <li key={Math.random()}>{Format(item)}</li>
-                ))}
-            </ul>
-        )
+    if(props.obj.type){
+        if(props.obj.type=="queryset"){
+            return (
+                <ul>
+                    {props.obj.results.map((item) => (
+                      <li key={Math.random()}>{Format(item)}</li>
+                    ))}
+                </ul>
+            )
+        } else {
+            return <Component data={props.obj}/>
+        }
     }
     if(typeof props.obj == "object" && Array.isArray(props.obj)){
         return (
@@ -91,15 +100,15 @@ function ClearFix(){
     )
 }
 
-function Empty(){
+function Message(props){
     return (
-        <div className="empty">
+        <div className="message">
             <div className="icon">
                 <Icon icon="info-circle"/>
             </div>
             <div className="detail">
                  <div className="text">
-                    Nenhum registro encontrado.
+                    {props.text}
                  </div>
             </div>
         </div>
@@ -286,7 +295,7 @@ function Table(props){
                 </div>
             )
         } else {
-            return <Empty/>
+            return <Message text="Nenhum registro encontrado"/>
         }
     }
 
@@ -362,6 +371,8 @@ function Component(props){
                 return <Table data={props.data}/>
              case 'progress':
                 return <Progress data={props.data}/>
+             case 'status':
+                return <Status data={props.data}/>
              case 'html':
                 return <Html data={props.data}/>
             default:
@@ -460,7 +471,7 @@ function Async(props){
 function Warning(props){
     function render(){
         return (
-            <div className="warning">
+            <div className="alert warning">
                 <div className="icon">
                     <Icon icon="warning"/>
                 </div>
@@ -573,6 +584,7 @@ function Accordion(props){
     )
 }
 
+
 function Progress(props){
     function render(){
         return (
@@ -585,5 +597,15 @@ function Progress(props){
 }
 
 
-export {toLabelCase, toTitleCase, TitleCase, Value, ClearFix, Empty, Loading, Content, Icon, Accordion, Component, Subsets};
+function Status(props){
+    function render(){
+        return (
+            <span className={"status "+props.data.style}>{props.data.label}</span>
+        )
+    }
+    return render();
+}
+
+
+export {toLabelCase, toTitleCase, TitleCase, Value, ClearFix, Message, Loading, Content, Icon, Accordion, Component, Subsets};
 export default Loading;

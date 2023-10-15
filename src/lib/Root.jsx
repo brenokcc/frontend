@@ -48,7 +48,7 @@ function Root(props){
                     <Breadcrumbs/>
                     <Content data={data} reloader={load}/>
                     <Footer/>
-                    <Message/>
+                    <Notification/>
                     <Layer/>
                 </div>
             )
@@ -171,7 +171,7 @@ function Search(props){
     )
 }
 
-function Message(props){
+function Notification(props){
 
     useEffect(()=>{
         var message = getCookie('message');
@@ -182,7 +182,7 @@ function Message(props){
     }, [])
 
     return (
-        <div className="message">Message</div>
+        <div className="notification"></div>
     )
 }
 

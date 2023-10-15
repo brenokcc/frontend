@@ -242,29 +242,26 @@ body{
 .indicators .item .value{
     font-size: 3rem;
 }
-
-.empty{
+.message{
     padding: 30px;
     background-color: var(--info-color);
     margin-top: 20px;
     margin-bottom: 20px;
 }
-.empty .icon{
+.message .icon{
     width: 5%;
     display: inline-block;
     color: #155bcb;
 }
 
-.empty .icon i{
+.message .icon i{
     font-size: 1.5rem;
 }
-
-.empty .detail{
+.message .detail{
     width: 95%;
     display: inline-block;
     color: #333;
 }
-
 
 .info{
     padding: 30px;
@@ -304,28 +301,28 @@ body{
     color: #333;
     display: inline-block;
 }
-.warning{
+.alert.warning{
     padding: 30px;
     background-color: var(--warning-color);
     margin-left: -20px;
     margin-right: -20px;
 }
-.warning .icon{
+.alert.warning .icon{
     width: 10%;
     display: inline-block;
     vertical-align: top;
 }
 
-.warning .icon i{
+.alert.warning .icon i{
     font-size: 2.5rem;
 }
 
-.warning .detail{
+.alert.warning .detail{
      width: 90%;
     display: inline-block;
 }
 
-.warning .detail .actions{
+.alert.warning .detail .actions{
     text-align: right;
 }
 
@@ -441,9 +438,35 @@ body{
     background-color: var(--primary-color);
     border: 1px solid transparent;
 }
-.btn.primary:hover{
-
+.btn:hover{
+    opacity: 0.9;
 }
+
+.btn.success{
+    border: solid 1px #49cc90;
+    color: #49cc90;
+}
+.btn.success:hover{
+    color: white;
+    background-color: #49cc90;
+}
+.btn.danger{
+    border: solid 1px #f93e3e;
+    color: #f93e3e;
+}
+.btn.danger:hover{
+    background-color: #f93e3e;
+    color: white;
+}
+.btn.warning{
+    border: solid 1px #fca130;
+    color: #fca130;
+}
+.btn.warning:hover{
+    background-color: #fca130;
+    color: white;
+}
+
 .batchActions .btn.primary:hover{
     border-color: white;
 }
@@ -835,7 +858,7 @@ form .field-error{
 .form-container.login .form-group.token{
     display: none;
 }
-.message{
+.notification{
     display: none;
     padding: 15px;
     background-color: #49cc90;
@@ -852,11 +875,31 @@ form .field-error{
     width: 100%;
     background-color: #DDD;
     border-radius: 5px;
+    margin-top:5px;
 }
 .progress .value{
     display: block;
     background-color: var(--primary-color);
-    padding: 2;
+    padding: 5px;
     color: white;
     border-radius: 5px;
+}
+.status{
+    color:white;
+    padding:5;
+    border-radius: 5px;
+    text-wrap: nowrap;
+    padding: 10px;
+}
+.status.primary{
+    background-color: var(--primary-color);
+}
+.status.success{
+    background-color: #49cc90;
+}
+.status.danger{
+    background-color: #f93e3e;
+}
+.status.warning{
+    background-color: #fca130;
 }

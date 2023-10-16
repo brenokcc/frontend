@@ -88,7 +88,7 @@ function Header(props){
         <div className="header">
             <div className="left">
                 <div className="brand">
-                    <img src={application.logo}/>
+                    <a href="/"><img src={application.logo}/></a>
                     <div className="application">
                         <div className="title">
                             {application.menu.length > 0 && <Icon icon="align-justify"/>}
@@ -105,9 +105,11 @@ function Header(props){
                 { localStorage.getItem('user') &&
                 <>
                     <div className="controls">
+                        {false &&
                         <div className="links">
                             <Action href="/api/v1/icons/" modal={true} reloader={props.reloader} link={true}>Ícones</Action>
                         </div>
+                        }
                         <div>
                             <div className="user" onClick={function(){hideMessage();setactive(!active)}} data-label={toLabelCase(localStorage.getItem('user'))}>
                                 <div className="letter">
@@ -123,9 +125,12 @@ function Header(props){
                     <Search/>
                 </>
                 }
-                { application.oauth.length>0 && !localStorage.getItem('user') &&
+                {!localStorage.getItem('user') &&
                     <div className="controls oauth">
-                        {application.oauth.map((provider) => (
+                        {document.location.pathname!="/api/v1/login/" &&
+                            <Action icon="user" href="/api/v1/login/" button={true}>Login</Action>
+                        }
+                        {application.oauth.length>0 && application.oauth.map((provider) => (
                             <Action key={Math.random} icon="user" href={provider.url} button={true}>{provider.label}</Action>
                         ))}
                     </div>
@@ -190,10 +195,10 @@ function Breadcrumbs(props){
     if(localStorage.getItem('user')){
         return (
             <div className="breadcrumbs">
-                <Action label="Início" href="/api/v1/dashboard/" link={true} icon="home">
+                <Action label="Área Administrativa" href="/api/v1/dashboard/" link={true} icon="home">
                     <Icon icon  ="home"/>
                 </Action>
-                Início
+                Área Administrativa
             </div>
         )
     }
@@ -212,7 +217,8 @@ function Footer(props){
                             </div>
                         }
                         <div className="footerVersion">
-                            {application.footer.version}
+                            <div>Versão {application.footer.version}</div>
+                            <div>Todos os direitos reservados</div>
                         </div>
                     </div>
             )

@@ -3,19 +3,18 @@ import ReactDOM from 'react-dom/client'
 import Root from './lib/Root.jsx'
 
 const LOGIN_URL = '/api/v1/login/';
-const HOME_URL = '/api/v1/dashboard/';
 const APP_URL = '/api/v1/application/';
 
 
-if(document.location.pathname=='' || document.location.pathname=='/'){
-    document.location.href = HOME_URL;
-}  else if(document.location.pathname==LOGIN_URL){
-    localStorage.removeItem("token")
-    localStorage.removeItem("user")
-}
-
 function load(data){
     var application = data.result;
+
+    if(document.location.pathname=='' || document.location.pathname=='/'){
+        document.location.href = application.index;
+    }  else if(document.location.pathname==LOGIN_URL){
+        localStorage.removeItem("token")
+        localStorage.removeItem("user")
+    }
 
     var root = document.querySelector(':root');
     root.style.setProperty('--primary-color', application.theme.primary);

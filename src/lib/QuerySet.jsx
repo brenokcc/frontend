@@ -122,9 +122,9 @@ function DataTable(props){
                                 <input type="checkbox" className="selector all" value={0} onClick={props.onSelect}/>
                             </th>
                             }
-                            {Object.keys(props.data.results[0]).map((k) => (
-                              <th key={Math.random()}><TitleCase text={k}/></th>
-                            ))}
+                            {Object.keys(props.data.results[0]).map(function(k){
+                              if(k!='id') return <th key={Math.random()}><TitleCase text={k}/></th>
+                            })}
                             <th></th>
                         </tr>
                     </thead>
@@ -136,9 +136,9 @@ function DataTable(props){
                                 <input type="checkbox" className="selector all" value={item.id} onClick={props.onSelect}/>
                             </td>
                             }
-                            {Object.keys(props.data.results[0]).map((k) => (
-                              <td key={Math.random()}><Value obj={item[k]}/></td>
-                            ))}
+                            {Object.keys(props.data.results[0]).map(function(k){
+                              if(k!='id') return <td key={Math.random()}><Value obj={item[k]}/></td>
+                            })}
                             <td><InstanceActions data={props.data} id={item.id} reloader={props.reloader}/></td>
                           </tr>
                         ))}

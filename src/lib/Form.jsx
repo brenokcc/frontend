@@ -32,6 +32,13 @@ function Input(props){
     )
 }
 
+function Textarea(props){
+    var field = props.data;
+    return (
+        <textarea className="form-control" id={field.name} name={field.name} data-label={toLabelCase(field.label)} style={{height: 200}}>{field.value || ""}</textarea>
+    )
+}
+
 function BooleanSelect(props){
     var field = props.data;
     return (
@@ -109,6 +116,7 @@ function Field(props){
 
     function render(){
         var field = props.data;
+        console.log(field.type);
         if(["text", "password", "email", "number", "date", "datetime-regional",  "file", "image", "range", "search", "tel", "time", "url", "week", "hidden"].indexOf(field.type)>=0){
             return <Input data={field}/>
         } else if(field.type == "boolean" || field.type == "bool"){
@@ -117,6 +125,8 @@ function Field(props){
             if(field.choices) return <Select data={field}/>
             else if(field.multiple) return <AutocompleteMultiple data={field} url={props.url}/>
             else return <Autocomplete data={field} url={props.url}/>
+        } else if(field.type == "textarea"){
+            return <Textarea data={field}/>
         } else {
             return <div>{field.value}</div>
         }
@@ -125,11 +135,24 @@ function Field(props){
 }
 
 function Output(props){
-
+    const [data, setdata] = useState(props.data.output);
+    function render(){
+        console.log(data);
+        if(data){
+            return <Component key={Math.random()} data={data}/>
+        }
+    }
+    function reload(){
+        setdata(props.data.output);
+    }
+    if(props.reloadable && !props.reloadable[props.data.name]){
+        props.reloadable[props.data.name] = reload;
+    }
+    return render();
 }
 
 function Form(props){
-    const [data, setdata] = useState();
+    var reloadable = {};
 
     var form = props.data;
     var fields = [
@@ -148,7 +171,9 @@ function Form(props){
 
     function process(data, response){
         if(data.type && data.type!='form'){
-            setdata(data);
+            props.data['output'] = data;
+            var keys = Object.keys(reloadable);
+            for(var i=0; i<keys.length; i++) reloadable[keys[i]]();
             return
         }
         if (response.status>=400){
@@ -184,13 +209,13 @@ function Form(props){
                 error.show();
             }
         }
-        if(message) showMessage(message, 'error');
-        else showMessage('Corrija os erros indicados no formulário.', 'error');
+        if(message) showMessage(message, 'danger');
+        else showMessage('Corrija os erros indicados no formulário.', 'danger');
     }
 
     function submit(){
         hideMessage();
-        var id = 'form';
+        var id = props.data.name;
         var form = document.getElementById(id);
         var data = new FormData(form);
         var button = form.querySelector(".btn.submit");
@@ -260,7 +285,7 @@ function Form(props){
                 {props.data.prepend && props.data.prepend.map((item) => (
                       <Component key={Math.random()} data={item}/>
                 ))}
-                <form data-method={props.data.method} id="form" className="form" action={props.data.action}>
+                <form data-method={props.data.method} id={props.data.name} className="form" action={props.data.action}>
                     {toFields(form.fields)}
                     <ClearFix/>
                     <div className="right">
@@ -278,7 +303,7 @@ function Form(props){
                 {props.data.append && props.data.append.map((item) => (
                       <Component key={Math.random()} data={item}/>
                 ))}
-                {data && <Content data={data}/>}
+                <Output data={props.data} reloadable={reloadable} />
             </div>
         )
     }

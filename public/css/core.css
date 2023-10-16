@@ -89,7 +89,7 @@ body{
     overflow-x: auto;
 }
 .breadcrumbs{
-    margin: 25px;
+    margin-top: 10px;
 }
 .breadcrumbs i{
     color: #1151b3;
@@ -162,6 +162,7 @@ body{
 .table tbody td{
     border-bottom: solid 1px #DDD;
     padding: 15px;
+    white-space: pre-line;
 }
 .table tbody td.clickable{
     cursor: pointer;
@@ -247,7 +248,7 @@ body{
     background-color: var(--info-color);
     margin-top: 20px;
     margin-bottom: 20px;
-}
+ }
 .message .icon{
     width: 5%;
     display: inline-block;
@@ -262,7 +263,6 @@ body{
     display: inline-block;
     color: #333;
 }
-
 .info{
     padding: 30px;
     background-color: var(--info-color);
@@ -536,6 +536,9 @@ i.clickable:hover{
     border-bottom: solid 1px #DDD;
     margin-bottom: 20px;
 }
+.viewer{
+    margin-top: 20px;
+}
 .viewer h1{
     margin: 0px;
 }
@@ -550,10 +553,10 @@ i.clickable:hover{
 
 .viewer .fieldset .fields{
     display: grid;
-    grid-template-columns: auto auto auto;
+    /** grid-template-columns: auto auto auto; **/
 }
 .viewer .fieldset .field{
-
+    white-space: pre-line;
 }
 .viewer .field label{
     font-weight: bold;
@@ -869,6 +872,18 @@ form .field-error{
     right: 20px;
     text-align: center;
     z-index: 9999;
+}
+.notification.success{
+    background-color: var(--success-color);
+}
+.notification.info{
+    background-color: var(--info-color);
+}
+.notification.warning{
+    background-color: var(--warning-color);
+}
+.notification.danger{
+    background-color: var(--danger-color);
 }
 .progress{
     display: inline-block;

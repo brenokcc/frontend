@@ -166,14 +166,8 @@ function showMessage(text, style){
     hideMessage();
     var feedback = document.querySelector(".notification");
     feedback.innerHTML = text;
+    feedback.classList.add(style||'success');
     feedback.style.display='block';
-    if(style=='error'){
-        feedback.style.backgroundColor='#e52207';
-    } else if(style=='info'){
-        feedback.style.backgroundColor='#61affe';
-    } else {
-        feedback.style.backgroundColor='#1351b4';
-    }
     setTimeout(function(){feedback.style.display='none';}, 5000);
 }
 

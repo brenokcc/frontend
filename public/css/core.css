@@ -252,7 +252,7 @@ body{
 .message .icon{
     width: 5%;
     display: inline-block;
-    color: #155bcb;
+    color: var(--secondary-color);
 }
 
 .message .icon i{
@@ -388,10 +388,10 @@ body{
     border-bottom: solid 1px #DDD;
 }
 .header .right .dropdown a:hover{
-    background-color: #dae3f4;
+    background-color: var(--info-color);
 }
 .header .right .user:hover{
-    background-color: #dae3f4;
+    background-color: var(--info-color);
 }
 .header .right .user .letter{
     background-color: var(--secondary-color);
@@ -513,7 +513,7 @@ i.clickable:visited{
     color: var(--primary-color)
 }
 i.clickable:hover{
-    background-color: #dae3f4;
+    background-color: var(--info-color);
 }
 .accordion .accordionTitle i{
     font-size: 65%;
@@ -528,7 +528,7 @@ i.clickable:hover{
     font-size: 1.1rem;
 }
 .accordion .accordionTitle:hover{
-    background-color: #dae3f4;
+    background-color: var(--info-color);
 }
 .accordion .accordionBody{
     padding: 30px;

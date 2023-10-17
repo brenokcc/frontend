@@ -7,7 +7,7 @@ const APP_URL = '/api/v1/application/';
 
 
 function load(data){
-    var application = data.result;
+    var application = data;
 
     if(document.location.pathname=='' || document.location.pathname=='/'){
         document.location.href = application.index;
@@ -26,8 +26,8 @@ function load(data){
     root.style.setProperty('--warning-color', application.theme.warning);
     root.style.setProperty('--danger-color', application.theme.danger);
 
-    document.getElementById('title').innerHTML = data.result.title;
-    document.getElementById('icon').href = data.result.icon;
+    document.getElementById('title').innerHTML = data.title;
+    document.getElementById('icon').href = data.icon;
     localStorage.setItem('application', JSON.stringify(application));
 
     ReactDOM.createRoot(document.getElementById('root')).render(<Root/>)

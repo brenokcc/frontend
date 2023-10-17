@@ -341,6 +341,10 @@ function Pagination(props){
     }
 }
 
+function File(props){
+    return <a target="_blank" href={API_URL+props.data.url}>{props.data.name}</a>
+}
+
 
 function Component(props){
     function render(){
@@ -359,6 +363,8 @@ function Component(props){
                 return <Info data={props.data}/>
              case 'indicators':
                 return <Indicators data={props.data}/>
+             case 'file':
+                return <File data={props.data}/>
              case 'boxes':
                 return <Boxes data={props.data}/>
              case 'warning':
@@ -515,13 +521,21 @@ function Info(props){
 }
 
 function Unknown(props){
-    if(Array.isArray(props.data.result)){
+    if(typeof props.data == "object" && Array.isArray(props.data)){
         return (
-            <div>
-                {props.data.result.map((data)  => (
+            <>
+                {props.data.map((data)  => (
                   <Component key={Math.random()} data={data}/>
                 ))}
-            </div>
+            </>
+        )
+    } else if(typeof props.data == "object" && !Array.isArray(props.data)){
+        return (
+            <>
+                {Object.keys(props.data).map((k)  => (
+                    <Component key={Math.random()} data={props.data[k]}/>
+                ))}
+            </>
         )
     } else {
         return <div>{JSON.stringify(props.data)}</div>
@@ -536,7 +550,7 @@ function Icons(props){
 
     return (
         <div className="icons">
-            {props.data.result.icons.map((icon) => (
+            {props.data.icons.map((icon) => (
                 <div className="icon-box" key={Math.random()} onClick={()=>click(icon)}>
                     <i className={"fa-solid fa-fw fa-"+icon}></i>
                     <div className="icon-text">{icon}</div>

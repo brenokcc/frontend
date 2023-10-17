@@ -166,6 +166,10 @@ function showMessage(text, style){
     hideMessage();
     var feedback = document.querySelector(".notification");
     feedback.innerHTML = text;
+    feedback.classList.remove('danger');
+    feedback.classList.remove('success');
+    feedback.classList.remove('warning');
+    feedback.classList.remove('info');
     feedback.classList.add(style||'success');
     feedback.style.display='block';
     setTimeout(function(){feedback.style.display='none';}, 5000);

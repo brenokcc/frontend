@@ -30,6 +30,7 @@ function request(method, url, callback, data){
     ).then(
         text => {
             var data = JSON.parse(text||'{}');
+            if(data.redirect) document.location.href = data.redirect;
             callback(data, httpResponse);
         }
     );
@@ -237,11 +238,13 @@ function formWatch(watch){
         for (var i = 0; i < watch.length; i++){
             var id = watch[i];
             var group = document.querySelector(".form-group."+id);
-            var widget = group.querySelector('*[name="'+id+'"]');
-            widget.addEventListener("change", function (e) {
-                var form = widget.closest('form');
-                var data = new FormData(form);
-                request('POST', form.action+'?on_change='+this.name, formControl, data);
+            var widgets = group.querySelectorAll('*[name="'+id+'"]');
+            widgets.forEach(function( widget ) {
+                widget.addEventListener("change", function (e) {
+                    var form = widget.closest('form');
+                    var data = new FormData(form);
+                    request('POST', form.action+'?on_change='+this.name, formControl, data);
+                });
             });
         }
     }

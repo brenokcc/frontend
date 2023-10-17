@@ -51,6 +51,42 @@ function BooleanSelect(props){
     )
 }
 
+function Radio(props){
+    var key = Math.random();
+    var field = props.data;
+    function render(){
+        return (
+            <div className="radio-group">
+                {field.choices.map((choice, i) => (
+                  <div key={key+i}>
+                    <input id={field.name+key+i} type="radio" name={field.name} defaultValue={choice.id} defaultChecked={field.value && field.value.id==choice.id}/>
+                    <label htmlFor={field.name+key+i}>{choice.text}</label>
+                  </div>
+                ))}
+            </div>
+        )
+    }
+    return render()
+}
+
+function Checkbox(props){
+    var key = Math.random();
+    var field = props.data;
+    function render(){
+        return (
+            <div className="checkbox-group">
+                {field.choices.map((choice, i) => (
+                  <div key={key+i}>
+                    <input id={field.name+key+i} type="checkbox" name={field.name} defaultValue={choice.id} defaultChecked={field.value && field.value.id==choice.id}/>
+                    <label htmlFor={field.name+key+i}>{choice.text}</label>
+                  </div>
+                ))}
+            </div>
+        )
+    }
+    return render()
+}
+
 function Select(props){
     var field = props.data;
 
@@ -116,15 +152,19 @@ function Field(props){
 
     function render(){
         var field = props.data;
-        console.log(field.type);
         if(["text", "password", "email", "number", "date", "datetime-regional",  "file", "image", "range", "search", "tel", "time", "url", "week", "hidden"].indexOf(field.type)>=0){
             return <Input data={field}/>
         } else if(field.type == "boolean" || field.type == "bool"){
             return <BooleanSelect data={field}/>
         } else if(field.type == "select"){
-            if(field.choices) return <Select data={field}/>
-            else if(field.multiple) return <AutocompleteMultiple data={field} url={props.url}/>
-            else return <Autocomplete data={field} url={props.url}/>
+            if(field.pick){
+                if(field.multiple) return <Checkbox data={field}/>
+                else return <Radio data={field}/>
+            } else {
+                if(field.choices) return <Select data={field}/>
+                else if(field.multiple) return <AutocompleteMultiple data={field} url={props.url}/>
+                else return <Autocomplete data={field} url={props.url}/>
+            }
         } else if(field.type == "textarea"){
             return <Textarea data={field}/>
         } else {
@@ -242,11 +282,13 @@ function Form(props){
     function toField(field){
         return (
             <div className={"form-group "+field.name+" w"+field.width} key={Math.random()}>
+                {field.label &&
                 <label>
                     <TitleCase text={field.label}/>
                     {field.required && <i>*</i>}
                 </label>
-                <br/>
+                }
+                {field.label && <br/>}
                 <Field data={field} url={props.data.action}/>
                 <div className={"field-error "+field.name}>
                     <Icon icon='xmark-circle'/>

@@ -541,6 +541,7 @@ i.clickable:hover{
 }
 .viewer h1{
     margin: 0px;
+    color: #333;
 }
 .viewer .field{
     margin-left: 10px;
@@ -595,6 +596,7 @@ input[type="checkbox"]:checked::before {
     margin-bottom: 50px;
 }
 .queryset h1{
+    color: #333;
     margin-top: 0px;
 }
 .queryset .calendar td{
@@ -759,7 +761,15 @@ input[type="checkbox"]:checked::before {
   background-color: DodgerBlue !important;
   color: #ffffff;
 }
-
+.radio-group label, .checkbox-group label{
+    margin-left: 5px;
+}
+.radio-group > div, .checkbox-group > div{
+    display: inline-flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 20px;
+}
 .form-control:focus, .form-control:focus-visible{
     outline: none !important;
     border: solid 2px #c2850c;

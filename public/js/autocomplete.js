@@ -6,7 +6,7 @@ function setAcValue(name, value, label){
     option.innerHTML = label;
     var select = document.getElementById(name);
     if(!select.multiple) select.innerHTML = ''
-    select.add(option);
+    if(value) select.add(option);
     var input = document.getElementById(name+'autocomplete');
     if(select.multiple) createBoxes(name);
     else input.value = label;
@@ -84,11 +84,17 @@ function autocomplete(name, placeholder, multiple, url, callback, onselect) {
             if(form){
                 var selects = form.querySelectorAll('select');
                 for(var j=0; j<selects.length; j++){
+                    usp.delete(selects[j].name);
                     if(selects[j].selectedIndex>=0){
                         if(selects[j].options[selects[j].selectedIndex].value){
                             usp.set(selects[j].name, selects[j].options[selects[j].selectedIndex].value);
                         }
                     }
+                }
+                var radios = form.querySelectorAll('input[type="radio"]');
+                for(var j=0; j<radios.length; j++) usp.delete(radios[j].name);
+                for(var j=0; j<radios.length; j++){
+                    if(radios[j].checked) usp.set(radios[j].name, radios[j].value.toString());
                 }
             }
             url = url+'?'+usp.toString();
@@ -103,6 +109,9 @@ function autocomplete(name, placeholder, multiple, url, callback, onselect) {
                   /*append the DIV element as a child of the autocomplete container:*/
                   inp.parentNode.appendChild(a);
                   /*for each item in the array...*/
+                  var empty = document.createElement("DIV");
+                  empty.classList.add("autocomplete-item");
+                  empty.innerHTML = 'Nenhum registro encontrado';
                   for (i = 0; i < data.length; i++) {
                     if (true) {
                       if(callback) data[i] = callback(data[i]);
@@ -140,6 +149,7 @@ function autocomplete(name, placeholder, multiple, url, callback, onselect) {
                       a.appendChild(b);
                     }
                   }
+                  if(!a.innerHTML) a.appendChild(empty);
             });
         }
         if(timeout) clearTimeout(timeout);

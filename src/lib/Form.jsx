@@ -41,6 +41,7 @@ function Textarea(props){
 
 function BooleanSelect(props){
     var field = props.data;
+    field['choices'] = [{id:true, text:"Sim"}, {id:false, text:"Não"}];
     return (
         <select className="form-control" id={field.name} name={field.name} data-label={toLabelCase(field.label)} defaultValue={field.value}>
             <option></option>
@@ -51,15 +52,34 @@ function BooleanSelect(props){
     )
 }
 
+function BooleanRadio(props){
+    var field = props.data;
+    field['choices'] = [{id:true, text:"Sim"}, {id:false, text:"Não"}];
+    return <Radio data={field}/>
+}
+
 function Radio(props){
     var key = Math.random();
     var field = props.data;
+
+    function checked(choice){
+        if(field.value!=null){
+            if(field.value == choice.id){
+                return true;
+            } else {
+                return field.value.id == choice.id
+            }
+        } else {
+            return false;
+        }
+    }
+
     function render(){
         return (
             <div className="radio-group">
                 {field.choices.map((choice, i) => (
                   <div key={key+i}>
-                    <input id={field.name+key+i} type="radio" name={field.name} defaultValue={choice.id} defaultChecked={field.value && field.value.id==choice.id}/>
+                    <input id={field.name+key+i} type="radio" name={field.name} defaultValue={choice.id} defaultChecked={checked(choice)} data-label={toLabelCase(choice.text)}/>
                     <label htmlFor={field.name+key+i}>{choice.text}</label>
                   </div>
                 ))}
@@ -72,12 +92,28 @@ function Radio(props){
 function Checkbox(props){
     var key = Math.random();
     var field = props.data;
+    function checked(choice){
+        var check = false;
+        if(field.value){
+            for(var i=0; i<field.value.length; i++){
+                var value = field.value[i];
+                if(value == choice.id){
+                    check = true;
+                } else if(value.id == choice.id){
+                    check = true;
+                }
+            }
+        }
+        return check;
+    }
+
     function render(){
         return (
+
             <div className="checkbox-group">
                 {field.choices.map((choice, i) => (
                   <div key={key+i}>
-                    <input id={field.name+key+i} type="checkbox" name={field.name} defaultValue={choice.id} defaultChecked={field.value && field.value.id==choice.id}/>
+                    <input id={field.name+key+i} type="checkbox" name={field.name} defaultValue={choice.id} defaultChecked={checked(choice)} data-label={toLabelCase(choice.text)}/>
                     <label htmlFor={field.name+key+i}>{choice.text}</label>
                   </div>
                 ))}
@@ -155,7 +191,7 @@ function Field(props){
         if(["text", "password", "email", "number", "date", "datetime-regional",  "file", "image", "range", "search", "tel", "time", "url", "week", "hidden"].indexOf(field.type)>=0){
             return <Input data={field}/>
         } else if(field.type == "boolean" || field.type == "bool"){
-            return <BooleanSelect data={field}/>
+            return props.filter ? <BooleanSelect data={field}/> : <BooleanRadio data={field}/>;
         } else if(field.type == "select"){
             if(field.pick){
                 if(field.multiple) return <Checkbox data={field}/>
@@ -283,7 +319,7 @@ function Form(props){
         return (
             <div className={"form-group "+field.name+" w"+field.width} key={Math.random()}>
                 {field.label &&
-                <label>
+                <label data-label={toLabelCase(field.label)}>
                     <TitleCase text={field.label}/>
                     {field.required && <i>*</i>}
                 </label>

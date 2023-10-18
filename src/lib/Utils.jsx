@@ -203,7 +203,7 @@ function Actions(props){
             <div className="globalActions right">
                 <input type="hidden" name="action"/>
                 {props.data.map((action) =>  (
-                  <button type="button" className="btn primary" onClick={function(){trigger(action.name)}} data-label={toLabelCase(action.label)}>
+                  <button key={Math.random()} type="button" className="btn primary" onClick={function(){trigger(action.name)}} data-label={toLabelCase(action.label)}>
                     {action.label}
                   </button>
                 ))}

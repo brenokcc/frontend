@@ -66,11 +66,10 @@ body{
 .dialog{
     display: block;
     position: absolute;
-    min-width: 75%;
     border: 1px solid #ebebeb;
     border-radius: 4px;
     box-shadow: 0 10px 30px 0 rgba(0,0,0,.2);
-    max-width: 90%;
+    width: 75%;
     overflow-x: auto;
     z-index: 9998;
 }
@@ -566,7 +565,7 @@ i.clickable:hover{
 .viewer .queryset h1{
     font-size: 1.3rem;
 }
-input[type="checkbox"]{
+input[type="checkbox"], input[type="radio"]{
   appearance: none;
   background-color: #fff;
   margin: 0;
@@ -574,13 +573,17 @@ input[type="checkbox"]{
   width: 1.5em;
   height: 1.5em;
   border: solid 1px #DDD;
-  border-radius: 0.15em;
   transform: translateY(-0.075em);
   display: grid;
   place-content: center;
 }
-
-input[type="checkbox"]::before {
+input[type="checkbox"]{
+    border-radius: 0.15em;
+}
+input[type="radio"]{
+    border-radius: 50%;
+}
+input[type="checkbox"]::before, input[type="radio"]::before {
   content: "";
   width: 0.65em;
   height: 0.65em;
@@ -588,9 +591,12 @@ input[type="checkbox"]::before {
   transition: 120ms transform ease-in-out;
   box-shadow: inset 1em 1em var(--primary-color);
 }
-
 input[type="checkbox"]:checked::before {
   transform: scale(1);
+}
+input[type="radio"]:checked::before {
+  transform: scale(1);
+  border-radius: 50%;
 }
 .queryset, .fieldset {
     margin-bottom: 50px;
@@ -801,6 +807,8 @@ select {color: #757575;}
 .filter > div{
     margin-right: 10px;
     display: inline-block;
+    vertical-align: bottom;
+    max-width: 255px;
 }
 .form .form-group{display: inline-block; padding: 5px;}
 .form .form-group.w100{ width: 100%; }

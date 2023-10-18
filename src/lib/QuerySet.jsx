@@ -42,13 +42,13 @@ function FilterForm(props){
 
     function field(filter){
         if(filter.type == "hidden"){
-            return <Field data={filter} url={props.url}/>
+            return <Field data={filter} url={props.url} filter={true}/>
         } else {
             return (
               <div className="filterField" key={Math.random()}>
                 <label><TitleCase text={filter.label}/></label>
                 <br/>
-                <Field data={filter} url={props.url}/>
+                <Field data={filter} url={props.url} filter={true}/>
               </div>
             )
         }

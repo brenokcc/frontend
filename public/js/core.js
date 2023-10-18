@@ -195,16 +195,20 @@ function showTask(key, callback){
 }
 
 function formHide(id){
-    var fieldset = document.querySelector(".form-fieldset."+id);
-    if(fieldset) fieldset.style.display = 'none';
-    var field = document.querySelector(".form-group."+id);
-    if(field) field.style.display = 'none';
+    if(id){
+        var fieldset = document.querySelector(".form-fieldset."+id);
+        if(fieldset) fieldset.style.display = 'none';
+        var field = document.querySelector(".form-group."+id);
+        if(field) field.style.display = 'none';
+    }
 }
 function formShow(id){
-    var fieldset = document.querySelector(".form-fieldset."+id);
-    if(fieldset) fieldset.style.display = 'block';
-    var field = document.querySelector(".form-group."+id);
-    if(field) field.style.display = 'block';
+    if(id){
+        var fieldset = document.querySelector(".form-fieldset."+id);
+        if(fieldset) fieldset.style.display = 'block';
+        var field = document.querySelector(".form-group."+id);
+        if(field) field.style.display = 'block';
+    }
 }
 function formValue(id, value){
     var group = document.querySelector(".form-group."+id);

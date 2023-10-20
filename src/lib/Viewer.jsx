@@ -17,9 +17,7 @@ function ValueSet(props){
     const [value, setvalue] = useState(props.value);
 
     function reload(){
-        console.log('Reloading '+props.title+'...');
         setvalue({ ...props.data.result[props.title] });
-        console.log(value);
     }
 
     if(props.reloadable && !props.reloadable[props.title]){
@@ -27,7 +25,6 @@ function ValueSet(props){
     }
 
     function render(){
-        console.log('Rendering '+props.title+': '+JSON.stringify(value));
         if(value.type){
             return (
                 <div className="fieldset">
@@ -61,6 +58,7 @@ function ValueSet(props){
 
 
 function Viewer(props){
+    const [key, setkey] = useState(0);
     var reloadable = {};
 
     function Fieldset(k, v){
@@ -83,13 +81,20 @@ function Viewer(props){
     }
 
     function reload(){
-        request('GET', document.location.href, function(data){
-            console.log(props.data.result);
-            console.log(data.result);
+        request('GET', props.data.url, function(data){
             props.data.result = data.result
             var keys = Object.keys(reloadable);
             for(var i=0; i<keys.length; i++) reloadable[keys[i]]();
         });
+    }
+
+    if(props.data.autoreload){
+        setTimeout(function(){
+            request('GET', props.data.url, function(data){
+                props.data.result = {...data.result};
+                setkey(key+1);
+            });
+        }, props.data.autoreload*1000);
     }
 
     //<div>{JSON.stringify(props.data.result)}</div>

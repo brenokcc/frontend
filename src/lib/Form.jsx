@@ -142,7 +142,7 @@ function Autocomplete(props){
     var key = '__'+Math.random();
 
     useEffect(() => {
-        autocomplete(field.name+key, field.name, false, props.url);
+        if(!field.read_only) autocomplete(field.name+key, field.name, false, props.url);
     });
 
     return (
@@ -152,7 +152,7 @@ function Autocomplete(props){
                     <option value={field.value.id}>{ field.value.text }</option>
                 }
             </select>
-            <input className="form-control" autoComplete="off" id={field.name+key+'autocomplete'} type="text" name={field.name+'__autocomplete'} defaultValue={field.value ? field.value.text : ''} data-label={toLabelCase(field.label)}/>
+            <input className="form-control" autoComplete="off" id={field.name+key+'autocomplete'} type="text" name={field.name+'__autocomplete'} defaultValue={field.value ? field.value.text : ''} data-label={toLabelCase(field.label)}  readOnly={field.read_only}/>
         </div>
     )
 }
@@ -295,8 +295,16 @@ function Form(props){
         var form = document.getElementById(id);
         var data = new FormData(form);
         var button = form.querySelector(".btn.submit");
-        var label = button.value;
-        button.value = 'Aguarde...';
+        var label = button.innerHTML;
+        var span = document.createElement("span");
+        var icon = document.createElement("i");
+        button.innerHTML = '';
+        span.innerHTML = 'Aguarde...';
+        icon.classList.add("fa-solid");
+        icon.classList.add("fa-sync");
+        icon.classList.add("fa-spin");
+        button.appendChild(icon);
+        button.appendChild(span);
         $(form).find('.field-error').hide();
         form.querySelectorAll("input[type=file]").forEach(function( widget ) {
             if(widget.blob){
@@ -308,7 +316,7 @@ function Form(props){
             data.set(widget.name, data.get(widget.name).replace(',', '.'));
         });
         function callback(data, response){
-            button.value = label;
+            button.innerHTML = label;
             process(data, response);
         }
         if(form.dataset.method.toUpperCase()!='GET') request(form.dataset.method.toUpperCase(), form.action, callback, data);
@@ -353,7 +361,7 @@ function Form(props){
     function render(){
         //<div>{JSON.stringify(props.data)}</div>
         return (
-            <div className={props.data.name+'-form'}>
+            <div className={props.data.name+'-form form-wrapper'}>
                 {props.data.display && <Component data={props.data.display}/>}
                 <h1 data-label={toLabelCase(props.data.name)}>
                     {props.data.icon && <Icon icon={props.data.icon}/>}
@@ -367,7 +375,9 @@ function Form(props){
                     {toFields(form.fields)}
                     <ClearFix/>
                     <div className="right">
-                        <input className="btn submit primary" type="button" onClick={submit} value="Enviar" data-label={toLabelCase("Enviar")}/>
+                        <a className="btn submit primary" href="javascript:" onClick={submit} data-label={toLabelCase("Enviar")}>
+                            Enviar
+                        </a>
                     </div>
                     <ClearFix/>
                     {props.data.subactions &&

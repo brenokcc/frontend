@@ -536,7 +536,8 @@ i.clickable:hover{
     margin-bottom: 20px;
 }
 .viewer{
-    margin-top: 20px;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 .viewer h1{
     margin: 0px;
@@ -598,8 +599,25 @@ input[type="radio"]:checked::before {
   transform: scale(1);
   border-radius: 50%;
 }
+.queryset .aggregations{
+    float: right;
+    margin-bottom: 20px;
+}
+.queryset .aggregation{
+    display: inline-block;
+}
+.queryset .aggregation .name{
+    margin-left: 20px;
+}
+.queryset .aggregation .name{
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+.queryset .aggregation .value{
+    font-size: 1.3rem;
+}
 .queryset, .fieldset {
-    margin-bottom: 50px;
+
 }
 .queryset h1{
     color: #333;
@@ -739,7 +757,7 @@ input[type="radio"]:checked::before {
     padding-bottom: 10px;
 }
 .autocomplete-items {
-  position: absolute;
+  position: inherit;
   border: 1px solid #d4d4d4;
   border-top: none;
   z-index: 99;
@@ -776,6 +794,9 @@ input[type="radio"]:checked::before {
     margin-bottom: 10px;
     margin-right: 20px;
 }
+.form-wrapper .viewer h1, .form-wrapper .queryset h1{
+    font-size: 1.3rem;
+}
 .form-control:focus, .form-control:focus-visible{
     outline: none !important;
     border: solid 2px #c2850c;
@@ -788,7 +809,7 @@ input[type="radio"]:checked::before {
     border: 1px solid #d9d9d9;
     border-radius: 4px;
     margin: 5px 0;
-    min-width: 250px;
+    width: 250px;
     padding: 8px 10px;
     line-height: 2;
     height: 45px;
@@ -919,10 +940,11 @@ form .field-error{
 }
 .status{
     color:white;
-    padding:5;
+    width: fit-content;
     border-radius: 5px;
     text-wrap: nowrap;
     padding: 10px;
+    white-space: nowrap;
 }
 .status.primary{
     background-color: var(--primary-color);

@@ -39,8 +39,12 @@ function Format(obj){
     if(obj===false) return 'Não';
     if(typeof obj === "string"){
         if(obj.length==19 && obj[13]==':' && obj[16]==':'){
-            var tokens = obj.split('T')[0].split('-');
-            return new Date(tokens[0], tokens[1]-1, tokens[2]).toLocaleDateString()
+            var tokens = obj.split('T');
+            var data = tokens[0].split('-');
+            var hora = tokens[1];
+            var date = new Date(data[0], data[1]-1, data[2]).toLocaleDateString();
+            if(hora=='00:00:00') return date;
+            else return date + ' ' + hora.substr(0, 5);
         }
         return obj
     }
@@ -379,6 +383,10 @@ function Component(props){
                 return <Progress data={props.data}/>
              case 'status':
                 return <Status data={props.data}/>
+             case 'qrcode':
+                return <QrCode data={props.data}/>
+             case 'link':
+                return <Link data={props.data}/>
              case 'html':
                 return <Html data={props.data}/>
             default:
@@ -407,6 +415,7 @@ function Content(props){
 }
 
 function Boxes(props){
+    console.log(props.data.items);
     return (
         <div className="boxes">
             <h2><TitleCase text={props.data.title}/></h2>
@@ -424,6 +433,35 @@ function Boxes(props){
             </div>
         </div>
     )
+}
+
+function Link(props){
+    function render(){
+        return (
+            <a href={props.data.url} target={props.data.target}>{props.data.url}</a>
+        )
+    }
+    return render();
+}
+
+function QrCode(props){
+    const key = Math.random();
+
+    useEffect(()=>{
+        var qrcode = new QRCode(document.getElementById(key), {
+            text: props.data.text,
+            width: 128,
+            height: 128,
+            colorDark : "#5868bf",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+    }, [])
+
+    function render(){
+        return <div id={key}></div>
+    }
+    return render();
 }
 
 
@@ -614,7 +652,7 @@ function Progress(props){
 function Status(props){
     function render(){
         return (
-            <span className={"status "+props.data.style}>{props.data.label}</span>
+            <div className={"status "+props.data.style}>{props.data.label}</div>
         )
     }
     return render();

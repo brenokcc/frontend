@@ -17,13 +17,20 @@ function GlobalActions(props){
 }
 
 function InstanceActions(props){
-    return (
-        <div className="instanceActions right">
-            {props.data.actions.map((action) => action.target == "instance" && (
-              <Action label={toTitleCase(action.name)} icon={action.icon} href={action.url.replace('{id}', props.id)} key={Math.random()} modal={action.modal} reloader={props.reloader} style={action.style}>
+
+    function get_action(action){
+        if(action.ids.indexOf(props.id)>=0){
+            return (
+                <Action label={toTitleCase(action.name)} icon={action.icon} href={action.url.replace('{id}', props.id)} key={Math.random()} modal={action.modal} reloader={props.reloader} style={action.style}>
                 <TitleCase text={action.name}/>
               </Action>
-            ))}
+            )
+        }
+    }
+
+    return (
+        <div className="instanceActions right">
+            {props.data.actions.map((action) => action.target == "instance" && get_action(action))}
         </div>
     )
 }
@@ -92,7 +99,7 @@ function Pagination(props){
     }
     var start = ((page-1) * 10) + 1;
     var end = start + 10 - 1;
-    if(props.data.count > 10){
+    if(props.data.count > 0){
         return (
             <div className="pagination">
                 <div className="left">
@@ -171,6 +178,25 @@ function BatchActions(props){
             <div className="counter right"></div>
         </div>
     )
+}
+
+function Aggreations(props){
+    console.log(props.data);
+    function render(){
+        return (
+            <div className="aggregations">
+                {Object.keys(props.data).map(function(k){
+                  return (
+                    <div className="aggregation" key={Math.random()}>
+                        <span className="name"><TitleCase text={k}/>: </span>
+                        <span className="value"><Value obj={props.data[k]}/></span>
+                    </div>
+                  )
+                })}
+            </div>
+        )
+    }
+    return render()
 }
 
 function QuerySet(props){
@@ -357,6 +383,8 @@ function QuerySet(props){
             <Pagination data={data} reloader={reload}/>
             <ClearFix/>
             <BatchActions data={data} reloader={props.reloader || reload}/>
+            <ClearFix/>
+            {data.aggregations && <Aggreations data={data.aggregations}/>}
             <ClearFix/>
             <DataTable data={data} reloader={props.reloader || reload} onSelect={onSelect} selectable={hasBatchActions()}/>
             <BatchActions data={data} reloader={props.reloader || reload}/>

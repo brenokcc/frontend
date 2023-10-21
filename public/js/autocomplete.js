@@ -1,15 +1,25 @@
 var timeout = null;
 function setAcValue(name, value, label){
-    var option = document.createElement('option');
-    option.value = value;
-    option.selected = true;
-    option.innerHTML = label;
     var select = document.getElementById(name);
-    if(!select.multiple) select.innerHTML = ''
-    if(value) select.add(option);
     var input = document.getElementById(name+'autocomplete');
-    if(select.multiple) createBoxes(name);
-    else input.value = label;
+    var clearer = input.parentNode.querySelector('.clearer');
+    if(value!=null){
+        var option = document.createElement('option');
+        option.value = value;
+        option.selected = true;
+        option.innerHTML = label;
+        if(!select.multiple) select.innerHTML = ''
+        if(value) select.add(option);
+        if(select.multiple) createBoxes(name);
+        else input.value = label;
+        clearer.classList.remove('fa-angle-down');
+        if(!select.multiple) clearer.classList.add('fa-x');
+    } else {
+        input.value = "";
+        if(!select.multiple) select.innerHTML = "";
+        clearer.classList.add('fa-angle-down');
+        clearer.classList.remove('fa-x');
+    }
 }
 function escapeHtml(unsafe){
     return unsafe

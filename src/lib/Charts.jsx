@@ -23,7 +23,7 @@ function Pie(props){
                   name: header,
                   type: 'pie',
                   radius: radius[i],
-                  emphasis: {label: {show: true, fontWeight: 'bold'}},
+                  emphasis: {label: {show: true, formatter: function (params) {return params.value.toLocaleString("pt-BR");}, fontWeight: 'bold'}},
                   roseType: null,
                   data: props.rows.map(function(row){
                     return {name: row[0], value: row[i+1]}
@@ -35,7 +35,7 @@ function Pie(props){
                   name: null,
                   type: 'pie',
                   radius: props.donut ? ['25%', '65%'] : ['0%', '75%'],
-                  emphasis: {label: {show: true, fontWeight: 'bold'}},
+                  emphasis: {label: {show: true, formatter: function (params) {return params.value.toLocaleString("pt-BR");}, fontWeight: 'bold'}},
                   roseType: props.area ? 'area' : null,
                   data: props.rows.map(function(row, i){
                     return {name: row[0], value: row[1]}
@@ -46,9 +46,12 @@ function Pie(props){
 
     function render(){
         var option = {
-          tooltip: {trigger: 'item'},
+          tooltip: {
+            trigger: 'item',
+            formatter: function (params) {return `${params.name}: <b>${params.data.value.toLocaleString("pt-BR")}</b> (${params.percent.toLocaleString("pt-BR")}%)`;}
+          },
           legend: {},
-          label: {show: true, formatter(param) {return param.name + ' (' + param.percent * 2 + '%)'; }},
+          label: {show: true, formatter(param) {return param.name + ' (' + param.percent.toLocaleString("pt-BR") + '%)'; }},
           series: series()
         };
         return <Echarts option={option}/>;
@@ -106,9 +109,13 @@ function Chart(props){
     function render(){
         var option = {
           toolbox: toolbox,
-          tooltip: { trigger: 'axis', axisPointer: {type: 'shadow'}},
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {type: 'shadow'},
+            formatter: function (params) {return `${params[0].name}: <b>${params[0].value.toLocaleString("pt-BR")}</b>`;}
+          },
           legend: {},
-          label: {show: true},
+          label: {show: true, formatter: function (params) {return params.value.toLocaleString("pt-BR");}},
           xAxis: invert? yAxis: xAxis(),
           yAxis: invert? xAxis() : yAxis,
           series: series()
@@ -184,7 +191,7 @@ function TreeMap(props){
         var option = {
             tooltip: {trigger: 'item'},
           legend: {},
-          label: {show: true, formatter(param) {return param.name + ' (' + param.value + ')'; }},
+          label: {show: true, formatter(param) {return param.name + ' (' + param.value.toLocaleString("pt-BR") + ')'; }},
           series: series()
         };
         return <Echarts option={option}/>;
@@ -245,8 +252,7 @@ function Progress(props){
 }
 
 function ChartFactory(props){
-    function render(){
-        console.log(props.type)
+    function chart(){
         switch(props.type) {
             case 'pie':
               return (<Pie headers={props.headers} rows={props.rows} />);
@@ -273,6 +279,14 @@ function ChartFactory(props){
             default:
               return (<Chart headers={props.headers} rows={props.rows} />);
         }
+    }
+    function render(){
+        return (
+            <div className="chart">
+                {props.title && <h2 className="title">{props.title}</h2>}
+                {chart()}
+            </div>
+        )
     }
     return render()
 }

@@ -744,6 +744,19 @@ input[type="radio"]:checked::before {
   background-color: #e9e9e9;
 }
 
+.clearer{
+    cursor: pointer;
+    position: absolute;
+    margin-left: -20px;
+    margin-top: 20px;
+    color: #aaa;
+    font-size: 75%;
+}
+select {
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari and Chrome */
+    appearance:none;
+}
 
 .autocomplete {
   /*the container must be positioned relative:*/
@@ -757,7 +770,6 @@ input[type="radio"]:checked::before {
     padding-bottom: 10px;
 }
 .autocomplete-items {
-  position: inherit;
   border: 1px solid #d4d4d4;
   border-top: none;
   z-index: 99;
@@ -788,6 +800,11 @@ input[type="radio"]:checked::before {
 .radio-group label, .checkbox-group label{
     margin-left: 5px;
 }
+.chart .title{
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+}
 .radio-group > div, .checkbox-group > div{
     display: inline-flex;
     margin-top: 10px;
@@ -802,7 +819,7 @@ input[type="radio"]:checked::before {
     border: solid 2px #c2850c;
 }
 .form-control:hover{
-    background-color: #DDD;
+    background-color: #EEE;
 }
 .form-control {
     background: #fff;
@@ -830,6 +847,9 @@ select {color: #757575;}
     display: inline-block;
     vertical-align: bottom;
     max-width: 255px;
+}
+.filter .autocomplete-items{
+    position: absolute;
 }
 .form .form-group{display: inline-block; padding: 5px;}
 .form .form-group.w100{ width: 100%; }

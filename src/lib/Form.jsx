@@ -74,12 +74,22 @@ function Radio(props){
         }
     }
 
+    function toogle(id){
+        var radio = document.getElementById(id);
+        if(field['checked']) radio.checked = false;
+    }
+
+    function ischecked(id){
+        var radio = document.getElementById(id);
+        field['checked'] = radio.checked;
+    }
+
     function render(){
         return (
             <div className="radio-group">
                 {field.choices.map((choice, i) => (
                   <div key={key+i}>
-                    <input id={field.name+key+i} type="radio" name={field.name} defaultValue={choice.id} defaultChecked={checked(choice)} data-label={toLabelCase(choice.text)}/>
+                    <input id={field.name+key+i} type="radio" name={field.name} defaultValue={choice.id} defaultChecked={checked(choice)} data-label={toLabelCase(choice.text)} onClick={function(){toogle(field.name+key+i)}} onMouseEnter={function(){ischecked(field.name+key+i)}}/>
                     <label htmlFor={field.name+key+i}>{choice.text}</label>
                   </div>
                 ))}
@@ -126,12 +136,19 @@ function Checkbox(props){
 function Select(props){
     var field = props.data;
 
+    function clear(){
+        alert(1);
+    }
+
     return (
+        <>
         <select className="form-control" id={field.name} name={field.name} data-label={toLabelCase(field.label)} defaultValue={field.value}>
             {field.choices.map((choice) => (
               <option key={Math.random()} value={choice.id}>{choice.text}</option>
             ))}
         </select>
+        <i className="fa-solid fa-chevron-down clearer" onClick={clear}/>
+        </>
     )
 }
 
@@ -145,6 +162,10 @@ function Autocomplete(props){
         if(!field.read_only) autocomplete(field.name+key, field.name, false, props.url);
     });
 
+    function clear(){
+        setAcValue(field.name+key, null);
+    }
+
     return (
         <div className="autocomplete">
             <select className="form-control" id={field.name+key} name={field.name} style={{display:'none'}} defaultValue={value}>
@@ -153,6 +174,7 @@ function Autocomplete(props){
                 }
             </select>
             <input className="form-control" autoComplete="off" id={field.name+key+'autocomplete'} type="text" name={field.name+'__autocomplete'} defaultValue={field.value ? field.value.text : ''} data-label={toLabelCase(field.label)}  readOnly={field.read_only}/>
+            <i className="fa-solid fa-chevron-down clearer" onClick={clear}/>
         </div>
     )
 }
@@ -172,6 +194,10 @@ function AutocompleteMultiple(props){
         autocomplete(field.name+key, field.name, true, props.url);
     });
 
+    function clear(){
+        setAcValue(field.name+key, null);
+    }
+
     return (
         <div className="autocomplete">
             <div id={field.name+key+"boxes"}></div>
@@ -179,6 +205,7 @@ function AutocompleteMultiple(props){
                 {options}
             </select>
             <input className="form-control" autoComplete="off" id={field.name+key+'autocomplete'} type="text" name={field.name+'autocomplete'} defaultValue={field.value.text} data-label={toLabelCase(field.label)}/>
+            <i className="fa-solid fa-chevron-down clearer" onClick={clear}/>
         </div>
     )
 }
@@ -246,7 +273,7 @@ function Form(props){
     }, [])
 
     function process(data, response){
-        if(data.type && data.type!='form'){
+        if((data.type && data.type!='form') || Array.isArray(data)){
             props.data['output'] = data;
             var keys = Object.keys(reloadable);
             for(var i=0; i<keys.length; i++) reloadable[keys[i]]();
@@ -372,6 +399,7 @@ function Form(props){
                       <Component key={Math.random()} data={item}/>
                 ))}
                 <form data-method={props.data.method} id={props.data.name} className="form" action={props.data.action}>
+                    <input type="hidden" name="submit" value={props.data.name}/>
                     {toFields(form.fields)}
                     <ClearFix/>
                     <div className="right">

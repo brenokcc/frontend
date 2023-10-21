@@ -452,7 +452,7 @@ function QrCode(props){
             text: props.data.text,
             width: 128,
             height: 128,
-            colorDark : "#5868bf",
+            colorDark : "#333333",
             colorLight : "#ffffff",
             correctLevel : QRCode.CorrectLevel.H
         });

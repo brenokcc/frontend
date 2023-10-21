@@ -36,20 +36,31 @@ function InstanceActions(props){
 }
 
 function SearchField(props){
-    return (
-        <div>
-            <label>Palavra-chave</label>
-            <br/>
-            <input type="text" name="q" className="form-control" data-label={toLabelCase("Palavras-chave")}/>
-        </div>
-    )
+    const key = Math.random();
+
+    function clear(){
+        document.getElementById(key).value = "";
+    }
+
+    function render(){
+        return (
+            <div>
+                <label>Palavra-chave</label>
+                <br/>
+                <input id={key} type="text" name="q" className="form-control" data-label={toLabelCase("Palavras-chave")}/>
+                <i className="fa-solid fa-x clearer" onClick={clear}/>
+            </div>
+        )
+    }
+
+    return render();
 }
 
 function FilterForm(props){
 
     function field(filter){
         if(filter.type == "hidden"){
-            return <Field data={filter} url={props.url} filter={true}/>
+            return <Field key={Math.random()} data={filter} url={props.url} filter={true}/>
         } else {
             return (
               <div className="filterField" key={Math.random()}>

@@ -7,10 +7,11 @@ function Statistics(props){
         for(var i=0; i<props.data.series.length; i++){
             rows.push([props.data.series[i][0], props.data.series[i][1]]);
         }
-        if(props.data.chart) return <ChartFactory type={props.data.chart} rows={rows}/>
+        if(props.data.chart) return <ChartFactory type={props.data.chart} title={props.data.title} rows={rows}/>
 
         return (
             <div className="statistics">
+                {props.data.title && <h2>{props.data.title}</h2>}
                 <table>
                     <tbody>
                         {rows.map((row) => (
@@ -40,10 +41,11 @@ function Statistics(props){
             rows.push(row);
         }
 
-        if(props.data.chart) return <ChartFactory type={props.data.chart} headers={headers} rows={rows}/>
+        if(props.data.chart) return <ChartFactory type={props.data.chart} title={props.data.title} headers={headers} rows={rows}/>
 
         return (
             <div className="statistics">
+                {props.data.title && <h2>{props.data.title}</h2>}
                 <table>
                     {headers &&
                     <thead>

@@ -45,6 +45,9 @@ function Root(props){
                 <div key={key}>
                     <Header reloader={load} data={data} open={open}/>
                     <ClearFix/>
+                    {!localStorage.getItem('user') && window.innerWidth<=600 && <OAuth/>}
+                    { window.innerWidth<=600 && <Search/>}
+                    <ClearFix/>
                     <Breadcrumbs/>
                     <Content data={data} reloader={load}/>
                     <Footer/>
@@ -84,6 +87,7 @@ function Header(props){
             )
         }
     }
+
     return (
         <div className="header">
             <div className="left">
@@ -115,29 +119,40 @@ function Header(props){
                                 <div className="letter">
                                     {localStorage.getItem('user').toUpperCase()[0]}
                                 </div>
-                                <div className="username">
-                                    Olá <strong>{localStorage.getItem('user')}</strong> <Icon icon="chevron-down"/>
-                                </div>
+                                { window.innerWidth>600 &&
+                                    <div className="username">
+                                        Olá <strong>{localStorage.getItem('user')}</strong> <Icon icon="chevron-down"/>
+                                    </div>
+                                }
                             </div>
                             {dropdown()}
+                            { window.innerWidth>600 && <Search/>}
                         </div>
                     </div>
-                    <Search/>
+
                 </>
                 }
-                {!localStorage.getItem('user') &&
-                    <div className="controls oauth">
-                        {document.location.pathname!="/api/v1/login/" &&
-                            <Action icon="user" href="/api/v1/login/" button={true}>Login</Action>
-                        }
-                        {application.oauth.length>0 && application.oauth.map((provider) => (
-                            <Action key={Math.random} icon="user" href={provider.url} button={true}>{provider.label}</Action>
-                        ))}
-                    </div>
-                }
+                {!localStorage.getItem('user') && window.innerWidth>600 && <OAuth/>}
             </div>
         </div>
     )
+}
+
+function OAuth(props){
+    const application = JSON.parse(localStorage.getItem('application'));
+    function render(){
+        return (
+            <div className="controls oauth">
+                {document.location.pathname!="/api/v1/login/" &&
+                    <Action icon="user" href="/api/v1/login/" button={true}>Login</Action>
+                }
+                {application.oauth.length>0 && application.oauth.map((provider) => (
+                    <Action key={Math.random} icon="user" href={provider.url} button={true}>{provider.label}</Action>
+                ))}
+            </div>
+        )
+    }
+    return render();
 }
 
 function Search(props){
@@ -165,15 +180,20 @@ function Search(props){
             )
         }
     }
-    return (
-        <div className="searcher">
-            <div>
-                <Icon icon="search"/>
-                <input type="text" className="form-control" placeholder="O que você procura?" onChange={onChange} data-label={toLabelCase("Buscar...")}/>
-                {dropdown()}
-            </div>
-        </div>
-    )
+    function render(){
+        if(localStorage.getItem('user')){
+            return (
+                <div className="searcher">
+                    <div style={{ width: "100%" }}>
+                        <Icon icon="search"/>
+                        <input type="text" className={"form-control "+(window.innerWidth > 600 ? "small" : "big")} placeholder="O que você procura?" onChange={onChange} data-label={toLabelCase("Buscar...")}/>
+                        {dropdown()}
+                    </div>
+                </div>
+            )
+        }
+    }
+    return render();
 }
 
 function Notification(props){

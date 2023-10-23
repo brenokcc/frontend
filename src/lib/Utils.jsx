@@ -107,14 +107,10 @@ function ClearFix(){
 function Message(props){
     return (
         <div className="message">
-            <div className="icon">
-                <Icon icon="info-circle"/>
-            </div>
-            <div className="detail">
-                 <div className="text">
-                    {props.text}
-                 </div>
-            </div>
+            <Icon icon="info-circle"/>
+             <div className="text">
+                {props.text}
+             </div>
         </div>
     )
 }
@@ -436,9 +432,15 @@ function Boxes(props){
 }
 
 function Link(props){
+    function content(){
+        if(props.data.icon) return <Icon icon={props.data.icon}/>
+        else return props.data.url;
+    }
     function render(){
         return (
-            <a href={props.data.url} target={props.data.target}>{props.data.url}</a>
+            <a href={props.data.url} target={props.data.target}>
+                {content()}
+            </a>
         )
     }
     return render();

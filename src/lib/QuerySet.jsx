@@ -63,7 +63,7 @@ function FilterForm(props){
             return <Field key={Math.random()} data={filter} url={props.url} filter={true}/>
         } else {
             return (
-              <div className="filterField" key={Math.random()}>
+              <div key={Math.random()}>
                 <label><TitleCase text={filter.label}/></label>
                 <br/>
                 <Field data={filter} url={props.url} filter={true}/>
@@ -76,7 +76,7 @@ function FilterForm(props){
         if(props.data.search.length>0 || props.data.filters.length>0){
             return(
               <Accordion title="Filtros">
-                <form className="filter">
+                <form className={"filter "+(window.innerWidth > 600 ? "small" : "big")}>
                     {props.data.search.length>0 && <SearchField state={props.state}/>}
                     {props.data.filters.map((filter) => (
                        field(filter)
@@ -133,6 +133,7 @@ function DataTable(props){
             return (
             <div className="responsive data">
                 <table className="table">
+                    {window.innerWidth > 600 &&
                     <thead>
                         <tr>
                             { props.selectable &&
@@ -146,18 +147,29 @@ function DataTable(props){
                             <th></th>
                         </tr>
                     </thead>
+                    }
                     <tbody>
                         {props.data.results.map((item) => (
                           <tr key={Math.random()}>
-                            { props.selectable &&
+                            {props.selectable &&
                             <td>
                                 <input type="checkbox" className="selector all" value={item.id} onClick={props.onSelect}/>
                             </td>
                             }
-                            {Object.keys(props.data.results[0]).map(function(k){
+                            {window.innerWidth > 600 && Object.keys(props.data.results[0]).map(function(k){
                               if(k!='id') return <td key={Math.random()}><Value obj={item[k]}/></td>
                             })}
-                            <td><InstanceActions data={props.data} id={item.id} reloader={props.reloader}/></td>
+                            {window.innerWidth <= 600 &&
+                                <td>
+                                    {Object.keys(props.data.results[0]).map(function(k){
+                                      if(k!='id') return <div key={Math.random()}>
+                                        <strong><TitleCase text={k}/>:</strong>&nbsp;&nbsp;&nbsp;
+                                        <Value obj={item[k]}/>
+                                      </div>
+                                    })}
+                                </td>
+                            }
+                            <td style={{textAlign: "right"}}><InstanceActions data={props.data} id={item.id} reloader={props.reloader}/></td>
                           </tr>
                         ))}
                     </tbody>

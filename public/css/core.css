@@ -76,9 +76,14 @@ a:hover, a:visited{
     border: 1px solid #ebebeb;
     border-radius: 4px;
     box-shadow: 0 10px 30px 0 rgba(0,0,0,.2);
-    width: 75%;
     overflow-x: auto;
     z-index: 9998;
+}
+.dialog.big{
+    width: 95%;
+}
+.dialog.small{
+    width: 75%;
 }
 .layer{
     background-color: black;
@@ -371,16 +376,20 @@ a:hover, a:visited{
     margin-right: 20px;
 }
 .header .right .dropdown{
+    margin-top: 40px;
+    margin-right: 20px;
     position: absolute;
     z-index: 1;
     background-color: white;
-    position: absolute;
     right: 0px;
     width: 250px;
     margin-left: 20px;
     box-shadow: 15px 15px 15px 15px #DDD;
     border-radius: 10px;
     text-align: left;
+}
+.header .left{
+    max-width:75%;
 }
 .header .right .dropdown a{
     text-decoration: none;
@@ -852,8 +861,9 @@ select {color: #757575;}
 .filter.small > div{
     width: 255px;
 }
-.filter.big > div, .filter.big .form-control, .filter.big .autocomplete{
+.filter.big > div, .filter.big .form-control, .filter.big .autocomplete, .filter.big .btn{
     width: 100%;
+    -webkit-min-logical-width: calc(100% - 12px);
 }
 .filter > div{
     margin-right: 10px;
@@ -870,7 +880,10 @@ select {color: #757575;}
 .form .form-group .help_text{
     font-style: italic;
 }
-.form .form-control{width: 100%;}
+.form .form-control{
+    width: 100%;
+    -webkit-min-logical-width: calc(100% - 12px);
+}
 .form .autocomplete{width: 100%;}
 .form .subactions{
     text-align:center;

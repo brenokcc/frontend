@@ -204,7 +204,6 @@ function BatchActions(props){
 }
 
 function Aggreations(props){
-    console.log(props.data);
     function render(){
         return (
             <div className="aggregations">

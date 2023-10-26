@@ -65,7 +65,7 @@ function Root(props){
 
 function Layer(props){
     return (
-        <div className="layer"></div>
+        <div className="layer" onClick={function(){closeDialogs();}}></div>
     )
 }
 
@@ -82,7 +82,7 @@ function Header(props){
             return (
                 <div className="dropdown">
                     <Action label="Alterar Senha" href="/api/v1/user/change_password/" reloader={props.reloader} modal={true} link={true} onClick={onClickDropdownLink}>Alterar Senha</Action>
-                    <a href="/api/v1/login/" data-label={toLabelCase("Sair")}>Sair</a>
+                    <a href="/api/v1/logout/" data-label={toLabelCase("Sair")}>Sair</a>
                 </div>
             )
         }
@@ -92,7 +92,7 @@ function Header(props){
         <div className="header">
             <div className="left">
                 <div className="brand">
-                    <a href="/"><img src={application.logo}/></a>
+                    <a href={application.index}><img src={application.logo}/></a>
                     <div className="application">
                         <div className="title">
                             {application.menu.length > 0 && <Icon icon="align-justify"/>}
@@ -144,7 +144,7 @@ function OAuth(props){
         return (
             <div className="controls oauth">
                 {document.location.pathname!="/api/v1/login/" &&
-                    <Action icon="user" href="/api/v1/login/" button={true}>Login</Action>
+                    <Action icon="sign-in" href="/api/v1/login/" button={true}>Login</Action>
                 }
                 {application.oauth.length>0 && application.oauth.map((provider) => (
                     <Action key={Math.random} icon="user" href={provider.url} button={true}>{provider.label}</Action>

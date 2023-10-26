@@ -36,7 +36,7 @@ function Dialog(props){
     }
 
     return (
-        <dialog className="dialog" key={key}>
+        <dialog className={"dialog "+(window.innerWidth > 600 ? "small" : "big")} key={key}>
             {content()}
         </dialog>
     )

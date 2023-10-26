@@ -258,14 +258,6 @@ function Form(props){
     var reloadable = {};
 
     var form = props.data;
-    var fields = [
-        {type: 'text', name:'username', value:'admin'},
-        {type: 'password', name:'password', value:null},
-        {type: 'boolean', name:'casado', value:null},
-        {type: 'select', name:'uf', value:null, choices:[{id: null, text: ''}, {id: 1, text: 'RN'}, {id: 2, text: 'PB'}]},
-        {type: 'select', name:'tipo', value:{id: 1, text: ''}},
-        {type: 'select', name:'pesquisadores_institucionais', multiple:true, value:[{id: 1, text: 'João'}]},
-    ]
 
     useEffect(()=>{
         formControl(form.controls);
@@ -282,32 +274,102 @@ function Form(props){
         if (response.status>=400){
              showErrors(data);
              return;
-        } else if (data.token){
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('user', data.user.username);
         }
-        if(data.redirect){
-            if(data.message) setCookie('message', data.message);
-            document.location.href = data.redirect;
+        if(data.task){
+            showTask(data.task, function(){
+                data.message ? showMessage(data.message) : showMessage('Ação realizada com sucesso');
+                closeDialogs();
+            });
         } else {
-            if(data.message){
-                showMessage(data.message);
-            } else if(data.task){
-                showTask(data.task, callback);
-            } else {
-                showMessage('Ação realizada com sucesso');
-            }
+            data.message ? showMessage(data.message) : showMessage('Ação realizada com sucesso');
             closeDialogs();
         }
     }
 
+    function showTask(key, callback){
+        request('GET', '/api/v1/task_progress/?raw=&key='+key, function(data, response){
+            if(isNaN(data)){
+                showMessage(data, 'danger')
+            } else {
+                var btn = document.querySelector(".btn.submit");
+                btn.innerHTML = "Aguarde... "+data+"%";
+                if(data == "100"){
+                    callback();
+                } else {
+                    setTimeout(function(){showTask(key, callback)}, 3000)
+                }
+            }
+        });
+    }
+
+    function formHide(id){
+        if(id){
+            var fieldset = document.querySelector(".form-fieldset."+id);
+            if(fieldset) fieldset.style.display = 'none';
+            var field = document.querySelector(".form-group."+id);
+            if(field) field.style.display = 'none';
+        }
+    }
+    function formShow(id){
+        if(id){
+            var fieldset = document.querySelector(".form-fieldset."+id);
+            if(fieldset) fieldset.style.display = 'block';
+            var field = document.querySelector(".form-group."+id);
+            if(field) field.style.display = 'block';
+        }
+    }
+    function formValue(id, value){
+        var group = document.querySelector(".form-group."+id);
+        var widget = group.querySelector('*[name="'+id+'"]');
+        if(widget.tagName == "INPUT"){
+            widget.value = value;
+        } else {
+            if(widget.tagName == "SELECT"){
+                if(widget.style.display=="none"){
+                    setAcValue(widget.id, value.id, value.text);
+                } else {
+                    for (var i = 0; i < widget.options.length; i++) {
+                        if (widget.options[i].value == value) {
+                            widget.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    function formControl(controls){
+        if(controls){
+            for (var i = 0; i < controls.hide.length; i++) formHide(controls.hide[i]);
+            for (var i = 0; i < controls.show.length; i++) formShow(controls.show[i]);
+            for (var k in controls.set) formValue(k, controls.set[k]);
+        }
+    }
+    function formWatch(watch){
+        if(watch){
+            for (var i = 0; i < watch.length; i++){
+                var id = watch[i];
+                var group = document.querySelector(".form-group."+id);
+                var widgets = group.querySelectorAll('*[name="'+id+'"]');
+                widgets.forEach(function( widget ) {
+                    widget.addEventListener("change", function (e) {
+                        var form = widget.closest('form');
+                        var data = new FormData(form);
+                        request('POST', form.action+'?on_change='+this.name, formControl, data);
+                    });
+                });
+            }
+        }
+    }
+
     function showErrors(data){
+        var form = document.getElementById(props.data.name);
         var message = null;
         for(var k in data){
             if(k=='non_field_errors' || k=='detail' || k==0){
                 message = data[k];
             } else {
-                var error = $('.field-error.'+ k);
+                var error = $(form).find('.field-error.'+ k);
                 error.find('span').html(data[k][0]);
                 error.show();
             }
@@ -316,7 +378,13 @@ function Form(props){
         else showMessage('Corrija os erros indicados no formulário.', 'danger');
     }
 
-    function submit(){
+    function cancel(e){
+        e.preventDefault();
+        closeDialogs();
+    }
+
+    function submit(e){
+        e.preventDefault();
         hideMessage();
         var id = props.data.name;
         var form = document.getElementById(id);
@@ -328,7 +396,7 @@ function Form(props){
         button.innerHTML = '';
         span.innerHTML = 'Aguarde...';
         icon.classList.add("fa-solid");
-        icon.classList.add("fa-sync");
+        icon.classList.add("fa-circle-notch");
         icon.classList.add("fa-spin");
         button.appendChild(icon);
         button.appendChild(span);
@@ -403,7 +471,10 @@ function Form(props){
                     {toFields(form.fields)}
                     <ClearFix/>
                     <div className="right">
-                        <a className="btn submit primary" href="javascript:" onClick={submit} data-label={toLabelCase("Enviar")}>
+                        <a className="btn" onClick={cancel} data-label={toLabelCase("Cancelar")}>
+                            Cancelar
+                        </a>
+                        <a className="btn submit primary" onClick={submit} data-label={toLabelCase("Enviar")}>
                             Enviar
                         </a>
                     </div>

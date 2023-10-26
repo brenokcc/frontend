@@ -118,7 +118,7 @@ function Message(props){
 function Loading(props){
     return (
         <div className="loading">
-            <i className="fa-solid fa-sync fa-spin fa-3x"></i>
+            <i className="fa-solid fa-circle-notch fa-spin fa-3x"></i>
         </div>
     )
 }

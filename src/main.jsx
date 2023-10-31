@@ -23,6 +23,7 @@ function initApp(data){
     localStorage.setItem('application', JSON.stringify(application));
     ReactDOM.createRoot(document.getElementById('root')).render(<Root/>)
     //<React.StrictMode><Root/></React.StrictMode>
+
 }
 
 var pathname = document.location.pathname;

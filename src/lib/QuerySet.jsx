@@ -77,6 +77,7 @@ function FilterForm(props){
             return(
               <Accordion title="Filtros">
                 <form className={"filter "+(window.innerWidth > 600 ? "small" : "big")}>
+                    <input type="hidden" name="page_size" value={props.data.page_size}/>
                     {props.data.search.length>0 && <SearchField state={props.state}/>}
                     {props.data.filters.map((filter) => (
                        field(filter)
@@ -108,13 +109,27 @@ function Pagination(props){
             setpage(1);
         }
     }
-    var start = ((page-1) * 10) + 1;
-    var end = start + 10 - 1;
+
+    function setPageSize(){
+        var size = $(event.target).val();
+        var queryset = $(event.target).closest('.queryset');
+        queryset.find("input[name=page_size]").val(size);
+        props.reloader();
+    }
+
+    var page_size = props.data.page_size;
+    var page_sizes = props.data.page_sizes;
+    var start = ((page-1) * page_size) + 1;
+    var end = start + page_size - 1;
     if(props.data.count > 0){
         return (
             <div className="pagination">
                 <div className="left">
-                    Exibir <select><option>10</option></select> | {start}-{end} de {props.data.count} itens
+                    Exibir <select onChange={setPageSize} value={page_size}>
+                    {page_sizes.map(function(n){
+                      return <option key={Math.random()} value={n}>{n}</option>
+                    })}
+                    </select> | {start}-{end} de {props.data.count} itens
                 </div>
                 <div className="right">
                     Página {page}

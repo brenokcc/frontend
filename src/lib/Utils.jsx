@@ -193,17 +193,55 @@ function Flags(props){
 function Actions(props){
 
     function trigger(name){
-        $(event.target).closest('form').find('input[name=action]').val(name);
-        if(props.onClick) props.onClick();
-        $(event.target).closest('form').find('input[name=action]').val('');
+        var link = event.target;
+        var form = $(link).closest('form');
+        form.find('input[name=action]').val(name);
+        var params = form.serialize();
+        form.find('input[name=action]').val('');
+        var span = document.createElement("span");
+        var icon = document.createElement("i");
+        link.innerHTML = '';
+        span.innerHTML = "Aguarde...";
+        icon.classList.add("fa-solid");
+        icon.classList.add("fa-circle-notch");
+        icon.classList.add("fa-spin");
+        link.appendChild(icon);
+        link.appendChild(span);
+        request('GET', document.location.pathname+'?'+params, function(result){
+            if(result.task){
+                function showTask(key, callback){
+                    request('GET', '/api/v1/task_progress/?raw=&key='+key, function(data, response){
+                        if(data.error!=null){
+                            showMessage(data.error, 'danger')
+                        } else if(data.progress!=null) {
+                            span.innerHTML = "Aguarde... "+data.progress+"%";
+                            if(data.progress == 100){
+                                showMessage(result.message);
+                                callback();
+                            } else {
+                                setTimeout(function(){showTask(key, callback)}, 3000)
+                            }
+                        } else {
+                            callback()
+                        }
+                    });
+                }
+                showTask(result.task, props.reload);
+            } else {
+                showMessage(result.message);
+                props.reload();
+            }
+        });
+
     }
 
     function render(){
         return (
-            <div className="globalActions right">
-                <input type="hidden" name="action"/>
+            <div className="batchActions">
+                {!props.auxiliar && <input type="hidden" name="action"/>}
                 {props.data.map((action) =>  (
                   <button key={Math.random()} type="button" className="btn primary" onClick={function(){trigger(action.name)}} data-label={toLabelCase(action.label)}>
+                    <Icon icon={action.icon}/>
                     {action.label}
                   </button>
                 ))}
@@ -218,6 +256,8 @@ function Table(props){
     const key = "table";
 
     function subset(k){
+        var input = $(event.target).closest('form').find('input[name=page]');
+        input.val(1);
         $('#table form input[name=subset]').val(k);
         reload();
     }
@@ -244,17 +284,20 @@ function Table(props){
 
     function render(){
         return (
-            <div id="table">
+            <div id="table" className="table-wrapper">
                 <h1>Inconsistências</h1>
-                <form>
-                    <Actions data={data.actions} onClick={reload}/>
+                <form onKeyDown={function(){if(event.key == 'Enter') event.preventDefault();}}>
                     <Subsets data={data.subsets} active={data.subset} onChange={subset}/>
                     <Filter data={data.filters} onfilter={reload}/>
                     <Flags data={data.flags} onChange={reload}/>
                     <ClearFix/>
                     <Pagination data={data.pagination} onChange={reload}/>
                     <ClearFix/>
+                    <Actions data={data.actions} reload={reload}/>
+                    <ClearFix/>
                     {table()}
+                    <ClearFix/>
+                    <Actions data={data.actions} reload={reload} auxiliar={true}/>
                     <ClearFix/>
                     <Pagination data={data.pagination} onChange={reload} auxiliar={true}/>
                     <ClearFix/>
@@ -283,9 +326,9 @@ function Table(props){
                             {data.rows.map((row, i)  => (
                                 <tr key={Math.random()}>
                                     {row.map((col, j)  => (
-                                      <td key={Math.random()} onClick={function(){open(col.url);}} className={(col.url ? "clickable " : "")+col.style}>
-                                        {j==0 && <input type="checkbox" name="id" value={row[0].value}/>}
-                                        {j!=0 && <span>{col.value!=null && Format(col.value)}</span>}
+                                      <td key={Math.random()} onClick={function(){open(col.url);}} className={(col.url ? "clickable " : "")+(col.style || "")+ " "+(j!=0 && row[0].deleted ? "inactive" : "active")}>
+                                        {j==0 && col.checkable && <input type="checkbox" name="id" value={row[0].value}/>}
+                                        {j!=0 && <span>{col.value!=null && <Value obj={col.value}/>}</span>}
                                       </td>
                                     ))}
                                 </tr>

@@ -288,16 +288,18 @@ function Form(props){
 
     function showTask(key, callback){
         request('GET', '/api/v1/task_progress/?raw=&key='+key, function(data, response){
-            if(isNaN(data)){
-                showMessage(data, 'danger')
-            } else {
+            if(data.error!=null){
+                showMessage(data.error, 'danger')
+            } else if(data.progress!=null) {
                 var btn = document.querySelector(".btn.submit");
-                btn.innerHTML = "Aguarde... "+data+"%";
-                if(data == "100"){
+                btn.innerHTML = "Aguarde... "+data.progress+"%";
+                if(data.progress == 100){
                     callback();
                 } else {
                     setTimeout(function(){showTask(key, callback)}, 3000)
                 }
+            } else {
+                callback();
             }
         });
     }

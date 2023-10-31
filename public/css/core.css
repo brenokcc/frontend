@@ -170,6 +170,9 @@ a:hover, a:visited{
     text-align: left;
     padding: 10px;
 }
+.table tbody td.inactive{
+    opacity: 40%;
+}
 .table tbody td{
     border-bottom: solid 1px #DDD;
     padding: 15px;
@@ -198,6 +201,23 @@ a:hover, a:visited{
     border-bottom: solid 1px #FFF;
     border-left: solid 1px #FFF;
     border-right: solid 1px #FFF;
+}
+.table-wrapper .batchActions .btn.primary:hover{
+    border-color: white;
+}
+.table-wrapper .batchActions i{
+    color: white;
+}
+.table-wrapper .batchActions .counter{
+    color: white;
+    padding-top: 15px;
+}
+.table-wrapper .batchActions{
+    width: 100%;
+    background-color: var(--primary-color);
+    text-align: left;
+    padding: 10px;
+    display: block;
 }
 .subsets{
     width: 100%;
@@ -479,10 +499,6 @@ a:hover, a:visited{
     color: white;
 }
 
-.batchActions .btn.primary:hover{
-    border-color: white;
-}
-
 .btn.secondary{
     color: var(--primary-color);
     background-color: white;
@@ -696,6 +712,9 @@ input[type="radio"]:checked::before {
 .queryset .calendar table td .total{
     padding: 10px;
     text-align: center;
+}
+.queryset .batchActions .btn.primary:hover{
+    border-color: white;
 }
 .queryset .batchActions i{
     color: white;

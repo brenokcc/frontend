@@ -158,6 +158,9 @@ a:hover, a:visited{
 .sidemenu li i.fa-chevron-down, .sidemenu li i.fa-chevron-up{
     float: right;
 }
+.main .menu a{
+    text-decoration: none;
+}
 .main .menu{
     display: inline-block;
     vertical-align: top;

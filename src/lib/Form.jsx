@@ -240,7 +240,6 @@ function Field(props){
 function Output(props){
     const [data, setdata] = useState(props.data.output);
     function render(){
-        console.log(data);
         if(data){
             return <Component key={Math.random()} data={data}/>
         }

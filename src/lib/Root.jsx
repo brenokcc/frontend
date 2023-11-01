@@ -18,8 +18,8 @@ function Root(props){
         }, false);
     }, [])
 
-    function load(){
-        request('GET', document.location.href, function(data){
+    function load(url){
+        request('GET', url || document.location.href, function(data){
             /*
                OAuth Authentication Flow:
                 1) The user access the authorization HOME_URL available as subaction of login action
@@ -71,10 +71,12 @@ function Main(props){
         const application = JSON.parse(localStorage.getItem('application'));
         return (
             <div className="main">
+                {application.menu.length > 0 &&
                 <div className={"menu "+(mobile ? "compact" : "")} style={{ display: showMenu? "inline-block" : "none" }}>
-                    <Menu/>
+                    <Menu data={application.menu}/>
                 </div>
-                <div className={"container " + (showMenu ? "compact" : "")}>
+                }
+                <div className={"container " + (application.menu.length > 0 && showMenu ? "compact" : "")}>
                     <Breadcrumbs/>
                     <Content data={props.data} reloader={props.reloader}/>
                 </div>
@@ -128,7 +130,7 @@ function Header(props){
                     <a href={application.index}><img src={application.logo}/></a>
                     <div className="application">
                         <div className="title">
-                            {application.menu.length >= 0 && <Icon icon="align-justify" onClick={toggleMenu}/>}
+                            {application.menu.length > 0 && <Icon icon="align-justify" onClick={toggleMenu}/>}
                             {application.title}
                         </div>
                         <div className="subtitle">

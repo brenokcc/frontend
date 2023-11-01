@@ -454,7 +454,6 @@ function Content(props){
 }
 
 function Boxes(props){
-    console.log(props.data.items);
     return (
         <div className="boxes">
             <h2><TitleCase text={props.data.title}/></h2>
@@ -645,6 +644,7 @@ function Icons(props){
 
 function Icon(props){
     var className = "fa-solid fa-"+props.icon;
+    if(props.className) className += ' '+props.className
     if(props.onClick || props.clickable) className += " clickable";
     return (
         <i className={className} onClick={props.onClick}></i>

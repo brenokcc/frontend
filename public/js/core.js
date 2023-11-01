@@ -36,8 +36,10 @@ function request(method, url, callback, data){
             if(contentType=='application/json'){
                 var data = JSON.parse(result||'{}');
                 if(data.token){
+                    localStorage.removeItem("application");
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('user', data.user.username);
+
                 }
                 if(data.redirect){
                     if(data.message) setCookie('message', data.message);

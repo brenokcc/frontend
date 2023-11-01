@@ -31,6 +31,7 @@ body{
     font-family: Rawline, Raleway, sans-serif;
     font-size: 14px;
     margin: 0;
+    overflow-x: hidden;
 }
 a{
     color: var(--primary-color);
@@ -153,6 +154,58 @@ a:hover, a:visited{
     font-size: 1.2rem;
     text-transform: uppercase;
     height: 70px;
+}
+.sidemenu li i.fa-chevron-down, .sidemenu li i.fa-chevron-up{
+    float: right;
+}
+.main .menu{
+    display: inline-block;
+    vertical-align: top;
+}
+.main .menu.compact{
+    position: absolute;
+    background-color: white;
+}
+.main .menu.compact.visible {
+    margin-left: 0px;
+}
+.main .menu.compact.visible ~ div{
+   margin-left: 300px;
+}
+
+.main .container.compact{
+    width: calc(100% - 320px);
+}
+.main .container{
+    display: inline-block;
+    width: 100%;
+}
+.sidemenu li{
+    width: 300px;
+    list-style: none;
+}
+.sidemenu ul{
+    padding: 0px;
+}
+.sidemenu li > a{
+    display: block;
+    width: 300px;
+    padding: 20px;
+}
+.sidemenu li.level0{
+    border-bottom: solid 1px #DDD;
+}
+.sidemenu li.level1, .sidemenu li.level2, .sidemenu li.level3{
+    background-color: #f7f8f8;
+}
+.sidemenu li.level1 a:hover, .sidemenu li.level2 a:hover, .sidemenu li.level3 a:hover{
+    background-color: #d6ddee;
+}
+.sidemenu li.visible > ul{
+    display: block;
+}
+.sidemenu li > ul{
+    display: none;
 }
 .table{
     width: 100%;
@@ -369,6 +422,9 @@ a:hover, a:visited{
 }
 .header .title{
     font-size: 1.5rem;
+}
+.header .title i{
+    font-size: 80%;
 }
 .header .subtitle{
     font-size: 1.1rem;

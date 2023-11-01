@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Action from './Action'
 import {toLabelCase, toTitleCase, ClearFix, Loading, Content, Icon} from './Utils'
 import modal from './Modal'
+import Menu from './Menu'
 
 
 
@@ -48,8 +49,8 @@ function Root(props){
                     {!localStorage.getItem('user') && window.innerWidth<=600 && <OAuth/>}
                     { window.innerWidth<=600 && <Search/>}
                     <ClearFix/>
-                    <Breadcrumbs/>
-                    <Content data={data} reloader={load}/>
+                    <Main data={data} reloader={load} />
+                    <ClearFix/>
                     <Footer/>
                     <Notification/>
                     <Layer/>
@@ -61,6 +62,26 @@ function Root(props){
     }
     if(data==null) load();
     return content();
+}
+
+function Main(props){
+    var mobile = window.innerWidth < 600;
+    var showMenu = !mobile && getCookie('hide-menu') != "true";
+    function render(){
+        const application = JSON.parse(localStorage.getItem('application'));
+        return (
+            <div className="main">
+                <div className={"menu "+(mobile ? "compact" : "")} style={{ display: showMenu? "inline-block" : "none" }}>
+                    <Menu/>
+                </div>
+                <div className={"container " + (showMenu ? "compact" : "")}>
+                    <Breadcrumbs/>
+                    <Content data={props.data} reloader={props.reloader}/>
+                </div>
+            </div>
+        )
+    }
+    return render();
 }
 
 function Layer(props){
@@ -88,6 +109,18 @@ function Header(props){
         }
     }
 
+    function toggleMenu(){
+        var mobile = window.innerWidth < 600;
+        $('.main .menu').toggle();
+        if(mobile){
+            $('.main .menu').toggleClass('visible');
+        } else {
+            $('.main .container').toggleClass('compact');
+        }
+        if($('.main .menu').css('display')=="none") setCookie('hide-menu', true);
+        else setCookie('hide-menu', false);
+    }
+
     return (
         <div className="header">
             <div className="left">
@@ -95,7 +128,7 @@ function Header(props){
                     <a href={application.index}><img src={application.logo}/></a>
                     <div className="application">
                         <div className="title">
-                            {application.menu.length > 0 && <Icon icon="align-justify"/>}
+                            {application.menu.length >= 0 && <Icon icon="align-justify" onClick={toggleMenu}/>}
                             {application.title}
                         </div>
                         <div className="subtitle">
@@ -147,7 +180,7 @@ function OAuth(props){
                     <Action icon="sign-in" href="/api/v1/login/" button={true}>Login</Action>
                 }
                 {application.oauth.length>0 && application.oauth.map((provider) => (
-                    <Action key={Math.random} icon="user" href={provider.url} button={true}>{provider.label}</Action>
+                    <Action key={Math.random()} icon="user" href={provider.url} button={true}>{provider.label}</Action>
                 ))}
             </div>
         )

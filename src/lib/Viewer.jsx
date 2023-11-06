@@ -6,7 +6,7 @@ import QuerySet from './QuerySet'
 
 function Field(props){
     return (
-        <div className="field">
+        <div className={"field w"+props.w}>
             <label><TitleCase text={props.k}/></label>
             <div><Value obj={props.v}/></div>
         </div>
@@ -56,25 +56,73 @@ function ValueSet(props){
 
 }
 
+function FieldSet(props){
+    const [value, setvalue] = useState(props.value);
+
+    function reload(){
+        console.log(props.data.result[props.title]);
+        setvalue({ ...props.data.result[props.title] });
+    }
+
+    if(props.reloadable && !props.reloadable[props.title]){
+        props.reloadable[props.title] = reload;
+    }
+
+    function render(){
+        if(value.type != "fieldset"){
+            return (
+                <div className="fieldset">
+                    <h2 data-label={toLabelCase(props.title)}>
+                        <TitleCase text={props.title}/>
+                    </h2>
+                    <Component data={value}/>
+                </div>
+            )
+        } else {
+            return (
+                <div className="fieldset">
+                    <div className="title">
+                        <div className="left">
+                            <h2 data-label={toLabelCase(props.title)}>
+                                <TitleCase text={props.title}/>
+                            </h2>
+                        </div>
+                        <div className="right">
+                            {value.actions.map((action) =>
+                              <Action label={toTitleCase(action.name)} icon={action.icon} href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader} button={true}>
+                                <TitleCase text={action.name}/>
+                              </Action>
+                            )}
+                        </div>
+                    </div>
+                    <ClearFix/>
+                    <div className="fields">
+                        {value.fields.map((field) => (
+                            <Field key={Math.random()} k={field.key} v={field.value} w={field.width}/>
+                         ))}
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    return render();
+
+}
+
 
 function Viewer(props){
     const [key, setkey] = useState(0);
     var reloadable = {};
 
-    function Fieldset(k, v){
-        if(v){
-            if(v.type=="queryset"){
-                return <QuerySet data={v} relation={k} reloadable={reloadable} reloader={reload}/>;
-            } else{
-                return <ValueSet value={v} title={k} reloadable={reloadable} data={props.data}/>;
-            }
-        }
-    }
 
     function FieldOrFieldset(k, v){
         if(k=="id") return
-        if(typeof v == "object" && !Array.isArray(v)){
-            return Fieldset(k, v)
+        if(v && v.type == "queryset"){
+            return <QuerySet data={v} relation={k} reloadable={reloadable} reloader={reload}/>;
+        }
+        if(v && (v.type == "fieldset" || v.type == "statistics")){
+            return <FieldSet value={v} title={k} reloadable={reloadable} reloader={reload} data={props.data}/>;
         } else {
             return <Field k={k} v={v}/>
         }
@@ -99,14 +147,14 @@ function Viewer(props){
 
     //<div>{JSON.stringify(props.data.result)}</div>
     return (
-        <div className="viewer">
+        <div className={"viewer "+(window.innerWidth > 600 ? "desktop" : "mobile")}>
             <div>
                 <div className="left">
                     <h1 onClick={reload} data-label={toLabelCase(props.data.str)}>{props.data.str}</h1>
                 </div>
                 <div className="right">
                     {props.data.actions.map((action) =>
-                      <Action label={toTitleCase(action.name)} icon={action.icon} href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader}>
+                      <Action label={toTitleCase(action.name)} icon={action.icon} href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader} button={true}>
                         <TitleCase text={action.name}/>
                       </Action>
                     )}

@@ -47,7 +47,7 @@ function Root(props){
                     <Header reloader={load} data={data} open={open}/>
                     <ClearFix/>
                     {!localStorage.getItem('user') && window.innerWidth<=600 && <OAuth/>}
-                    { window.innerWidth<=600 && <Search/>}
+                    { window.innerWidth<=800 && <Search/>}
                     <ClearFix/>
                     <Main data={data} reloader={load} />
                     <ClearFix/>
@@ -154,14 +154,14 @@ function Header(props){
                                 <div className="letter">
                                     {localStorage.getItem('user').toUpperCase()[0]}
                                 </div>
-                                { window.innerWidth>600 &&
+                                { window.innerWidth>800 &&
                                     <div className="username">
                                         Olá <strong>{localStorage.getItem('user')}</strong> <Icon icon="chevron-down"/>
                                     </div>
                                 }
                             </div>
                             {dropdown()}
-                            { window.innerWidth>600 && <Search/>}
+                            { window.innerWidth>800 && <Search/>}
                         </div>
                     </div>
 

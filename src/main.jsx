@@ -28,7 +28,7 @@ function initApp(data){
 
 var pathname = document.location.pathname;
 var application = localStorage.getItem('application');
-if(application){
+if(application && localStorage.getItem('version')==VERSION){
     var data = JSON.parse(application);
     if(pathname==LOGOUT_URL){
         localStorage.removeItem("application");
@@ -45,6 +45,9 @@ if(application){
         initApp(data);
     }
 } else {
-    request('GET', APP_URL, function load(data){initApp(data)});
+    request('GET', APP_URL, function load(data){
+        localStorage.setItem('version', VERSION);
+        initApp(data);
+    });
 }
 

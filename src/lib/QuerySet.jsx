@@ -159,7 +159,7 @@ function DataTable(props){
                             {Object.keys(props.data.results[0]).map(function(k){
                               if(k!='id') return <th key={Math.random()}><TitleCase text={k}/></th>
                             })}
-                            <th></th>
+                            {window.innerWidth > 600 && <th></th>}
                         </tr>
                     </thead>
                     }
@@ -182,9 +182,12 @@ function DataTable(props){
                                         <Value obj={item[k]}/>
                                       </div>
                                     })}
+                                    <div>
+                                        <InstanceActions data={props.data} id={item.id} reloader={props.reloader}/>
+                                    </div>
                                 </td>
                             }
-                            <td style={{textAlign: "right"}}><InstanceActions data={props.data} id={item.id} reloader={props.reloader}/></td>
+                            {window.innerWidth > 600 && <td style={{textAlign: "right"}}><InstanceActions data={props.data} id={item.id} reloader={props.reloader}/></td>}
                           </tr>
                         ))}
                     </tbody>

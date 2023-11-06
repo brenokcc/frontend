@@ -5,10 +5,17 @@ import { useState, useEffect } from 'react'
 function Echarts(props){
     var id = Math.random();
 
-    useEffect(()=>{
-        var chart = echarts.init(document.getElementById(id));
-        chart.setOption(props.option);
-    }, [])
+    function init(){
+        var element = document.getElementById(id);
+        if(element){
+            var chart = echarts.init(element);
+            chart.setOption(props.option);
+        } else {
+            setTimeout(init, 1000);
+        }
+    }
+
+    setTimeout(init, 1000);
 
     return <div id={id} style={{width: '100%', height:400}}></div>
 }

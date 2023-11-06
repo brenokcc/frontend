@@ -51,8 +51,11 @@ function Format(obj){
     if(typeof obj == "object" && Array.isArray(obj)){
         return obj.join(", ")
     }
-    if(typeof obj == "object" && !Array.isArray(obj) && obj.str){
-        return obj.str;
+    if(typeof obj == "object" && obj.nome){
+        return obj.nome;
+    }
+    if(typeof obj == "object" && obj.descricao){
+        return obj.descricao;
     }
     return JSON.stringify(obj);
 }

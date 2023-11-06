@@ -629,18 +629,27 @@ i.clickable:hover{
     margin: 0px;
     color: #333;
 }
+.viewer .fields .field{
+    display: inline-block;
+}
 .viewer .field{
     margin-left: 10px;
     margin-bottom: 10px;
 }
-
-.grid-container {
-
+.viewer .field.w100{
+    width: 100%;
 }
-
-.viewer .fieldset .fields{
-    display: grid;
-    /** grid-template-columns: auto auto auto; **/
+.viewer .field.w50{
+    width: 48%;
+}
+.viewer .field.w33{
+    width: 31%;
+}
+.viewer .field.w25{
+    width: 23.5%;
+}
+.viewer.mobile .field{
+    width: 100%;
 }
 .viewer .fieldset .field{
     white-space: pre-line;
@@ -951,7 +960,11 @@ select {color: #757575;}
 .filter .autocomplete-items{
     position: absolute;
 }
-.form .form-group{display: inline-block; padding: 5px;}
+.form .form-group{
+    display: inline-block;
+    padding: 5px;
+    vertical-align: top;
+}
 .form .form-group.w100{ width: 100%; }
 .form .form-group.w50{ width: 49.8%; }
 .form .form-group.w33{ width: 33.1%;}

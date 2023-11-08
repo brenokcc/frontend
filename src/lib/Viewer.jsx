@@ -5,12 +5,15 @@ import QuerySet from './QuerySet'
 
 
 function Field(props){
-    return (
-        <div className={"field w"+props.w}>
-            <label><TitleCase text={props.k}/></label>
-            <div><Value obj={props.v}/></div>
-        </div>
-    )
+    function render(){
+        return props.k ? (
+            <div className={"field w"+props.w}>
+                <label><TitleCase text={props.k}/></label>
+                <div><Value obj={props.v}/></div>
+            </div>
+        ) : <Value obj={props.v}/>
+    }
+    return render()
 }
 
 function ValueSet(props){
@@ -124,7 +127,7 @@ function Viewer(props){
         if(v && (v.type == "fieldset" || v.type == "statistics")){
             return <FieldSet value={v} title={k} reloadable={reloadable} reloader={reload} data={props.data}/>;
         } else {
-            return <Field k={k} v={v}/>
+            return <Field v={v}/>
         }
     }
 

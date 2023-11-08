@@ -429,6 +429,12 @@ function Component(props){
                 return <QrCode data={props.data}/>
              case 'link':
                 return <Link data={props.data}/>
+             case 'banner':
+                return <Banner data={props.data}/>
+             case 'map':
+                return <Map data={props.data}/>
+             case 'steps':
+                return <Steps data={props.data}/>
              case 'html':
                 return <Html data={props.data}/>
             default:
@@ -436,6 +442,45 @@ function Component(props){
         }
     }
     return render()
+}
+
+function Banner(props){
+    return <img src={props.data.src} style={{ width: "100%" }}/>
+}
+
+function Map(props){
+    return (
+        <iframe width={props.data.width||"100%"} height={props.data.height||"400px"} id="gmap_canvas"
+            src={"https://maps.google.com/maps?q="+props.data.latitude+","+props.data.longitude+"&t=&z=13&ie=UTF8&iwloc=&output=embed"}
+            frameborder="0" scrolling="no" marginheight="0" marginwidth="0">
+        </iframe>
+    )
+}
+
+function Steps(props){
+
+    function icon(step){
+        if(props.data.icon){
+            return step.done ? <Icon icon={props.data.icon}/> : <span>&nbsp;</span>;
+        } else {
+            return <span>{step.number}</span>;
+        }
+    }
+    console.log(props.data);
+    return (
+        <div className="steps-wrapper">
+            <ul className="steps">
+                {props.data.steps.map((step) => (
+                      <li key={Math.random()} className="step">
+                        <div className={"icon "+(step.done ? "active" : "inactive")}>
+                            {icon(step)}
+                        </div>
+                        <div className="text">{step.name}</div>
+                      </li>
+                ))}
+            </ul>
+        </div>
+    )
 }
 
 function Html(props){

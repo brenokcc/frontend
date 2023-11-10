@@ -6,12 +6,14 @@ import QuerySet from './QuerySet'
 
 function Field(props){
     function render(){
-        return props.k ? (
-            <div className={"field w"+props.w}>
-                <label><TitleCase text={props.k}/></label>
-                <div><Value obj={props.v}/></div>
-            </div>
-        ) : <Value obj={props.v}/>
+        if(props.k != "id"){
+            return props.k ? (
+                <div className={"field w"+props.w}>
+                    <label><TitleCase text={props.k}/></label>
+                    <div><Value obj={props.v}/></div>
+                </div>
+            ) : <Value obj={props.v}/>
+        }
     }
     return render()
 }
@@ -82,6 +84,9 @@ function FieldSet(props){
                 </div>
             )
         } else {
+            if(value.fields.length==2 && value.fields[0]['key'] == 'id' && value.fields[1]['key'] == 'text'){
+                value.fields[1]['key'] = 'Descrição'
+            }
             return (
                 <div className="fieldset">
                     <div className="title">

@@ -142,6 +142,11 @@ function Pagination(props){
 }
 
 function DataTable(props){
+    var header = null;
+    if(props.data.results.length){
+        var keys = Object.keys(props.data.results[0]);
+        if(keys.length==2 && keys[0] == 'id' && keys[1] == 'text') header = 'Descrição';
+    }
 
     function render(){
         if(props.data.count){
@@ -157,7 +162,7 @@ function DataTable(props){
                             </th>
                             }
                             {Object.keys(props.data.results[0]).map(function(k){
-                              if(k!='id') return <th key={Math.random()}><TitleCase text={k}/></th>
+                              if(k!='id') return <th key={Math.random()}><TitleCase text={header || k}/></th>
                             })}
                             {window.innerWidth > 600 && <th></th>}
                         </tr>
@@ -420,7 +425,7 @@ function QuerySet(props){
             <Subsets data={data.subsets} count={data.count} active={data.subset} onChange={subset}/>
             <FilterForm data={data} onfilter={reload} url={getContextURL(data.url)}/>
             {calendar()}
-            <Pagination data={data} reloader={reload}/>
+            {data.count > data.page_size && <Pagination data={data} reloader={reload}/>}
             <ClearFix/>
             <BatchActions data={data} reloader={props.reloader || reload}/>
             <ClearFix/>
@@ -429,7 +434,7 @@ function QuerySet(props){
             <DataTable data={data} reloader={props.reloader || reload} onSelect={onSelect} selectable={hasBatchActions()}/>
             <BatchActions data={data} reloader={props.reloader || reload}/>
             <ClearFix/>
-            <Pagination data={data} reloader={reload}/>
+            {data.count > data.page_size && <Pagination data={data} reloader={reload}/>}
             <ClearFix/>
         </div>
     )

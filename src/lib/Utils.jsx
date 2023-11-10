@@ -51,11 +51,8 @@ function Format(obj){
     if(typeof obj == "object" && Array.isArray(obj)){
         return obj.join(", ")
     }
-    if(typeof obj == "object" && obj.nome){
-        return obj.nome;
-    }
-    if(typeof obj == "object" && obj.descricao){
-        return obj.descricao;
+    if(typeof obj == "object" && JSON.stringify(Object.keys(obj))==JSON.stringify(['id', 'text'])){
+        return obj.text;
     }
     return JSON.stringify(obj);
 }
@@ -87,6 +84,7 @@ function Value(props){
         )
     }
     if(typeof props.obj == "object" && !Array.isArray(props.obj)){
+        if(JSON.stringify(Object.keys(props.obj))==JSON.stringify(['id', 'text'])) return props.obj.text;
         return (
             <div className="valueset">
                 {Object.keys(props.obj).map((k)  => (

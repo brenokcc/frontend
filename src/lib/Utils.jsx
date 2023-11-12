@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import modal from './Modal';
+import {modal, imodal} from './Modal';
 import {Form, Filter} from './Form'
 import QuerySet from './QuerySet'
 import Viewer from './Viewer'
@@ -95,6 +95,9 @@ function Value(props){
                 ))}
             </div>
         )
+    }
+    if(typeof props.obj === "string" && props.obj.length == 7 && props.obj[0] == "#"){
+        return <div className="color" style={{ backgroundColor: props.obj, width: 30, height: 30, borderRadius: "50%" }}></div>
     }
     return Format(props.obj)
 }
@@ -427,6 +430,8 @@ function Component(props){
                 return <QrCode data={props.data}/>
              case 'link':
                 return <Link data={props.data}/>
+             case 'image':
+                return <Image data={props.data}/>
              case 'banner':
                 return <Banner data={props.data}/>
              case 'map':
@@ -444,6 +449,14 @@ function Component(props){
 
 function Banner(props){
     return <img src={props.data.src} style={{ width: "100%" }}/>
+}
+
+function Image(props){
+    return (
+        <div style={{ width: "100%", textAlign: "center"}}>
+            <img src={props.data.src} style={{ width: props.data.width }}/>
+        </div>
+    )
 }
 
 function Map(props){
@@ -464,7 +477,6 @@ function Steps(props){
             return <span>{step.number}</span>;
         }
     }
-    console.log(props.data);
     return (
         <div className="steps-wrapper">
             <ul className="steps">
@@ -521,12 +533,18 @@ function Boxes(props){
 
 function Link(props){
     function content(){
-        if(props.data.icon) return <Icon icon={props.data.icon}/>
-        else return props.data.url;
+        if(props.data.icon) return props.data.url ? <Icon icon={props.data.icon}/> : "-";
+        else return props.data.url ? props.data.url : "-";
     }
+
+    function onClick(){
+        imodal(props.data.url);
+        event.preventDefault();
+    }
+
     function render(){
         return (
-            <a href={props.data.url} target={props.data.target}>
+            <a href={props.data.url} target={props.data.target} onClick={onClick}>
                 {content()}
             </a>
         )

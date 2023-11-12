@@ -7,12 +7,12 @@ import QuerySet from './QuerySet'
 function Field(props){
     function render(){
         if(props.k != "id"){
-            return props.k ? (
+            return (
                 <div className={"field w"+props.w}>
                     <label><TitleCase text={props.k}/></label>
                     <div><Value obj={props.v}/></div>
                 </div>
-            ) : <Value obj={props.v}/>
+            )
         }
     }
     return render()
@@ -61,11 +61,28 @@ function ValueSet(props){
 
 }
 
-function FieldSet(props){
+function UntitledFieldSet(props){
     const [value, setvalue] = useState(props.value);
 
     function reload(){
-        console.log(props.data.result[props.title]);
+        setvalue({ ...props.data.result[props.title] });
+    }
+
+    if(props.reloadable && !props.reloadable[props.title]){
+        props.reloadable[props.title] = reload;
+    }
+
+    function render(){
+        return <Value obj={value}/>
+    }
+
+    return render();
+}
+
+function TitledFieldSet(props){
+    const [value, setvalue] = useState(props.value);
+
+    function reload(){
         setvalue({ ...props.data.result[props.title] });
     }
 
@@ -130,9 +147,9 @@ function Viewer(props){
             return <QuerySet data={v} relation={k} reloadable={reloadable} reloader={reload}/>;
         }
         if(v && (v.type == "fieldset" || v.type == "statistics")){
-            return <FieldSet value={v} title={k} reloadable={reloadable} reloader={reload} data={props.data}/>;
+            return <TitledFieldSet value={v} title={k} reloadable={reloadable} reloader={reload} data={props.data}/>;
         } else {
-            return <Field v={v}/>
+            return <UntitledFieldSet value={v} title={k} reloadable={reloadable} reloader={reload} data={props.data}/>;
         }
     }
 

@@ -9,6 +9,11 @@ function modal(url, reloader){
     createRoot(document.body.appendChild(document.createElement( 'div' ))).render(<Dialog url={url} />);
 }
 
+function imodal(url){
+    hideMessage();
+    createRoot(document.body.appendChild(document.createElement( 'div' ))).render(<IDialog url={url} />);
+}
+
 function Dialog(props){
     const [data, setdata] = useState(null);
     const [key, setkey] = useState(0);
@@ -43,5 +48,23 @@ function Dialog(props){
     )
 }
 
+function IDialog(props){
+    var key = Math.random();
+
+    useEffect(()=>{
+        var layer = document.querySelector('.layer');
+        if(layer) layer.style.display = 'block';
+        var dialog = document.getElementById(key);
+        $(dialog).css('top', document.documentElement.scrollTop + 100);
+    }, [])
+
+    return (
+        <dialog className={"dialog "+(window.innerWidth > 600 ? "small" : "big")} id={key}>
+            <iframe src={props.url} width="100%" height={500}></iframe>
+        </dialog>
+    )
+}
+
+export {modal, imodal};
 export default modal;
 

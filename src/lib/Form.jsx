@@ -215,7 +215,7 @@ function Field(props){
 
     function render(){
         var field = props.data;
-        if(["text", "password", "email", "number", "date", "datetime-regional",  "file", "image", "range", "search", "tel", "time", "url", "week", "hidden"].indexOf(field.type)>=0){
+        if(["text", "password", "email", "number", "date", "datetime-regional",  "file", "image", "range", "search", "tel", "time", "url", "week", "hidden", "color"].indexOf(field.type)>=0){
             return <Input data={field}/>
         } else if(field.type == "boolean" || field.type == "bool"){
             return props.filter ? <BooleanSelect data={field}/> : <BooleanRadio data={field}/>;
@@ -382,6 +382,7 @@ function Form(props){
     function cancel(e){
         e.preventDefault();
         closeDialogs();
+        hideMessage();
     }
 
     function submit(e){

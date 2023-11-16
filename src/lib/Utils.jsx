@@ -37,6 +37,17 @@ function Format(obj){
     if(obj==="") return '-';
     if(obj===true) return 'Sim';
     if(obj===false) return 'Não';
+    if(typeof obj === "number"){
+        var tokens = obj.toString().split('.')
+        if(tokens.length==1){
+            return obj.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        } else {
+            tokens[0] = tokens[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            tokens[1] = tokens[1].substring(0, 2);
+            if(tokens[1].length==1) tokens[1] = tokens[1] + "0";
+            return tokens[0]+","+tokens[1];
+        }
+    }
     if(typeof obj === "string"){
         if(obj.length==19 && obj[13]==':' && obj[16]==':'){
             var tokens = obj.split('T');
@@ -521,10 +532,10 @@ function Boxes(props){
                 <div>
                     {props.data.items.map((item) => (
                           <a key={Math.random()} href={item.url} className="item" data-label={toLabelCase(item.label)}>
-                            <div className="icon">
+                            <div className={"icon "+(item.style || "primary")}>
                                 <Icon icon={item.icon}/>
                             </div>
-                            <div className="text">
+                            <div className={"text "+(item.style || "primary")}>
                                 {item.label}
                             </div>
                           </a>
@@ -587,7 +598,7 @@ function Indicators(props){
                     {props.data.items.map((item) => (
                         <div key={Math.random()} className="item">
                             <div className="value">
-                                {item.value}
+                                {Format(item.value)}
                             </div>
                             <div className="text">
                                 <TitleCase text={item.name}/>

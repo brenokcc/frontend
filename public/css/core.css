@@ -201,16 +201,18 @@ a:hover, a:visited{
 .boxes .item i{
     margin-top: 30px;
     font-size: 3rem;
-    color: var(--auxiliary-color)
 }
 .boxes .item .text{
     margin-top: 40px;
     font-weight: bold;
-    color: var(--highlight-color);
     font-size: 1.2rem;
     text-transform: uppercase;
     height: 70px;
 }
+.boxes .icon.primary i{color: var(--auxiliary-color);}
+.boxes .text.primary {color: var(--highlight-color);}
+.boxes .icon.danger{color: var(--danger-color);}
+.boxes .text.danger {color: var(--danger-color);}
 .sidemenu li i.fa-chevron-down, .sidemenu li i.fa-chevron-up{
     float: right;
 }
@@ -292,6 +294,9 @@ a:hover, a:visited{
     border-bottom: solid 1px #DDD;
     padding: 15px;
     white-space: pre-line;
+}
+.table tbody td ul{
+    padding-inline-start: 5px;
 }
 .table tbody td.clickable{
     cursor: pointer;

@@ -6,6 +6,8 @@ import {Loading, Content} from './Utils'
 function modal(url, reloader){
     hideMessage();
     window.reloader = reloader;
+    var dialogs = document.getElementsByTagName('dialog');
+    for(var i=0; i<dialogs.length; i++) dialogs[i].style.display = "none";
     createRoot(document.body.appendChild(document.createElement( 'div' ))).render(<Dialog url={url} />);
 }
 

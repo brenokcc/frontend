@@ -97,7 +97,7 @@ function Value(props){
         )
     }
     if(typeof props.obj === "string" && props.obj.length == 7 && props.obj[0] == "#"){
-        return <div className="color" style={{ backgroundColor: props.obj, width: 30, height: 30, borderRadius: "50%" }}></div>
+        return <div className="color" style={{ backgroundColor: props.obj }}></div>
     }
     return Format(props.obj)
 }
@@ -319,7 +319,7 @@ function Table(props){
                         <thead>
                             <tr>
                             {data.rows[0].map((col, i)  => (
-                              <th key={Math.random()}>
+                              <th key={Math.random()} style={{padding: i==0 ? 15 : 10 }}>
                                 {i==0 && <input type="checkbox" name="id" value="0" onChange={select}/>}
                                 {i!=0 && <TitleCase text={col.name}/>}
                               </th>
@@ -426,6 +426,8 @@ function Component(props){
                 return <Progress data={props.data}/>
              case 'status':
                 return <Status data={props.data}/>
+             case 'badge':
+                return <Badge data={props.data}/>
              case 'qrcode':
                 return <QrCode data={props.data}/>
              case 'link':
@@ -512,23 +514,26 @@ function Content(props){
 }
 
 function Boxes(props){
-    return (
-        <div className="boxes">
-            <h2><TitleCase text={props.data.title}/></h2>
-            <div>
-                {props.data.items.map((item) => (
-                      <a key={Math.random()} href={item.url} className="item" data-label={toLabelCase(item.label)}>
-                        <div className="icon">
-                            <Icon icon={item.icon}/>
-                        </div>
-                        <div className="text">
-                            {item.label}
-                        </div>
-                      </a>
-                ))}
+    function render(){
+        return props.data.items.length ? (
+            <div className="boxes">
+                <h2><TitleCase text={props.data.title}/></h2>
+                <div>
+                    {props.data.items.map((item) => (
+                          <a key={Math.random()} href={item.url} className="item" data-label={toLabelCase(item.label)}>
+                            <div className="icon">
+                                <Icon icon={item.icon}/>
+                            </div>
+                            <div className="text">
+                                {item.label}
+                            </div>
+                          </a>
+                    ))}
+                </div>
             </div>
-        </div>
-    )
+        ) : null;
+    }
+    return render();
 }
 
 function Link(props){
@@ -633,7 +638,7 @@ function Warning(props){
                      </div>
                      <div className="actions">
                         {props.data.actions.map((action)  => (
-                            <Action key={Math.random()} href={action.url} label={action.label} modal={action.modal}>{action.label}</Action>
+                            <Action key={Math.random()} href={action.url} label={action.label} modal={action.modal} icon={action.icon} button={true}>{action.label}</Action>
                         ))}
                      </div>
                 </div>
@@ -749,8 +754,10 @@ function Accordion(props){
 function Progress(props){
     function render(){
         return (
-            <span className="progress">
-                <span style={{ width: props.data.value+'%' }} className="value">{ props.data.value }%</span>
+            <span className="progress ">
+                <span style={{ width: props.data.value+'%' }} className={"value "+(props.data.style || "primary")}>
+                    { props.data.value }%
+                </span>
             </span>
         )
     }
@@ -761,7 +768,21 @@ function Progress(props){
 function Status(props){
     function render(){
         return (
-            <div className={"status "+props.data.style}>{props.data.label}</div>
+            <div className="status">
+                <div className={"color "+props.data.style}></div>
+                <div className="text">{props.data.label}</div>
+            </div>
+        )
+    }
+    return render();
+}
+
+function Badge(props){
+    const style = props.data.color[0] == "#" ? {backgroundColor: props.data.color} : {}
+    const className = props.data.color[0] == "#" ? props.data.color : ""
+    function render(){
+        return (
+            <div className={"badge "+className} style={style}>{props.data.label}</div>
         )
     }
     return render();

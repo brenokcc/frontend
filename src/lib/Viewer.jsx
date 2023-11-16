@@ -142,14 +142,17 @@ function Viewer(props){
 
 
     function FieldOrFieldset(k, v){
-        if(k=="id") return
-        if(v && v.type == "queryset"){
-            return <QuerySet data={v} relation={k} reloadable={reloadable} reloader={reload}/>;
-        }
-        if(v && (v.type == "fieldset" || v.type == "statistics")){
-            return <TitledFieldSet value={v} title={k} reloadable={reloadable} reloader={reload} data={props.data}/>;
-        } else {
-            return <UntitledFieldSet value={v} title={k} reloadable={reloadable} reloader={reload} data={props.data}/>;
+        if(k != "id" && v){
+            if(v.type == "queryset"){
+                return <QuerySet data={v} relation={k} reloadable={reloadable} reloader={reload}/>;
+            }
+            if(v.type == "fieldset" || v.type == "statistics"){
+                return <TitledFieldSet value={v} title={k} reloadable={reloadable} reloader={reload} data={props.data}/>;
+            }
+            if(v.type){
+                return <UntitledFieldSet value={v} title={k} reloadable={reloadable} reloader={reload} data={props.data}/>;
+            }
+            return <Field k={k} v={v}/>
         }
     }
 
@@ -179,7 +182,7 @@ function Viewer(props){
                 </div>
                 <div className="right">
                     {props.data.actions.map((action) =>
-                      <Action label={toTitleCase(action.name)} icon={action.icon} href={action.url} key={Math.random()} modal={action.modal} reloader={props.reloader} button={true}>
+                      <Action label={toTitleCase(action.name)} icon={action.icon} href={action.url} key={Math.random()} modal={action.modal} reloader={reload} button={true}>
                         <TitleCase text={action.name}/>
                       </Action>
                     )}

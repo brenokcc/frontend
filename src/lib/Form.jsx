@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import {modal} from './Modal';
 import {toLabelCase, toTitleCase, TitleCase, Icon, ClearFix, Content, Component, Accordion, Message} from './Utils'
 
 
@@ -35,7 +36,7 @@ function Input(props){
 function Textarea(props){
     var field = props.data;
     return (
-        <textarea className="form-control" id={field.name} name={field.name} data-label={toLabelCase(field.label)} style={{height: 200}}>{field.value || ""}</textarea>
+        <textarea className="form-control" id={field.name} name={field.name} data-label={toLabelCase(field.label)} style={{height: 200}} defaultValue={field.value || ""}></textarea>
     )
 }
 
@@ -429,6 +430,7 @@ function Form(props){
                     {field.required && <i>*</i>}
                 </label>
                 }
+                {field.add_url && <a onClick={function(){ event.preventDefault(); modal(event.target.href); }} className="right" href={field.add_url} style={{textDecoration: "none"}} >Adicionar</a>}
                 {field.label && <br/>}
                 <Field data={field} url={props.data.action}/>
                 <div className={"field-error "+field.name}>
@@ -459,7 +461,7 @@ function Form(props){
         //<div>{JSON.stringify(props.data)}</div>
         return (
             <div className={props.data.name+'-form form-wrapper'}>
-                {props.data.display && <Component data={props.data.display}/>}
+
                 <h1 data-label={toLabelCase(props.data.name)}>
                     {props.data.icon && <Icon icon={props.data.icon}/>}
                     <TitleCase text={props.data.name}/>
@@ -468,6 +470,7 @@ function Form(props){
                 {props.data.prepend && props.data.prepend.map((item) => (
                       <Component key={Math.random()} data={item}/>
                 ))}
+                {props.data.display && <Component data={props.data.display}/>}
                 <form data-method={props.data.method} id={props.data.name} className="form" action={props.data.action}>
                     <input type="hidden" name="submit" value={props.data.name}/>
                     {toFields(form.fields)}

@@ -119,6 +119,9 @@ a:hover, a:visited{
 .login-form .form-group.token{
     display: none;
 }
+.field .steps-wrapper{
+    zoom: 80%;
+}
 .steps-wrapper{
     overflow-x: auto;
     white-space: nowrap;
@@ -210,6 +213,9 @@ a:hover, a:visited{
 }
 .sidemenu li i.fa-chevron-down, .sidemenu li i.fa-chevron-up{
     float: right;
+}
+.main {
+    min-height: 300px;
 }
 .main .menu a{
     text-decoration: none;
@@ -711,6 +717,9 @@ i.clickable:hover{
     font-weight: bold;
     font-size: 1rem;
 }
+.viewer .queryset, .viewer .fieldset{
+    margin-top: 25px;
+}
 .viewer .queryset h1{
     font-size: 1.3rem;
 }
@@ -1116,6 +1125,15 @@ form .field-error{
 .notification.danger{
     background-color: var(--danger-color);
 }
+.color{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+.color.primary{background-color: var(--primary-color);}
+.color.success{background-color: #2d7e25}
+.color.warning{background-color: #ccb055;}
+.color.danger{background-color: var(--danger-color);}
 .progress{
     display: inline-block;
     width: 100%;
@@ -1125,12 +1143,23 @@ form .field-error{
 }
 .progress .value{
     display: block;
-    background-color: var(--primary-color);
     padding: 5px;
     color: white;
     border-radius: 5px;
 }
+.progress .value.primary{background-color: var(--primary-color);}
+.progress .value.success{background-color: #2d7e25}
+.progress .value.warning{background-color: #ccb055;}
+.progress .value.danger{background-color: var(--danger-color);}
 .status{
+    display: flex;
+}
+.status .text{
+    margin-top: 5px;
+    padding-left: 10px;
+    white-space: nowrap;
+}
+.badge{
     color:white;
     width: fit-content;
     border-radius: 5px;
@@ -1138,15 +1167,7 @@ form .field-error{
     padding: 10px;
     white-space: nowrap;
 }
-.status.primary{
-    background-color: var(--primary-color);
-}
-.status.success{
-    background-color: #49cc90;
-}
-.status.danger{
-    background-color: #f93e3e;
-}
-.status.warning{
-    background-color: #fca130;
-}
+.badge.primary{background-color: var(--primary-color);}
+.badge.success{background-color: #49cc90;}
+.badge.danger{background-color: #f93e3e;}
+.badge.warning{background-color: #fca130;}

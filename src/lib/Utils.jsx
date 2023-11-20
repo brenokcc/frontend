@@ -528,7 +528,7 @@ function Boxes(props){
     function render(){
         return props.data.items.length ? (
             <div className="boxes">
-                <h2><TitleCase text={props.data.title}/></h2>
+                <h2>{props.data.title}</h2>
                 <div>
                     {props.data.items.map((item) => (
                           <a key={Math.random()} href={item.url} className="item" data-label={toLabelCase(item.label)}>
@@ -767,7 +767,9 @@ function Progress(props){
         return (
             <span className="progress ">
                 <span style={{ width: props.data.value+'%' }} className={"value "+(props.data.style || "primary")}>
-                    { props.data.value }%
+                    <span className="percentage">
+                        { props.data.value }%
+                    </span>
                 </span>
             </span>
         )
@@ -790,7 +792,7 @@ function Status(props){
 
 function Badge(props){
     const style = props.data.color[0] == "#" ? {backgroundColor: props.data.color} : {}
-    const className = props.data.color[0] == "#" ? props.data.color : ""
+    const className = props.data.color[0] != "#" ? props.data.color : ""
     function render(){
         return (
             <div className={"badge "+className} style={style}>{props.data.label}</div>

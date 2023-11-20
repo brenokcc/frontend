@@ -263,8 +263,8 @@ function QuerySet(props){
     }
 
     function hasBatchActions(){
-        for(var i=0; i<props.data.actions.length; i++){
-            if(props.data.actions[i].target=="instances") return true;
+        for(var i=0; i<data.actions.length; i++){
+            if(data.actions[i].target=="instances") return true;
         }
         return false
     }
@@ -280,14 +280,14 @@ function QuerySet(props){
             }
             if(ids.length>0){
                 a.href = a.dataset.url + ids.join(',') +  '/';
-                a.style.cursor='pointer';
-                batchActions.show();
+                a.classList.remove("disabled");
+                a.style.pointerEvents = '';
                 if(ids.length===1) batchActions.find('.counter').html('1 registro selecionado');
                 else batchActions.find('.counter').html(ids.length+' registros selecionados');
             } else {
-                a.href = '#';
-                a.style.cursor='not-allowed';
-                batchActions.hide();
+                a.href = '';
+                a.classList.add("disabled");
+                a.style.pointerEvents = "none";
                 batchActions.find('.counter').html('');
             }
         });
@@ -427,7 +427,7 @@ function QuerySet(props){
             {calendar()}
             {data.count > data.page_size && <Pagination data={data} reloader={reload}/>}
             <ClearFix/>
-            <BatchActions data={data} reloader={props.reloader || reload}/>
+            {data.count > 10 && <BatchActions data={data} reloader={props.reloader || reload}/>}
             <ClearFix/>
             {data.aggregations && <Aggreations data={data.aggregations}/>}
             <ClearFix/>

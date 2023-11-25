@@ -322,19 +322,12 @@ a:hover, a:visited{
     border-left: solid 1px #FFF;
     border-right: solid 1px #FFF;
 }
-.table-wrapper .batchActions .btn.primary:hover{
-    border-color: white;
-}
-.table-wrapper .batchActions i{
-    color: white;
-}
+
 .table-wrapper .batchActions .counter{
-    color: white;
     padding-top: 15px;
 }
 .table-wrapper .batchActions{
     width: 100%;
-    background-color: var(--primary-color);
     text-align: left;
     padding: 10px;
     display: block;

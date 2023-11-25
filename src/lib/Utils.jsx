@@ -341,9 +341,16 @@ function Table(props){
                             {data.rows.map((row, i)  => (
                                 <tr key={Math.random()}>
                                     {row.map((col, j)  => (
-                                      <td key={Math.random()} onClick={function(){open(col.url);}} className={(col.url ? "clickable " : "")+(col.style || "")+ " "+(j!=0 && row[0].deleted ? "inactive" : "active")}>
+                                      <td key={Math.random()} onClick={function(){if(event.target.tagName!="I") open(col.url);}} className={(col.url ? "clickable " : "")+(col.style || "")+ " "+(j!=0 && j!=row.length-1  && row[0].deleted ? "inactive" : "active")}>
                                         {j==0 && col.checkable && <input type="checkbox" name="id" value={row[0].value}/>}
                                         {j!=0 && <span>{col.value!=null && <Value obj={col.value}/>}</span>}
+                                        {col.actions!=null &&
+                                            <center>
+                                                {col.actions.map((action) => (
+                                                    <Action key={Math.random()} href={action.url} label={action.name} icon={action.icon} modal={true} reloader={reload}>{action.name}</Action>
+                                                ))}
+                                            </center>
+                                        }
                                       </td>
                                     ))}
                                 </tr>

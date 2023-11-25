@@ -230,11 +230,11 @@ function Aggreations(props){
     function render(){
         return (
             <div className="aggregations">
-                {Object.keys(props.data).map(function(k){
+                {props.data.map(function(aggregation){
                   return (
                     <div className="aggregation" key={Math.random()}>
-                        <span className="name"><TitleCase text={k}/>: </span>
-                        <span className="value"><Value obj={props.data[k]}/></span>
+                        <span className="name"><TitleCase text={aggregation.label}/>: </span>
+                        <span className="value"><Value obj={aggregation.value}/></span>
                     </div>
                   )
                 })}

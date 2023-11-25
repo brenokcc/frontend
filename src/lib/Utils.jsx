@@ -160,24 +160,24 @@ function Subsets(props){
     var active = props.count ? 'all' : null;
     function render(){
         if(props.data){
-            Object.keys(props.data).map((k) => {
-                if(props.active==k || active==null) active = k;
+            props.data.map((subset) => {
+                if(props.active==subset.name || active==null) active = subset.name;
             })
             if(props.count!=null){
                 if(active=='all') style = "subset active"
-                subsets.push({k:'all', v:props.data.count, style:style});
+                subsets.push({k:'all', v:props.data.count, style:style, label: "Tudo"});
             }
-            {Object.keys(props.data).map((k) => {
+            {props.data.map((subset) => {
                 style = "subset";
-                if(k==active) style = "subset active"
-                subsets.push({k:k, v:props.data[k], style:style});
+                if(subset.name==active) style = "subset active"
+                subsets.push({k:subset.name, v:subset.count, style:style, label: subset.label});
             })}
             return (
                 <div className="subsets">
                     <input type="hidden" name="subset" defaultValue={active}/>
                     {subsets.map((subset) => (
-                      <div className={subset.style} key={Math.random()} onClick={function(){props.onChange(subset.k)}} data-label={toLabelCase(subset.k)}>
-                        <TitleCase text={subset.k}/> <span className="counter">{subset.v}</span>
+                      <div className={subset.style} key={Math.random()} onClick={function(){props.onChange(subset.k)}} data-label={toLabelCase(subset.label)}>
+                        <TitleCase text={subset.label}/> <span className="counter">{subset.v}</span>
                       </div>
                     ))}
                 </div>
@@ -192,10 +192,10 @@ function Flags(props){
         if(props.data){
             return (
                 <div className="flags">
-                    {Object.keys(props.data).map((k) => (
+                    {props.data.map((flag) => (
                         <div key={Math.random()} className="flag">
-                             <input type="checkbox" name={k} onChange={props.onChange} checked={props.data[k]}/>
-                             <label>{toTitleCase(k)}</label>
+                             <input type="checkbox" name={flag.name} onChange={props.onChange} checked={flag.checked}/>
+                             <label>{flag.label}</label>
                         </div>
                     ))}
                 </div>
@@ -290,13 +290,6 @@ function Table(props){
 
     useEffect(()=>{}, [])
 
-    function open(url){
-        if(url){
-            event.preventDefault();
-            modal(url, function(){reload()});
-        }
-    }
-
     function render(){
         return (
             <div id="table" className="table-wrapper">
@@ -339,21 +332,7 @@ function Table(props){
                         </thead>
                         <tbody>
                             {data.rows.map((row, i)  => (
-                                <tr key={Math.random()}>
-                                    {row.map((col, j)  => (
-                                      <td key={Math.random()} onClick={function(){if(event.target.tagName!="I") open(col.url);}} className={(col.url ? "clickable " : "")+(col.style || "")+ " "+(j!=0 && j!=row.length-1  && row[0].deleted ? "inactive" : "active")}>
-                                        {j==0 && col.checkable && <input type="checkbox" name="id" value={row[0].value}/>}
-                                        {j!=0 && <span>{col.value!=null && <Value obj={col.value}/>}</span>}
-                                        {col.actions!=null &&
-                                            <center>
-                                                {col.actions.map((action) => (
-                                                    <Action key={Math.random()} href={action.url} label={action.name} icon={action.icon} modal={true} reloader={reload}>{action.name}</Action>
-                                                ))}
-                                            </center>
-                                        }
-                                      </td>
-                                    ))}
-                                </tr>
+                                <Row key={Math.random()} data={row} reloader={reload}/>
                             ))}
                         </tbody>
                     </table>
@@ -362,6 +341,47 @@ function Table(props){
         } else {
             return <Message text="Nenhum registro encontrado"/>
         }
+    }
+
+    return render()
+}
+
+function Row(props){
+    const [data, setdata] = useState(props.data);
+
+    function reload(pk){
+        var params = $('#table form').serialize();
+        request('GET', document.location.pathname+'?'+params+'&pk='+pk, function(data){
+            setdata(data['rows'][0]);
+        });
+    }
+
+    function open(pk, url){
+        if(url && event.target.tagName != "I"){
+            event.preventDefault();
+            modal(url, function(){reload(pk)});
+        }
+    }
+
+    function render(){
+        const pk = data[0].value;
+        return (
+            <tr>
+                {data.map((col, j)  => (
+                  <td key={Math.random()} onClick={function(){open(pk, col.url);}} className={(col.url ? "clickable " : "")+(col.style || "")+ " "+(j!=0 && j!=data.length-1  && data[0].deleted ? "inactive" : "active")}>
+                    {j==0 && col.checkable && <input type="checkbox" name="id" value={pk}/>}
+                    {j!=0 && <div>{col.value!=null && <Value obj={col.value}/>}&nbsp;</div>}
+                    {col.actions!=null &&
+                        <center>
+                            {col.actions.map((action) => (
+                                <Action key={Math.random()} href={action.url} label={action.name} icon={action.icon} modal={true} reloader={function(){reload(pk);}}>{action.name}</Action>
+                            ))}
+                        </center>
+                    }
+                  </td>
+                ))}
+            </tr>
+        )
     }
 
     return render()
